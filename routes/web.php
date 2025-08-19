@@ -10,12 +10,15 @@ Route::get('/', function () {
 
 Route::get('dashboard', function () {
     $users_teams = auth()->user()->teams;
-    return Inertia::render('Dashboard',['teams' => $users_teams]);
+    $user = auth()->user();
+    return Inertia::render('Dashboard',['user' => $user,'teams' => $users_teams]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/teams/create', function () {
     return Inertia::render('Teams/Create');
 })->middleware(['auth', 'verified'])->name('teams.create');
+
+Route::get('/teams/{team}',[TeamController::class,'show'])->middleware(['auth','verified'])->name('teams.show');
 
 Route::post('/teams', [TeamController::class, 'store'])
     ->middleware(['auth', 'verified'])

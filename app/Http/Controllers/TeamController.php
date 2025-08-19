@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Team;
+use Inertia\Inertia;
 
 class TeamController extends Controller
 {
@@ -22,5 +23,10 @@ class TeamController extends Controller
         $request->user()->teams()->save($team);
 
         return redirect()->route('dashboard');
+    }
+
+    public function show(Team $team)
+    {
+        return Inertia::render('Teams/Show', ['team' => $team]);
     }
 }
