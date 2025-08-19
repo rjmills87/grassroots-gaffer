@@ -4,6 +4,7 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { type Team } from '@/types/Team';
 import { Head, router } from '@inertiajs/vue3';
+import { computed } from 'vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -19,6 +20,10 @@ const props = defineProps<{
 const clickEvent = () => {
     router.get('/teams/create');
 };
+
+const teamHeadingText = computed(() => {
+    return props.teams.length === 1 ? 'My Team' : 'My Teams';
+});
 </script>
 
 <template>
@@ -30,6 +35,15 @@ const clickEvent = () => {
                 <h2>Welcome</h2>
                 <p>You don't currently have any teams yet</p>
                 <Button @click="clickEvent" class="cursor-pointer"> Create Your First Team </Button>
+            </div>
+            <div v-else>
+                <h2 class="mb-4 text-2xl font-bold">{{ teamHeadingText }}</h2>
+                <div class="flex flex-col gap-4">
+                    <div class="flex gap-4 rounded-lg border p-4" v-for="team in props.teams" :key="team.id">
+                        <span class="text-xl">{{ team.name }}</span>
+                        <span class="text-xl text-muted-foreground">{{ team.age_group }}</span>
+                    </div>
+                </div>
             </div>
         </div>
     </AppLayout>
