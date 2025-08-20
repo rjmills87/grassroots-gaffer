@@ -8,7 +8,7 @@ import { type BreadcrumbItem } from '@/types';
 import { Form, Head, useForm } from '@inertiajs/vue3';
 
 const form = useForm({
-    'team-name': '', // Use quotes because of the hyphen
+    'team-name': '',
     'age-group': null,
 });
 
