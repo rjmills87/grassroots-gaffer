@@ -24,7 +24,7 @@ Create a simple, functional app that solves the core problem of **team communica
 - [x] Implement **User Authentication** (login, registration, logout).
 - [x] Design and build the basic **Coach Dashboard** view.
 - [x] Add the functionality for a coach to **Create a Team**.
-- [ ] Build the **Roster Management** screen, allowing a coach to add player/parent emails to the team.
+- [x] Build the **Roster Management** screen, allowing a coach to add player/parent emails to the team.
 
 ### Stretch Goal:
 
