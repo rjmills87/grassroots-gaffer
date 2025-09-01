@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\PlayerController;
+use App\Http\Controllers\EventController;
+
 Route::get('/', function () {
     return Inertia::render('Welcome');
 })->name('home');
@@ -25,6 +27,9 @@ Route::post('/teams', [TeamController::class, 'store'])
     ->name('teams.store');
 
 Route::post('/teams/{team}/players', [PlayerController::class,'store'])->middleware(['auth','verified'])->name('players.store');
+
+Route::post('/teams/{teams}/events',
+[EventController::class,'store'])->middleware(['auth','verified'])->name('events.store');
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
