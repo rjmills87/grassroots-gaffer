@@ -1,6 +1,7 @@
 <!-- eslint-disable @typescript-eslint/no-unused-vars -->
 <script setup lang="ts">
 import AddPlayerForm from '@/components/AddPlayerForm.vue';
+import CreateEventForm from '@/components/CreateEventForm.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Team } from '@/types/Team';
 import { Head } from '@inertiajs/vue3';
@@ -13,7 +14,7 @@ const props = defineProps<{
 <template>
     <Head :title="team.name" />
     <AppLayout>
-        <div>
+        <div class="flex flex-col gap-4 p-4">
             <h1>{{ team.name }}</h1>
             <div class="mt-8">
                 <h2 class="text-xl font-semibold">Squad List</h2>
@@ -31,6 +32,9 @@ const props = defineProps<{
 
             <div class="mt-8">
                 <AddPlayerForm :team="team" />
+            </div>
+            <div class="mt-8">
+                <CreateEventForm :team="team" />
             </div>
         </div>
     </AppLayout>
