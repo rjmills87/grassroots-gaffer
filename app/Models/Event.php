@@ -3,16 +3,18 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Event extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
-        'team_id',
         'type',
         'occurs_at',
         'location',
-        'details'
+        'details',
+        'team_id',
     ];
 
     public function team()
@@ -25,5 +27,4 @@ class Event extends Model
             'occurs_at' => 'datetime',
         ];
     }
-
-    
+}

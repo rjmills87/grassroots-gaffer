@@ -17,7 +17,9 @@ const form = useForm({
 });
 
 const addPlayer = () => {
-    form.post(`/teams/${props.team.id}/players`);
+    form.post(`/teams/${props.team.id}/players`, {
+        onSuccess: () => form.reset(),
+    });
 };
 </script>
 

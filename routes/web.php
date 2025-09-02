@@ -28,7 +28,7 @@ Route::post('/teams', [TeamController::class, 'store'])
 
 Route::post('/teams/{team}/players', [PlayerController::class,'store'])->middleware(['auth','verified'])->name('players.store');
 
-Route::post('/teams/{teams}/events',
+Route::post('/teams/{team}/events',
 [EventController::class,'store'])->middleware(['auth','verified'])->name('events.store');
 
 require __DIR__.'/settings.php';

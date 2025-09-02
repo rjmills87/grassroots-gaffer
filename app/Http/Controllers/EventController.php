@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Models\Team;
-
 use Illuminate\Http\Request;
 
 class EventController extends Controller
@@ -15,11 +14,11 @@ class EventController extends Controller
             'type' => 'required|string',
             'occurs_at' => 'required|date',
             'location' => 'required|string|max:255',
-            'details' => 'nullable|string|max:500',            
+            'details' => 'nullable|string|max:255',            
         ]);
 
-        $team->event()->create($validated);
+        $team->events()->create($validated);
 
-        return redirect()->route('teams.show', $team);
+        return redirect()->route('teams.show',$team);
     }
 }

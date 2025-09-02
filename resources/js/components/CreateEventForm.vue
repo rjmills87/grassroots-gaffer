@@ -12,6 +12,7 @@ import Button from './ui/button/Button.vue';
 import Calendar from './ui/calendar/Calendar.vue';
 import Input from './ui/input/Input.vue';
 import Label from './ui/label/Label.vue';
+import Textarea from './ui/textarea/Textarea.vue';
 
 const props = defineProps<{
     team: Team;
@@ -20,7 +21,9 @@ const props = defineProps<{
 const value = ref(today(getLocalTimeZone())) as Ref<DateValue>;
 
 const addEvent = () => {
-    form.post(`/teams/${props.team.id}/events`);
+    form.post(`/teams/${props.team.id}/events`, {
+        onSuccess: () => form.reset(),
+    });
 };
 
 const form = useForm({
@@ -75,8 +78,8 @@ const toDate = (date: DateValue) => {
             <Label for="location">Event Location</Label>
             <Input v-model="form.location" type="text" />
             <Label for="details">Event Details</Label>
-            <Input v-model="form.details" type="text" rows="4" />
-            <Button type="submit">Add Event</Button>
+            <Textarea id="details" v-model="form.details" rows="4" />
+            <Button class="mt-4 cursor-pointer" type="submit">Add Event</Button>
         </Form>
     </div>
 </template>
