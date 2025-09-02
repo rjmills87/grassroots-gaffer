@@ -4,9 +4,8 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { Team } from '@/types/Team';
 import { Form, useForm } from '@inertiajs/vue3';
 import type { DateValue } from '@internationalized/date';
-import { DateFormatter, getLocalTimeZone, today } from '@internationalized/date';
+import { DateFormatter, getLocalTimeZone } from '@internationalized/date';
 import { Calendar as CalendarIcon } from 'lucide-vue-next';
-import type { Ref } from 'vue';
 import { ref, watch } from 'vue';
 import Button from './ui/button/Button.vue';
 import Calendar from './ui/calendar/Calendar.vue';
@@ -18,11 +17,14 @@ const props = defineProps<{
     team: Team;
 }>();
 
-const value = ref(today(getLocalTimeZone())) as Ref<DateValue>;
+const value = ref<DateValue | undefined>();
 
 const addEvent = () => {
     form.post(`/teams/${props.team.id}/events`, {
-        onSuccess: () => form.reset(),
+        onSuccess: () => {
+            form.reset();
+            value.value = undefined;
+        },
     });
 };
 
