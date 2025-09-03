@@ -2,6 +2,7 @@
 <script setup lang="ts">
 import AddPlayerForm from '@/components/AddPlayerForm.vue';
 import CreateEventForm from '@/components/CreateEventForm.vue';
+import EventList from '@/components/EventList.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Team } from '@/types/Team';
 import { Head } from '@inertiajs/vue3';
@@ -29,7 +30,7 @@ const props = defineProps<{
                     <p>No players have been added to this team yet.</p>
                 </div>
             </div>
-
+            <EventList :events="team.events" />
             <div class="mt-8">
                 <AddPlayerForm :team="team" />
             </div>

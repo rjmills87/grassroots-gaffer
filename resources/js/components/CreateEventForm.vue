@@ -61,9 +61,9 @@ const toDate = (date: DateValue) => {
                 </SelectTrigger>
                 <SelectContent>
                     <SelectGroup>
-                        <SelectItem value="training"> Training </SelectItem>
-                        <SelectItem value="match"> Match </SelectItem>
-                        <SelectItem value="general"> General </SelectItem>
+                        <SelectItem value="Training"> Training </SelectItem>
+                        <SelectItem value="Match"> Match </SelectItem>
+                        <SelectItem value="General"> General </SelectItem>
                     </SelectGroup>
                 </SelectContent>
             </Select>

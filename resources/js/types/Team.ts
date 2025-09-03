@@ -1,3 +1,4 @@
+import { Event } from '@/types/Event';
 import { Player } from '@/types/Player';
 
 export interface Team {
@@ -5,4 +6,5 @@ export interface Team {
     name: string;
     age_group: string;
     players: Player[];
+    events: Event[];
 }
