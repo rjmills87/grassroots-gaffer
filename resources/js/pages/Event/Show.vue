@@ -2,12 +2,14 @@
 import Button from '@/components/ui/button/Button.vue';
 import { capitalizeFirstLetter, formatDate } from '@/helpers';
 import AppLayout from '@/layouts/AppLayout.vue';
+import { User } from '@/types';
 import { Event } from '@/types/Event';
 import { Player } from '@/types/Player';
 import { useForm } from '@inertiajs/vue3';
 
 const props = defineProps<{
     event: Event;
+    user: User;
 }>();
 
 const setAvailability = (player: Player, response: string) => {
@@ -32,7 +34,7 @@ const setAvailability = (player: Player, response: string) => {
                 <ul class="divide-y divide-gray-200">
                     <li v-for="player in props.event.players" :key="player.id" class="flex items-center justify-between py-2">
                         {{ player.name }}
-                        <div class="flex gap-4">
+                        <div class="flex gap-4" v-if="props.user.email === player.guardian_email">
                             <Button
                                 @click="setAvailability(player, 'attending')"
                                 class="cursor-pointer"

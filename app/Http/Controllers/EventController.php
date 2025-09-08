@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use App\Models\Team;
 use App\Models\Player;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -30,7 +31,7 @@ class EventController extends Controller
 
     public function show(Event $event)
     {
-        return Inertia::render('Event/Show',['event' => $event->load('players')]);
+        return Inertia::render('Event/Show',['event' => $event->load('players'), 'user' => auth()->user()]);
     }
 
     public function update(Request $request, Event $event, Player $player)

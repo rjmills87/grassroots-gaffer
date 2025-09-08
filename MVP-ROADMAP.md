@@ -22,6 +22,7 @@ Create a simple, functional app that solves the core problem of **team communica
 
 - [x] Set up the Laravel, Inertia, and Vue project using a starter kit.
 - [x] Implement **User Authentication** (login, registration, logout).
+- [ ] Implement a basic role system (e.g., Coach, Parent).
 - [x] Design and build the basic **Coach Dashboard** view.
 - [x] Add the functionality for a coach to **Create a Team**.
 - [x] Build the **Roster Management** screen, allowing a coach to add player/parent emails to the team.
