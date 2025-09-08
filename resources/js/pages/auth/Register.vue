@@ -45,7 +45,7 @@ const submit = () => {
                 <div class="grid gap-2">
                     <Label for="role">Role</Label>
                     <Select v-model="form.role">
-                        <SelectTrigger>
+                        <SelectTrigger class="w-full">
                             <SelectValue placeholder="Select a role" />
                         </SelectTrigger>
                         <SelectContent>
