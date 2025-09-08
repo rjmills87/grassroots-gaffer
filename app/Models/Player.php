@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Player extends Model
 {
@@ -17,5 +18,11 @@ class Player extends Model
     public function team()
     {
         return $this->belongsTo(Team::class);
+    }
+
+    public function events() 
+    {
+        return $this->belongsToMany(Event::class)->withPivot('player_response');
+
     }
 }

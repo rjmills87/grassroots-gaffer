@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
+
 
 class Event extends Model
 {
@@ -26,5 +28,9 @@ class Event extends Model
         return [
             'occurs_at' => 'datetime',
         ];
+    }
+
+    public function players() {
+        return $this->belongsToMany(Player::class)->withPivot('player_response');
     }
 }

@@ -1,3 +1,5 @@
+import { Player } from '@/types/Player';
+
 export interface Event {
     id: number;
     team_id: number;
@@ -5,4 +7,5 @@ export interface Event {
     occurs_at: string;
     location: string;
     details: string | null;
+    players: Player[];
 }

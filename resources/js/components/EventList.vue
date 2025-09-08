@@ -1,19 +1,11 @@
 <script setup lang="ts">
+import { capitalizeFirstLetter, formatDate } from '@/helpers';
 import { Event } from '@/types/Event';
+import { Link } from '@inertiajs/vue3';
 
 const props = defineProps<{
     events: Event[];
 }>();
-
-const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toDateString();
-};
-
-const capitalizeFirstLetter = (string: string) => {
-    const firstLetterCapitalized = string.charAt(0).toUpperCase() + string.slice(1);
-    return firstLetterCapitalized;
-};
 </script>
 
 <template>
@@ -27,13 +19,15 @@ const capitalizeFirstLetter = (string: string) => {
             </div>
             <ul class="divide-y divide-gray-200">
                 <li v-for="event in props.events" :key="event.id" class="py-2">
-                    <div class="grid grid-cols-3 items-center gap-8 text-sm">
-                        <div class="flex justify-between">
-                            <span>{{ capitalizeFirstLetter(event.type) }}</span> <span>{{ formatDate(event.occurs_at) }}</span>
+                    <Link :href="route('event.show', event.id)">
+                        <div class="grid grid-cols-3 items-center gap-8 text-sm">
+                            <div class="flex justify-between">
+                                <span>{{ capitalizeFirstLetter(event.type) }}</span> <span>{{ formatDate(event.occurs_at) }}</span>
+                            </div>
+                            <span>{{ event.location }}</span>
+                            <span>{{ event.details }}</span>
                         </div>
-                        <span>{{ event.location }}</span>
-                        <span>{{ event.details }}</span>
-                    </div>
+                    </Link>
                 </li>
             </ul>
         </div>

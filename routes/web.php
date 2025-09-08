@@ -22,6 +22,8 @@ Route::get('/teams/create', function () {
 
 Route::get('/teams/{team}',[TeamController::class,'show'])->middleware(['auth','verified'])->name('teams.show');
 
+Route::get('/events/{event}',[EventController::class,'show'])->middleware(['auth','verified'])->name('event.show');
+
 Route::post('/teams', [TeamController::class, 'store'])
     ->middleware(['auth', 'verified'])
     ->name('teams.store');
@@ -30,6 +32,8 @@ Route::post('/teams/{team}/players', [PlayerController::class,'store'])->middlew
 
 Route::post('/teams/{team}/events',
 [EventController::class,'store'])->middleware(['auth','verified'])->name('events.store');
+
+Route::post('/events/{event}/players/{player}',[EventController::class,'update'])->middleware(['auth','verified'])->name('events.update');
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

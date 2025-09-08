@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Models\Team;
+use App\Models\Player;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class EventController extends Controller
 {
@@ -17,8 +19,28 @@ class EventController extends Controller
             'details' => 'nullable|string|max:255',            
         ]);
 
-        $team->events()->create($validated);
+        $event = $team->events()->create($validated);
+
+        $playerIds = $team->players()->pluck('id');
+
+        $event->players()->attach($playerIds);
 
         return redirect()->route('teams.show',$team);
+    }
+
+    public function show(Event $event)
+    {
+        return Inertia::render('Event/Show',['event' => $event->load('players')]);
+    }
+
+    public function update(Request $request, Event $event, Player $player)
+    {
+        $validated = $request->validate([
+            'player_response' => 'required|string|in:attending,unavailable',
+        ]);
+
+        $event->players()->updateExistingPivot($player->id, $validated);
+
+        return redirect()->route('event.show',$event);
     }
 }

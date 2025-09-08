@@ -5,4 +5,7 @@ export interface Player {
     guardian_email: string;
     guardian_phone: string;
     team_id: number;
+    pivot?: {
+        player_response: 'attending' | 'unavailable' | null;
+    };
 }
