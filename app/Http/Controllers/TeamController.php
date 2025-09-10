@@ -28,7 +28,18 @@ class TeamController extends Controller
     public function show(Team $team)
     {
         return Inertia::render('Teams/Show', [
-            'team' => $team->load('players', 'events'),
+            // Load the team with its players and events.
+            // For each event, also count the number of players who are 'attending' or 'unavailable'.
+            'team' => $team->load(['players', 'events' => function($query) {
+                $query->withCount([
+                    'players as attending_count' => function ($query) {
+                        $query->where('player_response', 'attending');
+                    },
+                    'players as unavailable_count' => function($query) {
+                        $query->where('player_response', 'unavailable');
+                    }
+                ]);
+            }]),
         ]);
     }
 }
