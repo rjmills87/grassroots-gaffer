@@ -2,6 +2,7 @@
 <script setup lang="ts">
 import AddPlayerForm from '@/components/AddPlayerForm.vue';
 import CreateEventForm from '@/components/CreateEventForm.vue';
+import CreateMessageForm from '@/components/CreateMessageForm.vue';
 import EventList from '@/components/EventList.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Team } from '@/types/Team';
@@ -36,6 +37,9 @@ const props = defineProps<{
             </div>
             <div class="mt-8">
                 <CreateEventForm :team="team" />
+            </div>
+            <div class="mt-8">
+                <CreateMessageForm :team="team" />
             </div>
         </div>
     </AppLayout>
