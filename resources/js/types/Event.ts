@@ -8,4 +8,6 @@ export interface Event {
     location: string;
     details: string | null;
     players: Player[];
+    attending_count: number;
+    unavailable_count: number;
 }
