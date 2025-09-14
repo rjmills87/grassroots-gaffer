@@ -39,7 +39,7 @@ class TeamController extends Controller
                         $query->where('player_response', 'unavailable');
                     }
                 ]);
-            }]),
+            },'messages.user']),
         ]);
     }
 }

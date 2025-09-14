@@ -4,6 +4,7 @@ import AddPlayerForm from '@/components/AddPlayerForm.vue';
 import CreateEventForm from '@/components/CreateEventForm.vue';
 import CreateMessageForm from '@/components/CreateMessageForm.vue';
 import EventList from '@/components/EventList.vue';
+import MessageList from '@/components/MessageList.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Team } from '@/types/Team';
 import { Head } from '@inertiajs/vue3';
@@ -32,6 +33,8 @@ const props = defineProps<{
                 </div>
             </div>
             <EventList :events="team.events" />
+            <MessageList :messages="team.messages" />
+
             <div class="mt-8">
                 <AddPlayerForm :team="team" />
             </div>

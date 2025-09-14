@@ -10,7 +10,7 @@ const props = defineProps<{
 
 <template>
     <div>
-        <h2 class="text-xl font-semibold">Event List</h2>
+        <h2 class="text-xl font-semibold">Upcoming Events</h2>
         <div v-if="props.events && props.events.length > 0" class="mt-4">
             <div class="grid grid-cols-5 items-center gap-8 text-sm font-semibold">
                 <span>Type & Date</span>

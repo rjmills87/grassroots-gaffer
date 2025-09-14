@@ -43,7 +43,7 @@ Create a simple, functional app that solves the core problem of **team communica
 - [x] Display a clean, organized **Upcoming Events** list on the team dashboard.
 - [x] Implement the **Availability Tracking** system, with a link in an event notification that allows parents to easily respond (Yes/No).
 - [x] On the coach's side, show a clear, visual summary of player availability for each event.
-- [ ] Create a simple **Team Messaging** feature for coaches to send one-way announcements.
+- [x] Create a simple **Team Messaging** feature for coaches to send one-way announcements.
 
 ### Stretch Goal:
 

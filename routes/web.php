@@ -5,6 +5,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\MessageController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome');
@@ -34,6 +35,8 @@ Route::post('/teams/{team}/events',
 [EventController::class,'store'])->middleware(['auth','verified'])->name('events.store');
 
 Route::post('/events/{event}/players/{player}',[EventController::class,'update'])->middleware(['auth','verified'])->name('events.update');
+
+Route::post('/teams/{team}/messages',[MessageController::class,'store'])->middleware(['auth','verified'])->name('teams.messages.store');
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
