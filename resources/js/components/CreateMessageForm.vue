@@ -16,18 +16,21 @@ const form = useForm({
 const submit = () => {
     form.post(route('teams.messages.store', props.team.id), {
         onSuccess: () => form.reset(),
+        preserveScroll: true,
     });
 };
 </script>
 
 <template>
     <form @submit.prevent="submit" class="mt-4 space-y-4">
-        <div>
+        <div class="grid gap-2">
             <h3 class="text-lg font-semibold">Send a Message</h3>
             <p class="text-sm text-gray-500">Your message will be sent to all players and guardians on the team.</p>
         </div>
-        <Textarea v-model="form.message" placeholder="Type your message here..." />
-        <InputError :message="form.errors.message" />
+        <div class="grid gap-2">
+            <Textarea v-model="form.message" placeholder="Type your message here..." />
+            <InputError :message="form.errors.message" />
+        </div>
         <Button type="submit" :disabled="form.processing">Send Message</Button>
     </form>
 </template>

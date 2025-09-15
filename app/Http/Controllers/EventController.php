@@ -17,7 +17,7 @@ class EventController extends Controller
             'type' => 'required|string',
             'occurs_at' => 'required|date',
             'location' => 'required|string|max:255',
-            'details' => 'nullable|string|max:255',            
+            'details' => 'required|string|max:255',            
         ]);
 
         $event = $team->events()->create($validated);

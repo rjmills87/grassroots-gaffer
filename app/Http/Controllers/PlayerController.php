@@ -12,9 +12,9 @@ class PlayerController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'guardian_name' => 'nullable|string|max:255',
-            'guardian_email' => 'nullable|email',
-            'guardian_phone' => 'nullable|string|max:255',
+            'guardian_name' => 'required|string|max:255',
+            'guardian_email' => 'required|email',
+            'guardian_phone' => 'required|string|max:255',
         ]);
 
         $team->players()->create($validated);
