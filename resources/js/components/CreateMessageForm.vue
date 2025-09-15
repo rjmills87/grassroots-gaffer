@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Team } from '@/types/Team';
 import { useForm } from '@inertiajs/vue3';
+import InputError from './InputError.vue';
 
 const props = defineProps<{
     team: Team;
@@ -26,6 +27,7 @@ const submit = () => {
             <p class="text-sm text-gray-500">Your message will be sent to all players and guardians on the team.</p>
         </div>
         <Textarea v-model="form.message" placeholder="Type your message here..." />
+        <InputError :message="form.errors.message" />
         <Button type="submit" :disabled="form.processing">Send Message</Button>
     </form>
 </template>

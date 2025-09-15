@@ -7,6 +7,7 @@ import type { DateValue } from '@internationalized/date';
 import { DateFormatter, getLocalTimeZone } from '@internationalized/date';
 import { Calendar as CalendarIcon } from 'lucide-vue-next';
 import { ref, watch } from 'vue';
+import InputError from './InputError.vue';
 import Button from './ui/button/Button.vue';
 import Calendar from './ui/calendar/Calendar.vue';
 import Input from './ui/input/Input.vue';
@@ -67,6 +68,7 @@ const toDate = (date: DateValue) => {
                     </SelectGroup>
                 </SelectContent>
             </Select>
+            <InputError :message="form.errors.type" />
             <Label for="occurs_at">Event Date</Label>
             <Popover>
                 <PopoverTrigger
@@ -77,10 +79,13 @@ const toDate = (date: DateValue) => {
                 </PopoverTrigger>
                 <PopoverContent><Calendar v-model:model-value="value" :weekday-format="'short'" /></PopoverContent>
             </Popover>
+            <InputError :message="form.errors.occurs_at" />
             <Label for="location">Event Location</Label>
             <Input v-model="form.location" type="text" />
+            <InputError :message="form.errors.location" />
             <Label for="details">Event Details</Label>
             <Textarea id="details" v-model="form.details" rows="4" />
+            <InputError :message="form.errors.details" />
             <Button class="mt-4 cursor-pointer" type="submit">Add Event</Button>
         </Form>
     </div>

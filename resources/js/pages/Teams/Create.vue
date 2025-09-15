@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import InputError from '@/components/InputError.vue';
 import Button from '@/components/ui/button/Button.vue';
 import Input from '@/components/ui/input/Input.vue';
 import Label from '@/components/ui/label/Label.vue';
@@ -35,6 +36,7 @@ const breadcrumbs: BreadcrumbItem[] = [
             <Form @submit.prevent="createTeam">
                 <Label for="team-name">Name</Label>
                 <Input v-model="form['team-name']" type="text" name="team-name" placeholder="Enter Your Team Name" />
+                <InputError :message="form.errors['team-name']" />
                 <Label for="age-group">Age Group</Label>
                 <Select v-model="form['age-group']" name="age-group">
                     <SelectTrigger>
@@ -57,6 +59,7 @@ const breadcrumbs: BreadcrumbItem[] = [
                         </SelectGroup>
                     </SelectContent>
                 </Select>
+                <InputError :message="form.errors['age-group']" />
                 <Button type="submit">Create Team</Button>
             </Form>
         </div>

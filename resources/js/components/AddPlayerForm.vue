@@ -4,6 +4,7 @@ import Input from '@/components/ui/input/Input.vue';
 import Label from '@/components/ui/label/Label.vue';
 import { Team } from '@/types/Team';
 import { Form, useForm } from '@inertiajs/vue3';
+import InputError from './InputError.vue';
 
 const props = defineProps<{
     team: Team;
@@ -29,12 +30,16 @@ const addPlayer = () => {
         <Form @submit.prevent="addPlayer">
             <Label for="name">Player Name</Label>
             <Input v-model="form.name" type="text" />
+            <InputError :message="form.errors.name" />
             <Label for="guardian_name">Parent/Guardian Name</Label>
             <Input v-model="form.guardian_name" type="text" />
+            <InputError :message="form.errors.guardian_name" />
             <Label for="guardian_email">Parent/Guardian Email</Label>
             <Input v-model="form.guardian_email" type="email" />
+            <InputError :message="form.errors.guardian_email" />
             <Label for="guardian_phone">Parent/Guardian Phone Number</Label>
             <Input v-model="form.guardian_phone" type="text" />
+            <InputError :message="form.errors.guardian_phone" />
             <Button type="submit">Add Player</Button>
         </Form>
     </div>
