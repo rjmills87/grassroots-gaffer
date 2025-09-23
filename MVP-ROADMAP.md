@@ -58,6 +58,7 @@ Create a simple, functional app that solves the core problem of **team communica
 ### Key Tasks:
 
 - [ ] Review and improve the UI/UX for all features, ensuring it is intuitive and mobile-friendly.
+- [ ] Add a **Parent/Player Dashboard** that shows their team(s) and upcoming events.
 - [ ] Add basic **Error Handling** and form validation.
 - [ ] Set up the production environment for deployment.
 - [ ] Deploy the MVP to a web server.
@@ -74,3 +75,9 @@ Create a simple, functional app that solves the core problem of **team communica
 - **Focus on Functionality:** A working feature is better than a perfect but unfinished one.
 - **Embrace Feedback:** The goal is to get this into the hands of real coaches to learn what they actually need.
 - **Keep it Simple:** If a feature isn't listed here, don't build it yet.
+
+---
+
+## 🚀 Post-MVP Enhancements
+
+- [ ] **Team Join Code System:** Implement a feature where each team is assigned a unique, random join code. A coach can share this code with parents, who can then use it to have their child join the team roster automatically. This removes the need for the coach to manually invite every parent.
