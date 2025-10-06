@@ -12,9 +12,22 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('dashboard', function () {
-    $users_teams = auth()->user()->teams;
     $user = auth()->user();
-    return Inertia::render('Dashboard',['user' => $user,'teams' => $users_teams]);
+    $teams = [];
+
+    if ($user->role === 'coach') {
+        $teams = $user->teams; 
+    } elseif ($user->role === 'guardian') {
+        $players = $user->players; 
+        $teams = $players->map(function ($player) {
+            return $player->team;
+        })->unique();
+    }
+    return Inertia::render('Dashboard', [
+        'user' => $user,
+        'teams' => $teams
+    ]);
+
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/teams/create', function () {

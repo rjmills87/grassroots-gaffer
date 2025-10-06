@@ -26,4 +26,9 @@ class Player extends Model
         return $this->belongsToMany(Event::class)->withPivot('player_response');
 
     }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }
