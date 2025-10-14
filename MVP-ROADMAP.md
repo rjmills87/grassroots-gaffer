@@ -58,8 +58,8 @@ Create a simple, functional app that solves the core problem of **team communica
 ### Key Tasks:
 
 - [ ] Review and improve the UI/UX for all features, ensuring it is intuitive and mobile-friendly.
-- [ ] Add a **Parent/Player Dashboard** that shows their team(s) and upcoming events.
-- [ ] Add basic **Error Handling** and form validation.
+- [x] Add a **Parent Dashboard** that shows their team(s) and upcoming events.
+- [x] Add basic **Error Handling** and form validation.
 - [ ] Set up the production environment for deployment.
 - [ ] Deploy the MVP to a web server.
 - [ ] Prepare a welcome message or a short guide for the first test users.

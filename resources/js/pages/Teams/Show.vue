@@ -35,13 +35,13 @@ const props = defineProps<{
             <EventList :events="team.events" />
             <MessageList :messages="team.messages" />
 
-            <div class="mt-8">
+            <div v-if="$page.props.auth.user.role === 'coach'" class="mt-8">
                 <AddPlayerForm :team="team" />
             </div>
-            <div class="mt-8">
+            <div v-if="$page.props.auth.user.role === 'coach'" class="mt-8">
                 <CreateEventForm :team="team" />
             </div>
-            <div class="mt-8">
+            <div v-if="$page.props.auth.user.role === 'coach'" class="mt-8">
                 <CreateMessageForm :team="team" />
             </div>
         </div>

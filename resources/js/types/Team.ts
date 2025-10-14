@@ -8,5 +8,5 @@ export interface Team {
     age_group: string;
     players: Player[];
     events: Event[];
-    messages: Message[];
+    messages: Message[];  
 }

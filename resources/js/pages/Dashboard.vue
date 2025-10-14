@@ -35,7 +35,7 @@ const teamHeadingText = computed(() => {
             <h2>Welcome {{ props.user.name }}</h2>
             <div v-if="props.teams.length === 0">
                 <p>You don't currently have any teams yet</p>
-                <Button @click="clickEvent" class="cursor-pointer"> Create Your First Team </Button>
+                <Button v-if="props.user.role ==='coach' " @click="clickEvent" class="cursor-pointer"> Create Your First Team </Button>
             </div>
             <div v-else>
                 <h2 class="mb-4 text-2xl font-bold">{{ teamHeadingText }}</h2>
