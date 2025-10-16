@@ -47,7 +47,7 @@ Create a simple, functional app that solves the core problem of **team communica
 
 ### Stretch Goal:
 
-- [ ] Add a feature that allows a coach to quickly send a reminder message to parents who haven't responded yet.
+- [x] Add a feature that allows a coach to quickly send a reminder message to parents who haven't responded yet.
 
 ---
 
@@ -58,7 +58,7 @@ Create a simple, functional app that solves the core problem of **team communica
 ### Key Tasks:
 
 - [ ] Review and improve the UI/UX for all features, ensuring it is intuitive and mobile-friendly.
-- [ ] Add basic **Error Handling** and form validation.
+- [x] Add basic **Error Handling** and form validation.
 - [ ] Set up the production environment for deployment.
 - [ ] Deploy the MVP to a web server.
 - [ ] Prepare a welcome message or a short guide for the first test users.
