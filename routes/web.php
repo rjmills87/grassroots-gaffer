@@ -51,5 +51,7 @@ Route::post('/events/{event}/players/{player}',[EventController::class,'update']
 
 Route::post('/teams/{team}/messages',[MessageController::class,'store'])->middleware(['auth','verified'])->name('teams.messages.store');
 
+Route::post('/events/{event}/send-reminders', [EventController::class,'sendReminders'])->middleware(['auth','verified'])->name('events.sendReminders');
+
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

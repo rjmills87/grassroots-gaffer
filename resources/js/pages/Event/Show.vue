@@ -5,7 +5,7 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { User } from '@/types';
 import { Event } from '@/types/Event';
 import { Player } from '@/types/Player';
-import { useForm } from '@inertiajs/vue3';
+import { useForm, router } from '@inertiajs/vue3';
 
 const props = defineProps<{
     event: Event;
@@ -21,6 +21,14 @@ const setAvailability = (player: Player, response: string) => {
         preserveScroll: true,
     });
 };
+
+const sendEventReminder = () => {
+  router.post(`/events/${props.event.id}/send-reminders`, {}, {
+    preserveScroll: true,
+  });
+}
+
+
 </script>
 
 <template>
@@ -53,6 +61,7 @@ const setAvailability = (player: Player, response: string) => {
                     </li>
                 </ul>
             </div>
+            <Button @click="sendEventReminder" v-if="props.user.role === 'coach'">Send Reminder</Button>
         </div>
     </AppLayout>
 </template>

@@ -8,6 +8,7 @@ use App\Models\Player;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Notifications\EventReminderNotification;
 
 class EventController extends Controller
 {
@@ -43,5 +44,19 @@ class EventController extends Controller
         $event->players()->updateExistingPivot($player->id, $validated);
 
         return redirect()->route('event.show',$event);
+    }
+
+    public function sendReminders(Event $event)
+    {
+        $playersWithoutResponse = $event->players()->wherePivotNull('player_response')->get();
+        
+        foreach($playersWithoutResponse as $player) {
+            $guardian = $player->user;
+            $guardian->notify(new EventReminderNotification($event));
+
+        }
+
+        return redirect()->route('event.show',$event);
+
     }
 }

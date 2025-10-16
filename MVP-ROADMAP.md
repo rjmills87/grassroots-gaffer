@@ -47,7 +47,7 @@ Create a simple, functional app that solves the core problem of **team communica
 
 ### Stretch Goal:
 
-- [ ] Add a feature that allows a coach to quickly send a reminder message to parents who haven't responded yet.
+- [x] Add a feature that allows a coach to quickly send a reminder message to parents who haven't responded yet.
 
 ---
 
