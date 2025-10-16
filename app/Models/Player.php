@@ -13,7 +13,8 @@ class Player extends Model
         'name',
         'guardian_name',
         'guardian_email',
-        'guardian_phone'
+        'guardian_phone',
+        'user_id'
     ];
 
     public function team(): BelongsTo
@@ -25,5 +26,10 @@ class Player extends Model
     {
         return $this->belongsToMany(Event::class)->withPivot('player_response');
 
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }
