@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Str;
 use App\Models\Player;
 use App\Models\Team;
 use App\Models\User;
+use App\Notifications\WelcomeToTeamNotification;
 
 class PlayerController extends Controller
 {
@@ -25,19 +25,19 @@ class PlayerController extends Controller
 
         if ($guardianUser) {
             $validated['user_id'] = $guardianUser->id;
-            $team->players()->create($validated);
         } else {
-            $newGuardianUser =  User::create([
+            $guardianUser =  User::create([
                 'name' => $validated['guardian_name'],
                 'email' => $validated['guardian_email'],
                 'password' => Hash::make(Str::random(16)), // Generate random temp password
                 'role' => 'guardian',
             ]);
             
-            $validated['user_id'] = $newGuardianUser->id;
-            $team->players()->create($validated);
-            event(new Registered($newGuardianUser));
+            $validated['user_id'] = $guardianUser->id;
         }
+
+        $player = $team->players()->create($validated);
+        $guardianUser->notify(new WelcomeToTeamNotification($team, $player));
 
 
         return redirect()->route('teams.show',$team);

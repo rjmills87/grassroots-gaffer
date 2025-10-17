@@ -29,7 +29,7 @@ Create a simple, functional app that solves the core problem of **team communica
 
 ### Stretch Goal:
 
-- [ ] Send an initial "Welcome to the Team" email to parents added to the roster.
+- [x] Send an initial "Welcome to the Team" email to parents added to the roster.
 
 ---
 
