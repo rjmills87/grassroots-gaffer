@@ -12,7 +12,7 @@ import { LoaderCircle } from 'lucide-vue-next';
 const form = useForm({
     name: '',
     email: '',
-    role: '',
+    role: 'coach',
     password: '',
     password_confirmation: '',
 });
@@ -42,7 +42,7 @@ const submit = () => {
                     <InputError :message="form.errors.email" />
                 </div>
 
-                <div class="grid gap-2">
+                <!-- <div class="grid gap-2">
                     <Label for="role">Role</Label>
                     <Select v-model="form.role">
                         <SelectTrigger class="w-full">
@@ -57,7 +57,7 @@ const submit = () => {
                         </SelectContent>
                     </Select>
                     <InputError :message="form.errors.role" />
-                </div>
+                </div> -->
 
                 <div class="grid gap-2">
                     <Label for="password">Password</Label>
