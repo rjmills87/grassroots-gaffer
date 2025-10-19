@@ -39,6 +39,12 @@ class PlayerController extends Controller
         $player = $team->players()->create($validated);
         $guardianUser->notify(new WelcomeToTeamNotification($team, $player));
 
+        // Add new Player to already scheduled future events
+        $futureEvents = $team->events()->where('occurs_at', '>' ,now())->get();
+        foreach($futureEvents as $event) {
+            $event->players()->attach($player->id);
+        };
+
 
         return redirect()->route('teams.show',$team);
     }
