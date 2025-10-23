@@ -5,6 +5,8 @@ import CreateEventForm from '@/components/CreateEventForm.vue';
 import CreateMessageForm from '@/components/CreateMessageForm.vue';
 import EventList from '@/components/EventList.vue';
 import MessageList from '@/components/MessageList.vue';
+import Button from '@/components/ui/button/Button.vue';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Team } from '@/types/Team';
 import { Head } from '@inertiajs/vue3';
@@ -36,13 +38,28 @@ const props = defineProps<{
             <MessageList :messages="team.messages" />
 
             <div v-if="$page.props.auth.user.role === 'coach'" class="mt-8">
-                <AddPlayerForm :team="team" />
+                <Dialog>
+                    <DialogTrigger as-child><Button>Add Player</Button></DialogTrigger>
+                    <DialogContent>
+                        <AddPlayerForm :team="team" />
+                    </DialogContent>
+                </Dialog>
             </div>
             <div v-if="$page.props.auth.user.role === 'coach'" class="mt-8">
-                <CreateEventForm :team="team" />
+                <Dialog>
+                    <DialogTrigger as-child><Button>Create Event</Button></DialogTrigger>
+                    <DialogContent>
+                        <CreateEventForm :team="team" />
+                    </DialogContent>
+                </Dialog>
             </div>
             <div v-if="$page.props.auth.user.role === 'coach'" class="mt-8">
-                <CreateMessageForm :team="team" />
+                <Dialog>
+                    <DialogTrigger as-child><Button>Create Message</Button></DialogTrigger>
+                    <DialogContent>
+                        <CreateMessageForm :team="team" />
+                    </DialogContent>
+                </Dialog>
             </div>
         </div>
     </AppLayout>
