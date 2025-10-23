@@ -4,6 +4,7 @@ import Input from '@/components/ui/input/Input.vue';
 import Label from '@/components/ui/label/Label.vue';
 import { Team } from '@/types/Team';
 import { useForm } from '@inertiajs/vue3';
+import { toast } from 'vue-sonner';
 import InputError from './InputError.vue';
 
 const props = defineProps<{
@@ -20,7 +21,10 @@ const form = useForm({
 const addPlayer = () => {
     form.post(`/teams/${props.team.id}/players`, {
         preserveScroll: true,
-        onSuccess: () => form.reset(),
+        onSuccess: () => {
+            form.reset();
+            toast('Player has been successfully added to the team');
+        },
     });
 };
 </script>

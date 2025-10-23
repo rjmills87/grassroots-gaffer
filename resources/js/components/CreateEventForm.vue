@@ -7,6 +7,7 @@ import type { DateValue } from '@internationalized/date';
 import { DateFormatter, getLocalTimeZone } from '@internationalized/date';
 import { Calendar as CalendarIcon } from 'lucide-vue-next';
 import { ref, watch } from 'vue';
+import { toast } from 'vue-sonner';
 import InputError from './InputError.vue';
 import Button from './ui/button/Button.vue';
 import Calendar from './ui/calendar/Calendar.vue';
@@ -42,6 +43,7 @@ const addEvent = () => {
         onSuccess: () => {
             form.reset();
             value.value = undefined;
+            toast('The event has been created successfully');
         },
     });
 };
