@@ -1,6 +1,7 @@
 # UI/UX Review Checklist
 
 ## 🎯 Goal
+
 Test both coach and guardian workflows to identify and fix usability issues before deployment.
 
 ---
@@ -9,9 +10,10 @@ Test both coach and guardian workflows to identify and fix usability issues befo
 
 ### High Priority
 
-- [ ] **Message Management**: Coaches should be able to edit and delete their own messages
+- [x] **Message Management**: Coaches should be able to edit and delete their own messages
 
 ### Medium Priority
+
 - [ ] **Messaging Conversations**: Add ability for guardians to reply to messages (currently one-way announcements only)
 
 ### Low Priority
@@ -29,6 +31,7 @@ Test both coach and guardian workflows to identify and fix usability issues befo
 ## 📋 Testing Workflows
 
 ### Coach Workflow
+
 - [ ] Create a team
 - [ ] Add players to roster
 - [ ] Schedule an event
@@ -37,6 +40,7 @@ Test both coach and guardian workflows to identify and fix usability issues befo
 - [ ] Send reminders to non-responders
 
 ### Guardian Workflow
+
 - [ ] Receive welcome email
 - [ ] Set up password via reset link
 - [ ] Log in to dashboard
