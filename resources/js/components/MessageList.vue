@@ -3,6 +3,7 @@ import { formatDate } from '@/helpers';
 import { Message } from '@/types/Message';
 import { router } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import { toast } from 'vue-sonner';
 import Button from './ui/button/Button.vue';
 import Textarea from './ui/textarea/Textarea.vue';
 
@@ -14,7 +15,11 @@ const props = defineProps<{
 }>();
 
 const deleteMessage = (messageId: number) => {
-    router.delete(route('messages.destroy', messageId));
+    router.delete(route('messages.destroy', messageId), {
+        onSuccess: () => {
+            toast('Your message has been deleted successfully');
+        },
+    });
 };
 
 const editMessage = (messageId: number) => {
@@ -29,6 +34,9 @@ const saveMessage = (messageId: number) => {
             message: messageContent.value,
         },
         {
+            onSuccess: () => {
+                toast('Your message has been saved successfully');
+            },
             preserveScroll: true,
         },
     );
