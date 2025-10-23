@@ -87,6 +87,16 @@ const toDate = (date: DateValue) => {
                 <InputError :message="form.errors.type" />
             </div>
             <div class="grid gap-2">
+                <Label for="location">Event Location</Label>
+                <Input v-model="form.location" type="text" />
+                <InputError :message="form.errors.location" />
+            </div>
+            <div class="grid gap-2">
+                <Label for="details">Event Details</Label>
+                <Textarea id="details" v-model="form.details" rows="4" />
+                <InputError :message="form.errors.details" />
+            </div>
+            <div class="grid gap-2">
                 <Label for="occurs_at">Event Date</Label>
                 <Popover>
                     <PopoverTrigger
@@ -98,16 +108,6 @@ const toDate = (date: DateValue) => {
                     <PopoverContent><Calendar v-model:model-value="value" :weekday-format="'short'" /></PopoverContent>
                 </Popover>
                 <InputError :message="form.errors.occurs_at" />
-            </div>
-            <div class="grid gap-2">
-                <Label for="location">Event Location</Label>
-                <Input v-model="form.location" type="text" />
-                <InputError :message="form.errors.location" />
-            </div>
-            <div class="grid gap-2">
-                <Label for="details">Event Details</Label>
-                <Textarea id="details" v-model="form.details" rows="4" />
-                <InputError :message="form.errors.details" />
             </div>
             <Button class="mt-4 cursor-pointer" type="submit">Add Event</Button>
         </Form>
