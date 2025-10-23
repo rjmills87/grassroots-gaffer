@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Team } from '@/types/Team';
 import { useForm } from '@inertiajs/vue3';
+import { toast } from 'vue-sonner';
 import InputError from './InputError.vue';
 
 const props = defineProps<{
@@ -15,7 +16,10 @@ const form = useForm({
 
 const submit = () => {
     form.post(route('teams.messages.store', props.team.id), {
-        onSuccess: () => form.reset(),
+        onSuccess: () => {
+            form.reset();
+            toast('Your message has been created successfully');
+        },
         preserveScroll: true,
     });
 };
