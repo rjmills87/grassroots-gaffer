@@ -7,6 +7,8 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Form, Head, useForm } from '@inertiajs/vue3';
+import { toast } from 'vue-sonner';
+
 
 const form = useForm({
     'team-name': '',
@@ -16,6 +18,10 @@ const form = useForm({
 const createTeam = () => {
     form.post('/teams', {
         preserveScroll: true,
+        onSuccess: () => {
+            form.reset();
+            toast('Your team has been created successfully');
+        }
     });
 };
 

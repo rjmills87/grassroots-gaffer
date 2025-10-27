@@ -1,3 +1,7 @@
+---
+trigger: manual
+---
+
 # UI/UX Review Checklist
 
 ## 🎯 Goal

@@ -1,3 +1,7 @@
+---
+trigger: manual
+---
+
 # ⚽ The Grassroots Coach App (Grassroots Gaffer): MVP Roadmap ⚽
 
 ## Our Mission
