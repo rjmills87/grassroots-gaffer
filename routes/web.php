@@ -30,10 +30,6 @@ Route::get('dashboard', function () {
 
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/teams/create', function () {
-    return Inertia::render('Teams/Create');
-})->middleware(['auth', 'verified'])->name('teams.create');
-
 Route::get('/teams/{team}',[TeamController::class,'show'])->middleware(['auth','verified'])->name('teams.show');
 
 Route::get('/events/{event}',[EventController::class,'show'])->middleware(['auth','verified'])->name('event.show');
