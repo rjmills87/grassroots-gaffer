@@ -29,6 +29,7 @@ Test both coach and guardian workflows to identify and fix usability issues befo
 - [x] Removed role selector from registration (coaches only)
 - [x] Updated registration button text to "Coach Registration"
 - [x] Fixed bug: New players now auto-added to future events
+- [x] Add Delete a team functionality for coaches
 
 ---
 
