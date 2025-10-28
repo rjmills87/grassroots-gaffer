@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::table('players', function (Blueprint $table) {
             $table->renameColumn('user_id','guardian_id');
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete()->nullable();
         });
     }
 
@@ -23,8 +22,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('players', function (Blueprint $table) {
-            $table->dropForeign(['user_id']);
-            $table->dropColumn('user_id');
             $table->renameColumn('guardian_id', 'user_id');
         });
     }

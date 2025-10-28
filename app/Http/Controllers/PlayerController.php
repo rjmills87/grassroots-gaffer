@@ -24,7 +24,7 @@ class PlayerController extends Controller
         $guardianUser = User::where('email', $validated['guardian_email'])->first();
 
         if ($guardianUser) {
-            $validated['user_id'] = $guardianUser->id;
+            $validated['guardian_id'] = $guardianUser->id;
         } else {
             $guardianUser =  User::create([
                 'name' => $validated['guardian_name'],
@@ -33,7 +33,7 @@ class PlayerController extends Controller
                 'role' => 'guardian',
             ]);
             
-            $validated['user_id'] = $guardianUser->id;
+            $validated['guardian_id'] = $guardianUser->id;
         }
 
         $player = $team->players()->create($validated);
