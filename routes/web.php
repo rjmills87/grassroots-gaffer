@@ -38,6 +38,10 @@ Route::post('/teams', [TeamController::class, 'store'])
     ->middleware(['auth', 'verified'])
     ->name('teams.store');
 
+Route::delete('/teams/{team}', [TeamController::class, 'destroy'])
+    ->middleware(['auth', 'verified'])
+    ->name('teams.destroy');
+
 Route::post('/teams/{team}/players', [PlayerController::class,'store'])->middleware(['auth','verified'])->name('players.store');
 
 Route::post('/teams/{team}/events',

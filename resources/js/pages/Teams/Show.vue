@@ -3,6 +3,7 @@
 import AddPlayerForm from '@/components/AddPlayerForm.vue';
 import CreateEventForm from '@/components/CreateEventForm.vue';
 import CreateMessageForm from '@/components/CreateMessageForm.vue';
+import DeleteTeam from '@/components/DeleteTeam.vue';
 import EventList from '@/components/EventList.vue';
 import MessageList from '@/components/MessageList.vue';
 import Button from '@/components/ui/button/Button.vue';
@@ -58,6 +59,14 @@ const props = defineProps<{
                     <DialogTrigger as-child><Button>Create Message</Button></DialogTrigger>
                     <DialogContent>
                         <CreateMessageForm :team="team" />
+                    </DialogContent>
+                </Dialog>
+            </div>
+            <div v-if="$page.props.auth.user.role === 'coach'" class="mt-8">
+                <Dialog>
+                    <DialogTrigger><Button variant="destructive">Delete Team</Button></DialogTrigger>
+                    <DialogContent>
+                        <DeleteTeam :team="team" />
                     </DialogContent>
                 </Dialog>
             </div>

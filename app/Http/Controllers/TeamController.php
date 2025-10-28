@@ -42,4 +42,14 @@ class TeamController extends Controller
             },'messages.user']),
         ]);
     }
+
+    public function destroy(Team $team)
+    {
+        if ($team->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized action.');
+        }
+        $team->delete();
+
+        return redirect()->route('dashboard');
+    }
 }
