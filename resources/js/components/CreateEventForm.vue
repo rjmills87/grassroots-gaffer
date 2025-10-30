@@ -27,6 +27,10 @@ const props = defineProps<{
     team: Team;
 }>();
 
+const emit = defineEmits<{
+    close: [];
+}>();
+
 const value = ref<DateValue | undefined>();
 
 // Apply the interface to useForm and set initial values
@@ -44,11 +48,11 @@ const addEvent = () => {
             form.reset();
             value.value = undefined;
             toast('The event has been created successfully');
+            emit('close');
         },
     });
 };
 
-// This watch function is now type-safe
 watch(value, (newValue) => {
     if (newValue) {
         form.occurs_at = newValue.toDate(getLocalTimeZone()).toISOString();

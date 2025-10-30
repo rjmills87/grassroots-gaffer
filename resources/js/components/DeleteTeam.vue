@@ -10,11 +10,16 @@ const props = defineProps<{
     team: Team;
 }>();
 
+const emit = defineEmits<{
+    close: [];
+}>();
+
 const teamName = ref('');
 
 const deleteTeam = (teamId: number) => {
     router.delete(route('teams.destroy', teamId), {
         onSuccess: () => {
+            emit('close');
             toast('Your team has been deleted successfully');
         },
     });

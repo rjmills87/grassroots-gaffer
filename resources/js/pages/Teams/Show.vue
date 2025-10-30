@@ -11,10 +11,16 @@ import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Team } from '@/types/Team';
 import { Head } from '@inertiajs/vue3';
+import { ref } from 'vue';
 
 const props = defineProps<{
     team: Team;
 }>();
+
+const isAddPlayerOpen = ref(false);
+const isCreateEventOpen = ref(false);
+const isCreateMessageOpen = ref(false);
+const isDeleteTeamOpen = ref(false);
 </script>
 
 <template>
@@ -39,34 +45,34 @@ const props = defineProps<{
             <MessageList :messages="team.messages" />
 
             <div v-if="$page.props.auth.user.role === 'coach'" class="mt-8">
-                <Dialog>
+                <Dialog v-model:open="isAddPlayerOpen">
                     <DialogTrigger as-child><Button>Add Player</Button></DialogTrigger>
                     <DialogContent>
-                        <AddPlayerForm :team="team" />
+                        <AddPlayerForm :team="team" @close="isAddPlayerOpen = false" />
                     </DialogContent>
                 </Dialog>
             </div>
             <div v-if="$page.props.auth.user.role === 'coach'" class="mt-8">
-                <Dialog>
+                <Dialog v-model:open="isCreateEventOpen">
                     <DialogTrigger as-child><Button>Create Event</Button></DialogTrigger>
                     <DialogContent>
-                        <CreateEventForm :team="team" />
+                        <CreateEventForm :team="team" @close="isCreateEventOpen = false" />
                     </DialogContent>
                 </Dialog>
             </div>
             <div v-if="$page.props.auth.user.role === 'coach'" class="mt-8">
-                <Dialog>
+                <Dialog v-model:open="isCreateMessageOpen">
                     <DialogTrigger as-child><Button>Create Message</Button></DialogTrigger>
                     <DialogContent>
-                        <CreateMessageForm :team="team" />
+                        <CreateMessageForm :team="team" @close="isCreateMessageOpen = false" />
                     </DialogContent>
                 </Dialog>
             </div>
             <div v-if="$page.props.auth.user.role === 'coach'" class="mt-8">
-                <Dialog>
+                <Dialog v-model:open="isDeleteTeamOpen">
                     <DialogTrigger><Button variant="destructive">Delete Team</Button></DialogTrigger>
                     <DialogContent>
-                        <DeleteTeam :team="team" />
+                        <DeleteTeam :team="team" @close="isDeleteTeamOpen = false" />
                     </DialogContent>
                 </Dialog>
             </div>

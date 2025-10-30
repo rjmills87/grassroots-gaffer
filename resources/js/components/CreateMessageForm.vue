@@ -10,6 +10,10 @@ const props = defineProps<{
     team: Team;
 }>();
 
+const emit = defineEmits<{
+    close: [];
+}>();
+
 const form = useForm({
     message: '',
 });
@@ -18,6 +22,7 @@ const submit = () => {
     form.post(route('teams.messages.store', props.team.id), {
         onSuccess: () => {
             form.reset();
+            emit('close');
             toast('Your message has been created successfully');
         },
         preserveScroll: true,

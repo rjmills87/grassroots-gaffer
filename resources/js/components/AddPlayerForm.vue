@@ -11,6 +11,10 @@ const props = defineProps<{
     team: Team;
 }>();
 
+const emit = defineEmits<{
+    close: [];
+}>();
+
 const form = useForm({
     name: '',
     guardian_name: '',
@@ -23,6 +27,7 @@ const addPlayer = () => {
         preserveScroll: true,
         onSuccess: () => {
             form.reset();
+            emit('close');
             toast('Player has been successfully added to the team');
         },
     });
