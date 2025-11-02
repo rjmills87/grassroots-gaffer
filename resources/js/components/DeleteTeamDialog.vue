@@ -12,9 +12,9 @@ const props = defineProps<{
 const isDeleteTeamOpen = ref(false);
 </script>
 <template>
-    <div v-if="$page.props.auth.user.role === 'coach'" class="mt-8">
+    <div v-if="$page.props.auth.user.role === 'coach'" class="mt-8 mr-4 mb-4 flex justify-end">
         <Dialog v-model:open="isDeleteTeamOpen">
-            <DialogTrigger><Button variant="destructive">Delete Team</Button></DialogTrigger>
+            <DialogTrigger><Button class="cursor-pointer" variant="destructive">Delete Team</Button></DialogTrigger>
             <DialogContent>
                 <DeleteTeam :team="team" @close="isDeleteTeamOpen = false" />
             </DialogContent>

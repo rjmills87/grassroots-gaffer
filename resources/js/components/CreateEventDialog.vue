@@ -11,9 +11,9 @@ const props = defineProps<{
 const isCreateEventOpen = ref(false);
 </script>
 <template>
-    <div v-if="$page.props.auth.user.role === 'coach'" class="mt-8 mb-4 flex justify-end">
+    <div v-if="$page.props.auth.user.role === 'coach'" class="mt-8 mr-4 mb-4 flex justify-end">
         <Dialog v-model:open="isCreateEventOpen">
-            <DialogTrigger as-child><Button>Create Event</Button></DialogTrigger>
+            <DialogTrigger as-child><Button variant="default" class="cursor-pointer">Create Event</Button></DialogTrigger>
             <DialogContent>
                 <CreateEventForm :team="team" @close="isCreateEventOpen = false" />
             </DialogContent>

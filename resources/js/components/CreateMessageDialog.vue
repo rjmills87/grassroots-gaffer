@@ -12,9 +12,9 @@ const props = defineProps<{
 const isCreateMessageOpen = ref(false);
 </script>
 <template>
-    <div v-if="$page.props.auth.user.role === 'coach'" class="mt-8 mb-4 flex justify-end">
+    <div v-if="$page.props.auth.user.role === 'coach'" class="mt-8 mr-4 mb-4 flex justify-end">
         <Dialog v-model:open="isCreateMessageOpen">
-            <DialogTrigger as-child><Button>Create Message</Button></DialogTrigger>
+            <DialogTrigger as-child><Button variant="default" class="cursor-pointer">Create Message</Button></DialogTrigger>
             <DialogContent>
                 <CreateMessageForm :team="team" @close="isCreateMessageOpen = false" />
             </DialogContent>

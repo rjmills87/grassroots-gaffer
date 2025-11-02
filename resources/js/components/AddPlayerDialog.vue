@@ -13,9 +13,9 @@ const isAddPlayerOpen = ref(false);
 </script>
 
 <template>
-    <div v-if="$page.props.auth.user.role === 'coach'" class="mt-8 mb-4 flex justify-end">
+    <div v-if="$page.props.auth.user.role === 'coach'" class="mt-8 mr-4 mb-4 flex justify-end">
         <Dialog v-model:open="isAddPlayerOpen">
-            <DialogTrigger as-child><Button>Add Player</Button></DialogTrigger>
+            <DialogTrigger as-child><Button variant="default" class="cursor-pointer">Add Player</Button></DialogTrigger>
             <DialogContent>
                 <AddPlayerForm :team="team" @close="isAddPlayerOpen = false" />
             </DialogContent>
