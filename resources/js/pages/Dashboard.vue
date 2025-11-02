@@ -97,12 +97,14 @@ const hasMessages = computed(() => {
                             <div v-for="team in teams.filter((t) => t.events?.length > 0)" :key="team.id">
                                 <h3 class="mb-2 font-medium">{{ team.name }}</h3>
                                 <div v-for="event in team.events?.slice(0, 2)" :key="event.id" class="mb-3">
-                                    <div class="flex items-start">
-                                        <div>
-                                            <p class="font-medium">{{ capitalizeFirstLetter(event.type) }}</p>
-                                            <p class="text-sm text-muted-foreground">{{ formatDate(event.occurs_at) }} • {{ event.location }}</p>
+                                    <Link :href="`/events/${event.id}`">
+                                        <div class="flex items-start">
+                                            <div class="mb-2 flex items-center gap-2 border-b border-gray-200 pb-2">
+                                                <p class="font-medium">{{ capitalizeFirstLetter(event.type) }}</p>
+                                                <p class="text-sm text-muted-foreground">{{ formatDate(event.occurs_at) }} • {{ event.location }}</p>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
