@@ -40,19 +40,17 @@ const isDeleteTeamOpen = ref(false);
                 <div v-else class="mt-4">
                     <p>No players have been added to this team yet.</p>
                 </div>
+                <div v-if="$page.props.auth.user.role === 'coach'" class="mt-8 mb-4 flex justify-end">
+                    <Dialog v-model:open="isAddPlayerOpen">
+                        <DialogTrigger as-child><Button>Add Player</Button></DialogTrigger>
+                        <DialogContent>
+                            <AddPlayerForm :team="team" @close="isAddPlayerOpen = false" />
+                        </DialogContent>
+                    </Dialog>
+                </div>
             </div>
             <EventList :events="team.events" />
-            <MessageList :messages="team.messages" />
-
-            <div v-if="$page.props.auth.user.role === 'coach'" class="mt-8">
-                <Dialog v-model:open="isAddPlayerOpen">
-                    <DialogTrigger as-child><Button>Add Player</Button></DialogTrigger>
-                    <DialogContent>
-                        <AddPlayerForm :team="team" @close="isAddPlayerOpen = false" />
-                    </DialogContent>
-                </Dialog>
-            </div>
-            <div v-if="$page.props.auth.user.role === 'coach'" class="mt-8">
+            <div v-if="$page.props.auth.user.role === 'coach'" class="mt-8 mb-4 flex justify-end">
                 <Dialog v-model:open="isCreateEventOpen">
                     <DialogTrigger as-child><Button>Create Event</Button></DialogTrigger>
                     <DialogContent>
@@ -60,7 +58,8 @@ const isDeleteTeamOpen = ref(false);
                     </DialogContent>
                 </Dialog>
             </div>
-            <div v-if="$page.props.auth.user.role === 'coach'" class="mt-8">
+            <MessageList :messages="team.messages" />
+            <div v-if="$page.props.auth.user.role === 'coach'" class="mt-8 mb-4 flex justify-end">
                 <Dialog v-model:open="isCreateMessageOpen">
                     <DialogTrigger as-child><Button>Create Message</Button></DialogTrigger>
                     <DialogContent>

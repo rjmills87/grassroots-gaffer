@@ -12,12 +12,17 @@ const form = useForm({
     'age-group': null,
 });
 
+const emit = defineEmits<{
+    close: [];
+}>();
+
 const createTeam = () => {
     form.post('/teams', {
         preserveScroll: true,
         onSuccess: () => {
             form.reset();
             toast('Your team has been created successfully');
+            emit('close');
         },
     });
 };

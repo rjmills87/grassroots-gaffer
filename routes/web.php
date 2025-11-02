@@ -16,18 +16,49 @@ Route::get('dashboard', function () {
     $teams = [];
 
     if ($user->role === 'coach') {
-        $teams = $user->teams; 
+        $teams = $user->teams()->with([
+            'events' => function($query) {
+                $query->where('occurs_at', '>=', now())
+                      ->orderBy('occurs_at', 'asc')
+                      ->limit(2);
+            },
+            'messages' => function($query) {
+                $query->with('user')
+                      ->latest()
+                      ->limit(2);
+            },
+            'players' // Preload players count
+        ])->get();
     } elseif ($user->role === 'guardian') {
-        $players = $user->players; 
+        $players = $user->players()->with([
+            'team.events' => function($query) {
+                $query->where('occurs_at', '>=', now())
+                      ->orderBy('occurs_at', 'asc')
+                      ->limit(2);
+            },
+            'team.messages' => function($query) {
+                $query->with('user')
+                      ->latest()
+                      ->limit(2);
+            },
+            'team.players' // Preload players count
+        ])->get();
+        
         $teams = $players->map(function ($player) {
             return $player->team;
         })->unique();
     }
+
     return Inertia::render('Dashboard', [
         'user' => $user,
-        'teams' => $teams
+        'teams' => $teams->map(function($team) {
+            return array_merge($team->toArray(), [
+                'events' => $team->events ?? [],
+                'messages' => $team->messages ?? [],
+                'players' => $team->players ?? []
+            ]);
+        })
     ]);
-
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/teams/{team}',[TeamController::class,'show'])->middleware(['auth','verified'])->name('teams.show');
