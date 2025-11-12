@@ -6,6 +6,7 @@ export interface Team {
     id: number;
     name: string;
     age_group: string;
+    team_badge_url: string;
     players: Player[];
     events: Event[];
     messages: Message[];  

@@ -78,6 +78,7 @@ const hasMessages = computed(() => {
                         class="group block rounded-lg border p-6 transition-colors hover:bg-accent/50"
                     >
                         <div class="flex items-center justify-between">
+                            <img :src="team.team_badge_url" alt="Team Badge" class="h-32 w-32 rounded-full" />
                             <h3 class="text-lg font-medium">{{ team.name }}</h3>
                         </div>
                         <p class="mt-2 text-sm text-muted-foreground">
