@@ -11,6 +11,7 @@ class Team extends Model
     protected $fillable = [
         'name',
         'age_group',
+        'team_badge_url',
     ];
 
 

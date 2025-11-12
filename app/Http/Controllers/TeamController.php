@@ -13,11 +13,18 @@ class TeamController extends Controller
         $validated = $request->validate([
             'team-name' => 'required|string|max:255',
             'age-group' => 'required|string',
+            'club-badge' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
+
+        $path = null;
+        if ($request->hasFile('club-badge')) {
+            $path = $request->file('club-badge')->store('team_badges', 'public');
+        }
         
         $team = new Team([
             'name' => $validated['team-name'],
             'age_group' => $validated['age-group'],
+            'team_badge_url' => $path,
         ]);
         
         $request->user()->teams()->save($team);
