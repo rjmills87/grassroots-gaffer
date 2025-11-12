@@ -10,6 +10,7 @@ import { toast } from 'vue-sonner';
 const form = useForm({
     'team-name': '',
     'age-group': null,
+    'club-badge': null,
 });
 
 const emit = defineEmits<{
@@ -32,7 +33,7 @@ const createTeam = () => {
         <h1 class="text-xl font-bold">Create a New Team</h1>
         <Form @submit.prevent="createTeam" class="flex flex-col gap-4">
             <div class="grid gap-2">
-                <Label for="team-name">Name</Label>
+                <Label for="team-name">Team Name</Label>
                 <Input v-model="form['team-name']" type="text" name="team-name" placeholder="Enter Your Team Name" />
                 <InputError :message="form.errors['team-name']" />
             </div>
@@ -60,6 +61,11 @@ const createTeam = () => {
                     </SelectContent>
                 </Select>
                 <InputError :message="form.errors['age-group']" />
+            </div>
+            <div class="grid gap-2">
+                <Label for="club-badge">Club Badge</Label>
+                <Input class="cursor-pointer" id="club-badge" type="file" @input="form['club-badge'] = $event.target.files[0]" />
+                <InputError :message="form.errors['club-badge']" />
             </div>
             <Button type="submit">Create Team</Button>
         </Form>
