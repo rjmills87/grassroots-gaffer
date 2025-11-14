@@ -63,7 +63,7 @@ const createTeam = () => {
                 <InputError :message="form.errors['age-group']" />
             </div>
             <div class="grid gap-2">
-                <Label for="club-badge">Club Badge</Label>
+                <Label for="club-badge">Club Badge <span class="text-gray-400">*can be added later</span></Label>
                 <Input class="cursor-pointer" id="club-badge" type="file" @input="form['club-badge'] = $event.target.files[0]" />
                 <InputError :message="form.errors['club-badge']" />
             </div>

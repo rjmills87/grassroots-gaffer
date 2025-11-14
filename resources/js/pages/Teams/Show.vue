@@ -20,7 +20,7 @@ const props = defineProps<{
     <AppLayout>
         <div class="flex flex-col gap-4 p-4">
             <div class="flex items-center gap-4" v-if="team.team_badge_url">
-                <img :src="`/storage/${team.team_badge_url}`" alt="Team Badge" class="h-20 w-20 rounded-full" />
+                <img :src="`${team.team_badge_url}`" alt="Team Badge" class="h-20 w-20 rounded-full" />
                 <h1 class="text-2xl font-semibold">{{ team.name }}</h1>
             </div>
             <div v-else>

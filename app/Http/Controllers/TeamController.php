@@ -13,7 +13,7 @@ class TeamController extends Controller
         $validated = $request->validate([
             'team-name' => 'required|string|max:255',
             'age-group' => 'required|string',
-            'club-badge' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'club-badge' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048|nullable|sometimes',
         ]);
 
         $path = null;

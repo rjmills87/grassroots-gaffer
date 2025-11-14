@@ -5,6 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+
 
 class Team extends Model
 {
@@ -33,5 +37,19 @@ class Team extends Model
     public function messages(): HasMany
     {
         return $this->hasMany(Message::class);
+    }
+
+    protected function teamBadgeUrl(): Attribute
+    {
+        return Attribute::make(
+                get: function ($value) {
+                    log::info($value);
+                    if($value) {
+                        return Storage::url($value);
+                    } else {
+                        return Storage::url('placeholder-badge.jpeg');
+                    }
+                }    
+            );
     }
 }
