@@ -5,6 +5,7 @@ import Input from '@/components/ui/input/Input.vue';
 import Label from '@/components/ui/label/Label.vue';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Form, useForm } from '@inertiajs/vue3';
+import { ref } from 'vue';
 import { toast } from 'vue-sonner';
 
 const form = useForm({
@@ -26,6 +27,14 @@ const createTeam = () => {
             emit('close');
         },
     });
+};
+
+const teamBadgePreview = ref('');
+
+const handleTeamBadgeChange = (event: any) => {
+    const fileInput = (form['club-badge'] = event.target.files[0]);
+    const tempUrl = URL.createObjectURL(fileInput);
+    teamBadgePreview.value = tempUrl;
 };
 </script>
 <template>
@@ -63,8 +72,9 @@ const createTeam = () => {
                 <InputError :message="form.errors['age-group']" />
             </div>
             <div class="grid gap-2">
-                <Label for="club-badge">Club Badge <span class="text-gray-400">*can be added later</span></Label>
-                <Input class="cursor-pointer" id="club-badge" type="file" @input="form['club-badge'] = $event.target.files[0]" />
+                <Label for="club-badge">Club Badge <span class="text-gray-400">(can be added later)</span></Label>
+                <Input class="cursor-pointer" id="club-badge" type="file" @change="handleTeamBadgeChange" />
+                <img class="mt-4 h-20 w-20 rounded-full border-2 border-gray-300" v-if="teamBadgePreview" :src="teamBadgePreview" alt="" />
                 <InputError :message="form.errors['club-badge']" />
             </div>
             <Button type="submit">Create Team</Button>
