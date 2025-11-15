@@ -1,5 +1,5 @@
 ---
-trigger: manual
+trigger: always_on
 ---
 
 # ⚽ The Grassroots Coach App (Grassroots Gaffer): MVP Roadmap ⚽
