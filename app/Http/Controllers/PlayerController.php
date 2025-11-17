@@ -9,6 +9,7 @@ use App\Models\Player;
 use App\Models\Team;
 use App\Models\User;
 use App\Notifications\WelcomeToTeamNotification;
+use Illuminate\Validation\Rule;
 
 class PlayerController extends Controller
 {
@@ -19,6 +20,15 @@ class PlayerController extends Controller
             'guardian_name' => 'required|string|max:255',
             'guardian_email' => 'required|email',
             'guardian_phone' => 'required|string|max:255',
+            'squad_number' => [
+                'integer',
+                'min:1',
+                'max:99',
+                Rule::unique('players')->where(function ($query) use ($team) {
+                    return $query->where('team_id', $team->id);
+                }),
+            ],
+            'position' => 'string|max:255',
         ]);
 
         $guardianUser = User::where('email', $validated['guardian_email'])->first();

@@ -15,6 +15,8 @@ class Player extends Model
         'guardian_email',
         'guardian_phone',
         'guardian_id',
+        'squad_number',
+        'position',
     ];
 
     public function team(): BelongsTo

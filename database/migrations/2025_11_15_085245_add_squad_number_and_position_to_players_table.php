@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('players', function (Blueprint $table) {
             $table->smallInteger('squad_number')->nullable();
             $table->unique(['team_id','squad_number']);
-            $table->enum('position', ['gk','cb','rb','lb','rwb','lwb','cm','cdm','amf','rm','lm','lf','rf','cf','st'])->nullable();
+            $table->enum('position', ['gk','cb','rb','lb','rwb','lwb','cm','cdm','amf','rm','lm','lwf','rwf','cf','st'])->nullable();
         });
     }
 

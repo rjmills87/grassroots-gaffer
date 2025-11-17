@@ -2,6 +2,7 @@
 import Button from '@/components/ui/button/Button.vue';
 import Input from '@/components/ui/input/Input.vue';
 import Label from '@/components/ui/label/Label.vue';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Team } from '@/types/Team';
 import { useForm } from '@inertiajs/vue3';
 import { toast } from 'vue-sonner';
@@ -20,6 +21,8 @@ const form = useForm({
     guardian_name: '',
     guardian_email: '',
     guardian_phone: '',
+    squad_number: '',
+    position: '',
 });
 
 const addPlayer = () => {
@@ -35,9 +38,9 @@ const addPlayer = () => {
 </script>
 
 <template>
-    <div class="mt-8 flex flex-col gap-4">
+    <div class="mt-8 flex w-full flex-col items-center justify-center gap-4">
         <h2 class="text-xl font-semibold">Add a New Player</h2>
-        <form @submit.prevent="addPlayer" class="space-y-4">
+        <form @submit.prevent="addPlayer" class="w-full space-y-4">
             <div class="grid gap-2">
                 <Label for="name">Player Name</Label>
                 <Input v-model="form.name" type="text" />
@@ -57,6 +60,39 @@ const addPlayer = () => {
                 <Label for="guardian_phone">Parent/Guardian Phone Number</Label>
                 <Input v-model="form.guardian_phone" type="text" />
                 <InputError :message="form.errors.guardian_phone" />
+            </div>
+            <div class="grid gap-2">
+                <Label for="squad_number">Squad Number (1-99)</Label>
+                <Input v-model="form.squad_number" type="number" />
+                <InputError :message="form.errors.squad_number" />
+            </div>
+            <div class="grid gap-2">
+                <Label for="position">Position</Label>
+                <Select v-model="form['position']" name="position">
+                    <SelectTrigger>
+                        <SelectValue placeholder="Select Players Preferred Position" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectGroup>
+                            <SelectItem value="gk"> Goalkeeper </SelectItem>
+                            <SelectItem value="cb"> Center Back </SelectItem>
+                            <SelectItem value="rb"> Right Back </SelectItem>
+                            <SelectItem value="lb"> Left Back </SelectItem>
+                            <SelectItem value="rwb"> Right Wing Back </SelectItem>
+                            <SelectItem value="lwb"> Left Wing Back </SelectItem>
+                            <SelectItem value="cm"> Center Midfield </SelectItem>
+                            <SelectItem value="cdm"> Center Defensive Midfield </SelectItem>
+                            <SelectItem value="amf"> Attacking Midfield </SelectItem>
+                            <SelectItem value="rm"> Right Midfield </SelectItem>
+                            <SelectItem value="lm"> Left Midfield </SelectItem>
+                            <SelectItem value="lwf"> Left Wing Forward </SelectItem>
+                            <SelectItem value="rwf"> Right Wing Forward </SelectItem>
+                            <SelectItem value="cf"> Center Forward </SelectItem>
+                            <SelectItem value="st"> Striker </SelectItem>
+                        </SelectGroup>
+                    </SelectContent>
+                </Select>
+                <InputError :message="form.errors.position" />
             </div>
             <Button type="submit">Add Player</Button>
         </form>

@@ -8,4 +8,6 @@ export interface Player {
     pivot?: {
         player_response: 'attending' | 'unavailable' | null;
     };
+    squad_number: number;
+    position: string;
 }
