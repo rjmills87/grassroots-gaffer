@@ -36,10 +36,11 @@ const props = defineProps<{
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead class="w-1/4 font-bold">Name</TableHead>
-                                <TableHead class="w-1/4 font-bold">Squad Number</TableHead>
-                                <TableHead class="w-1/4 font-bold">Position</TableHead>
-                                <TableHead class="w-1/4 font-bold">Guardian Details</TableHead>
+                                <TableHead class="w-1/5 font-bold">Name</TableHead>
+                                <TableHead class="w-1/5 font-bold">Squad Number</TableHead>
+                                <TableHead class="w-1/5 font-bold">Position</TableHead>
+                                <TableHead class="w-1/5 font-bold">Guardian Details</TableHead>
+                                <TableHead class="w-1/5 font-bold">Actions</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -71,6 +72,9 @@ const props = defineProps<{
                                             </SheetDescription>
                                         </SheetContent>
                                     </Sheet></TableCell
+                                >
+                                <TableCell class="m-0 flex items-center gap-4"
+                                    ><AddPlayerDialog :team="team" :player="player" /> <Button variant="destructive">Delete</Button></TableCell
                                 >
                             </TableRow>
                         </TableBody>

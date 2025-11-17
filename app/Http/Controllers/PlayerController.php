@@ -58,4 +58,27 @@ class PlayerController extends Controller
 
         return redirect()->route('teams.show',$team);
     }
+
+    public function update(Request $request, Player $player)
+    {
+             $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'guardian_name' => 'required|string|max:255',
+                'guardian_email' => 'required|email',
+                'guardian_phone' => 'required|string|max:255',
+                'squad_number' => [
+                    'integer',
+                    'min:1',
+                    'max:99',
+                    Rule::unique('players')->where(function ($query) use ($player) {
+                    return $query->where('team_id', $player->team->id);
+                })->ignore($player->id),
+            ],
+            'position' => 'string|max:255',
+        ]);
+
+        $player->update($validated);
+
+        return redirect()->route('team.show', $player->team);
+    }
 }

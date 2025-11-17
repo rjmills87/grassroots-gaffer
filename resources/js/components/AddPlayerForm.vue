@@ -3,6 +3,7 @@ import Button from '@/components/ui/button/Button.vue';
 import Input from '@/components/ui/input/Input.vue';
 import Label from '@/components/ui/label/Label.vue';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Player } from '@/types/Player';
 import { Team } from '@/types/Team';
 import { useForm } from '@inertiajs/vue3';
 import { toast } from 'vue-sonner';
@@ -10,6 +11,7 @@ import InputError from './InputError.vue';
 
 const props = defineProps<{
     team: Team;
+    player?: Player;
 }>();
 
 const emit = defineEmits<{
@@ -17,30 +19,41 @@ const emit = defineEmits<{
 }>();
 
 const form = useForm({
-    name: '',
-    guardian_name: '',
-    guardian_email: '',
-    guardian_phone: '',
-    squad_number: '',
-    position: '',
+    name: props.player ? props.player.name : '',
+    guardian_name: props.player ? props.player.guardian_name : '',
+    guardian_email: props.player ? props.player.guardian_email : '',
+    guardian_phone: props.player ? props.player.guardian_phone : '',
+    squad_number: props.player ? props.player.squad_number : '',
+    position: props.player ? props.player.position : '',
 });
 
-const addPlayer = () => {
-    form.post(`/teams/${props.team.id}/players`, {
-        preserveScroll: true,
-        onSuccess: () => {
-            form.reset();
-            emit('close');
-            toast('Player has been successfully added to the team');
-        },
-    });
+const submitForm = () => {
+    if (props.player) {
+        form.patch(`/players/${props.team.id}`, {
+            preserveScroll: true,
+            onSuccess: () => {
+                form.reset();
+                emit('close');
+                toast('Your Player edits have been saved successfully');
+            },
+        });
+    } else {
+        form.post(`/teams/${props.team.id}/players`, {
+            preserveScroll: true,
+            onSuccess: () => {
+                form.reset();
+                emit('close');
+                toast('Player has been successfully added to the team');
+            },
+        });
+    }
 };
 </script>
 
 <template>
     <div class="mt-8 flex w-full flex-col items-center justify-center gap-4">
-        <h2 class="text-xl font-semibold">Add a New Player</h2>
-        <form @submit.prevent="addPlayer" class="w-full space-y-4">
+        <h2 class="text-xl font-semibold">{{ props.player ? 'Edit Player' : 'Add a New Player' }}</h2>
+        <form @submit.prevent="submitForm" class="w-full space-y-4">
             <div class="grid gap-2">
                 <Label for="name">Player Name</Label>
                 <Input v-model="form.name" type="text" />
@@ -94,7 +107,7 @@ const addPlayer = () => {
                 </Select>
                 <InputError :message="form.errors.position" />
             </div>
-            <Button type="submit">Add Player</Button>
+            <Button type="submit">{{ props.player ? 'Save Edits' : 'Add Player' }}</Button>
         </form>
     </div>
 </template>
