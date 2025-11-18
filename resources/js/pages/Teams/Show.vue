@@ -1,6 +1,6 @@
 <!-- eslint-disable @typescript-eslint/no-unused-vars -->
 <script setup lang="ts">
-import AddPlayerDialog from '@/components/AddPlayerDialog.vue';
+import AddOrEditPlayerDialog from '@/components/AddOrEditPlayerDialog.vue';
 import CreateEventDialog from '@/components/CreateEventDialog.vue';
 import CreateMessageDialog from '@/components/CreateMessageDialog.vue';
 import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog.vue';
@@ -76,7 +76,7 @@ const props = defineProps<{
                                     </Sheet></TableCell
                                 >
                                 <TableCell class="m-0 flex items-center gap-4"
-                                    ><AddPlayerDialog :team="team" :player="player" />
+                                    ><AddOrEditPlayerDialog :team="team" :player="player" />
                                     <DeleteConfirmationDialog
                                         itemType="Player"
                                         :itemName="player.name"
@@ -91,7 +91,7 @@ const props = defineProps<{
                 <div v-else class="mt-4">
                     <p>No players have been added to this team yet.</p>
                 </div>
-                <AddPlayerDialog class="pr-4" :team="team" />
+                <AddOrEditPlayerDialog class="pr-4" :team="team" />
             </div>
             <EventList :events="team.events" />
             <CreateEventDialog :team="team" />

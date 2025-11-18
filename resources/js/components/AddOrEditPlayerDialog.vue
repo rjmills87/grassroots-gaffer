@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Player } from '@/types/Player';
 import { Team } from '@/types/Team';
 import { ref } from 'vue';
-import AddPlayerForm from './AddPlayerForm.vue';
+import AddPlayerForm from './AddOrEditPlayerForm.vue';
 
 const props = defineProps<{
     team: Team;
