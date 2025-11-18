@@ -3,7 +3,7 @@
 import AddPlayerDialog from '@/components/AddPlayerDialog.vue';
 import CreateEventDialog from '@/components/CreateEventDialog.vue';
 import CreateMessageDialog from '@/components/CreateMessageDialog.vue';
-import DeleteTeamDialog from '@/components/DeleteTeamDialog.vue';
+import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog.vue';
 import EventList from '@/components/EventList.vue';
 import MessageList from '@/components/MessageList.vue';
 import { Button } from '@/components/ui/button';
@@ -11,11 +11,13 @@ import Label from '@/components/ui/label/Label.vue';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/AppLayout.vue';
+import { Player } from '@/types/Player';
 import { Team } from '@/types/Team';
 import { Head } from '@inertiajs/vue3';
 
 const props = defineProps<{
     team: Team;
+    players: Player;
 }>();
 </script>
 
@@ -74,8 +76,14 @@ const props = defineProps<{
                                     </Sheet></TableCell
                                 >
                                 <TableCell class="m-0 flex items-center gap-4"
-                                    ><AddPlayerDialog :team="team" :player="player" /> <Button variant="destructive">Delete</Button></TableCell
-                                >
+                                    ><AddPlayerDialog :team="team" :player="player" />
+                                    <DeleteConfirmationDialog
+                                        itemType="Player"
+                                        :itemName="player.name"
+                                        deleteRoute="players.destroy"
+                                        :itemId="player.id"
+                                        :toastMessage="`Player: ${player.name} has been deleted successfully`"
+                                /></TableCell>
                             </TableRow>
                         </TableBody>
                     </Table>
@@ -83,13 +91,21 @@ const props = defineProps<{
                 <div v-else class="mt-4">
                     <p>No players have been added to this team yet.</p>
                 </div>
-                <AddPlayerDialog :team="team" />
+                <AddPlayerDialog class="pr-4" :team="team" />
             </div>
             <EventList :events="team.events" />
             <CreateEventDialog :team="team" />
             <MessageList :messages="team.messages" />
             <CreateMessageDialog :team="team" />
-            <DeleteTeamDialog :team="team" />
+            <div class="mt-8 mr-4 mb-4 flex justify-end">
+                <DeleteConfirmationDialog
+                    itemType="Team"
+                    :itemName="team.name"
+                    deleteRoute="teams.destroy"
+                    :itemId="team.id"
+                    :toastMessage="`Team: ${team.name} has been deleted successfully`"
+                />
+            </div>
         </div>
     </AppLayout>
 </template>

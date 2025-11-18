@@ -81,4 +81,11 @@ class PlayerController extends Controller
 
         return redirect()->route('team.show', $player->team);
     }
+
+    public function destroy(Player $player)
+    {
+        $player->delete();
+
+        return redirect()->route('teams.show', $player->team);
+    }
 }

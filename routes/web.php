@@ -75,6 +75,7 @@ Route::delete('/teams/{team}', [TeamController::class, 'destroy'])
 
 Route::post('/teams/{team}/players', [PlayerController::class,'store'])->middleware(['auth','verified'])->name('players.store');
 Route::patch('/players/{player}', [PlayerController::class, 'update'])->name('players.update');
+Route::delete('/players/{player}', [PlayerController::class, 'destroy'])->name('players.destroy');
 
 Route::post('/teams/{team}/events',
 [EventController::class,'store'])->middleware(['auth','verified'])->name('events.store');
