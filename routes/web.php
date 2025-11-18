@@ -7,10 +7,12 @@ use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\MessageController;
 
+// Welcome Route
 Route::get('/', function () {
     return Inertia::render('Welcome');
 })->name('home');
 
+// Dashboard Route
 Route::get('dashboard', function () {
     $user = auth()->user();
     $teams = [];
@@ -61,32 +63,30 @@ Route::get('dashboard', function () {
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+// Team Routes
 Route::get('/teams/{team}',[TeamController::class,'show'])->middleware(['auth','verified'])->name('teams.show');
-
-Route::get('/events/{event}',[EventController::class,'show'])->middleware(['auth','verified'])->name('event.show');
-
 Route::post('/teams', [TeamController::class, 'store'])
-    ->middleware(['auth', 'verified'])
-    ->name('teams.store');
-
+->middleware(['auth', 'verified'])
+->name('teams.store');
 Route::delete('/teams/{team}', [TeamController::class, 'destroy'])
-    ->middleware(['auth', 'verified'])
-    ->name('teams.destroy');
+->middleware(['auth', 'verified'])
+->name('teams.destroy');
 
+// Player Routes
 Route::post('/teams/{team}/players', [PlayerController::class,'store'])->middleware(['auth','verified'])->name('players.store');
 Route::patch('/players/{player}', [PlayerController::class, 'update'])->name('players.update');
 Route::delete('/players/{player}', [PlayerController::class, 'destroy'])->name('players.destroy');
 
-Route::post('/teams/{team}/events',
-[EventController::class,'store'])->middleware(['auth','verified'])->name('events.store');
-
+// Event Routes
+Route::get('/events/{event}',[EventController::class,'show'])->middleware(['auth','verified'])->name('event.show');
+Route::post('/teams/{team}/events',[EventController::class,'store'])->middleware(['auth','verified'])->name('events.store');
 Route::post('/events/{event}/players/{player}',[EventController::class,'update'])->middleware(['auth','verified'])->name('events.update');
+Route::post('/events/{event}/send-reminders', [EventController::class,'sendReminders'])->middleware(['auth','verified'])->name('events.sendReminders');
 
+// Message Routes
 Route::post('/teams/{team}/messages',[MessageController::class,'store'])->middleware(['auth','verified'])->name('teams.messages.store');
 Route::put('/messages/{message}', [MessageController::class,'update'])->middleware(['auth','verified'])->name('messages.update');
 Route::delete('/messages/{message}', [MessageController::class,'destroy'])->middleware(['auth','verified'])->name('messages.destroy');
-
-Route::post('/events/{event}/send-reminders', [EventController::class,'sendReminders'])->middleware(['auth','verified'])->name('events.sendReminders');
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
