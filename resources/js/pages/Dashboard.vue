@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import CreateTeamForm from '@/components/CreateTeamForm.vue';
-import Button from '@/components/ui/button/Button.vue';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import CreateTeamDialog from '@/components/CreateTeamDialog.vue';
 import { capitalizeFirstLetter, formatDate } from '@/helpers';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { User, type BreadcrumbItem } from '@/types';
 import { type Team } from '@/types/Team';
 import { Head, Link } from '@inertiajs/vue3';
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -20,8 +18,6 @@ const props = defineProps<{
     user: User;
     teams: Array<Team>;
 }>();
-
-const isCreateTeamOpen = ref(false);
 
 const teamHeadingText = computed(() => {
     if (props.teams.length === 0) return 'Create your first team';
@@ -53,17 +49,7 @@ const hasMessages = computed(() => {
             <section>
                 <div class="mb-4 flex items-center justify-between">
                     <h2 class="text-2xl font-semibold">{{ teamHeadingText }}</h2>
-
-                    <Dialog v-model:open="isCreateTeamOpen">
-                        <DialogTrigger as-child>
-                            <Button>
-                                <span class="hidden sm:inline">Create New Team</span>
-                            </Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                            <CreateTeamForm @close="isCreateTeamOpen = false" />
-                        </DialogContent>
-                    </Dialog>
+                    <CreateTeamDialog v-if="user.role === 'coach'" />
                 </div>
 
                 <div v-if="teams.length === 0" class="rounded-lg border border-dashed p-8 text-center">

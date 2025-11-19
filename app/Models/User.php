@@ -60,6 +60,6 @@ class User extends Authenticatable
 
     public function players(): HasMany
     {
-        return $this->hasMany(Player::class);
+        return $this->hasMany(Player::class, 'guardian_id');
     }
 }
