@@ -6,9 +6,6 @@ import CreateMessageDialog from '@/components/CreateMessageDialog.vue';
 import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog.vue';
 import EventList from '@/components/EventList.vue';
 import MessageList from '@/components/MessageList.vue';
-import { Button } from '@/components/ui/button';
-import Label from '@/components/ui/label/Label.vue';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Player } from '@/types/Player';
@@ -38,44 +35,22 @@ const props = defineProps<{
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead class="w-1/5 font-bold">Name</TableHead>
-                                <TableHead class="w-1/5 font-bold">Squad Number</TableHead>
-                                <TableHead class="w-1/5 font-bold">Position</TableHead>
-                                <TableHead class="w-1/5 font-bold">Guardian Details</TableHead>
-                                <TableHead class="w-1/5 font-bold">Actions</TableHead>
+                                <TableHead class="w-auto font-bold">Name</TableHead>
+                                <TableHead class="w-auto font-bold">Squad Number</TableHead>
+                                <TableHead class="w-auto font-bold">Position</TableHead>
+                                <TableHead v-if="$page.props.auth.user.role === 'coach'" class="w-auto font-bold">Guardian Details</TableHead>
+                                <TableHead v-if="$page.props.auth.user.role === 'coach'" class="w-auto font-bold">Actions</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             <TableRow v-for="player in props.team.players" :key="player.id">
-                                <TableCell class="w-1/4">{{ player.name }}</TableCell>
-                                <TableCell class="w-1/4 font-bold">{{ player.squad_number }}</TableCell>
-                                <TableCell class="w-1/4 font-bold uppercase">{{ player.position }}</TableCell>
-                                <TableCell class="w-1/4"
-                                    ><Sheet>
-                                        <SheetTrigger asChild>
-                                            <Button variant="default">View Details</Button>
-                                        </SheetTrigger>
-                                        <SheetContent class="max-w-[400px]">
-                                            <SheetHeader class="p-4">
-                                                <SheetTitle class="flex flex-col">
-                                                    <span class="font-bold">Guardian Details</span>
-                                                    <span class="text-xl font-semibold">{{ player.name }}</span>
-                                                </SheetTitle>
-                                            </SheetHeader>
-                                            <SheetDescription class="space-y-2 p-4">
-                                                <div class="flex flex-col gap-2">
-                                                    <Label class="font-bold">Name</Label>
-                                                    <p>{{ player.guardian_name }}</p>
-                                                    <Label class="font-bold">Email</Label>
-                                                    <p>{{ player.guardian_email }}</p>
-                                                    <Label class="font-bold">Phone</Label>
-                                                    <p>{{ player.guardian_phone }}</p>
-                                                </div>
-                                            </SheetDescription>
-                                        </SheetContent>
-                                    </Sheet></TableCell
-                                >
-                                <TableCell class="m-0 flex items-center gap-4"
+                                <TableCell class="w-auto">{{ player.name }}</TableCell>
+                                <TableCell class="w-auto font-bold">{{ player.squad_number }}</TableCell>
+                                <TableCell class="w-auto font-bold uppercase">{{ player.position }}</TableCell>
+                                <TableCell class="w-auto"
+                                    ><GuardianDetailsSheet v-if="$page.props.auth.user.role === 'coach'" :player="player"
+                                /></TableCell>
+                                <TableCell v-if="$page.props.auth.user.role === 'coach'" class="m-0 flex items-center gap-4"
                                     ><AddOrEditPlayerDialog :team="team" :player="player" />
                                     <DeleteConfirmationDialog
                                         itemType="Player"
@@ -91,12 +66,12 @@ const props = defineProps<{
                 <div v-else class="mt-4">
                     <p>No players have been added to this team yet.</p>
                 </div>
-                <AddOrEditPlayerDialog class="pr-4" :team="team" />
+                <AddOrEditPlayerDialog v-if="$page.props.auth.user.role === 'coach'" class="pr-4" :team="team" />
             </div>
             <EventList :events="team.events" />
-            <CreateEventDialog :team="team" />
+            <CreateEventDialog v-if="$page.props.auth.user.role === 'coach'" :team="team" />
             <MessageList :messages="team.messages" />
-            <CreateMessageDialog :team="team" />
+            <CreateMessageDialog v-if="$page.props.auth.user.role === 'coach'" :team="team" />
             <div class="mt-8 mr-4 mb-4 flex justify-end">
                 <DeleteConfirmationDialog
                     itemType="Team"
