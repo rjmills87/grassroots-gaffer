@@ -7,10 +7,23 @@ use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\MessageController;
 
-// Welcome Route
+// Public Page Routes
 Route::get('/', function () {
     return Inertia::render('Welcome');
 })->name('home');
+
+Route::get('/features', function () {
+    return Inertia::render('Features');
+})->name('features');
+
+Route::get('/pricing', function () {
+    return Inertia::render('Pricing');
+})->name('pricing');
+
+Route::get('/faq', function (){
+    return Inertia::render('FAQ');
+})->name('faq');
+
 
 // Dashboard Route
 Route::get('dashboard', function () {
