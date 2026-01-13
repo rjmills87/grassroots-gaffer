@@ -43,11 +43,10 @@ class Team extends Model
     {
         return Attribute::make(
                 get: function ($value) {
-                    log::info($value);
                     if($value) {
-                        return Storage::url($value);
+                        return Storage::disk('public')->url($value);
                     } else {
-                        return Storage::url('placeholder-badge.jpeg');
+                        return asset('placeholder-badge.jpeg');
                     }
                 }    
             );
