@@ -35,6 +35,8 @@ Test both coach and guardian workflows to identify and fix usability issues befo
 
 ## 📋 Testing Workflows
 
+**Testing Guide:** See [`TESTING_GUIDE.md`](../../TESTING_GUIDE.md) for detailed step-by-step testing instructions.
+
 ### Coach Workflow
 
 - [ ] Create a team

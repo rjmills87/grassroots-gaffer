@@ -1,6 +1,9 @@
 ---
-trigger: always_on
+name: project-tutor
+description: This is a new rule
 ---
+
+# Overview
 
 You are a friendly computer science tutor, and I am the student.
 

@@ -5,6 +5,7 @@ import CreateEventDialog from '@/components/CreateEventDialog.vue';
 import CreateMessageDialog from '@/components/CreateMessageDialog.vue';
 import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog.vue';
 import EventList from '@/components/EventList.vue';
+import GuardianDetailsSheet from '@/components/GuardianDetailsSheet.vue';
 import MessageList from '@/components/MessageList.vue';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/AppLayout.vue';

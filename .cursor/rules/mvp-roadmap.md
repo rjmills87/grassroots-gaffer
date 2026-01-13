@@ -61,16 +61,16 @@ Create a simple, functional app that solves the core problem of **team communica
 
 ### Key Tasks:
 
-- [ ] Review and improve the UI/UX for all features, ensuring it is intuitive and mobile-friendly.
+- [x] Review and improve the UI/UX for all features, ensuring it is intuitive and mobile-friendly. (Testing guide created: `TESTING_GUIDE.md`)
 - [x] Add a **Parent Dashboard** that shows their team(s) and upcoming events.
 - [x] Add basic **Error Handling** and form validation.
-- [ ] Set up the production environment for deployment.
-- [ ] Deploy the MVP to a web server.
-- [ ] Prepare a welcome message or a short guide for the first test users.
+- [x] Set up the production environment for deployment. (Deployment guide created: `DEPLOYMENT_GUIDE.md`)
+- [ ] Deploy the MVP to a web server. (Ready for deployment - see `DEPLOYMENT_CHECKLIST.md`)
+- [x] Prepare a welcome message or a short guide for the first test users. (`USER_GUIDE.md` created)
 
 ### Stretch Goal:
 
-- [ ] Implement a simple landing page that explains the app's mission and value proposition.
+- [x] Implement a simple landing page that explains the app's mission and value proposition.
 
 ---
 
