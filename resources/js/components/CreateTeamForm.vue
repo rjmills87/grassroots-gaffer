@@ -5,9 +5,9 @@ import Input from '@/components/ui/input/Input.vue';
 import Label from '@/components/ui/label/Label.vue';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Form, useForm } from '@inertiajs/vue3';
+import { LoaderCircle } from 'lucide-vue-next';
 import { ref } from 'vue';
 import { toast } from 'vue-sonner';
-
 const form = useForm({
     'team-name': '',
     'age-group': null,
@@ -77,7 +77,10 @@ const handleTeamBadgeChange = (event: any) => {
                 <img class="mt-4 h-20 w-20 rounded-full border-2 border-gray-300" v-if="teamBadgePreview" :src="teamBadgePreview" alt="" />
                 <InputError :message="form.errors['club-badge']" />
             </div>
-            <Button type="submit">Create Team</Button>
+            <Button type="submit" :disabled="form.processing">
+                <LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin" />
+                {{ form.processing ? 'Creating...' : 'Create Team' }}
+            </Button>
         </Form>
     </div>
 </template>

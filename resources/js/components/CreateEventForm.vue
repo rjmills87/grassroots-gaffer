@@ -5,7 +5,7 @@ import { Team } from '@/types/Team';
 import { useForm } from '@inertiajs/vue3';
 import type { DateValue } from '@internationalized/date';
 import { DateFormatter, getLocalTimeZone } from '@internationalized/date';
-import { Calendar as CalendarIcon } from 'lucide-vue-next';
+import { Calendar as CalendarIcon, LoaderCircle } from 'lucide-vue-next';
 import { ref, watch } from 'vue';
 import { toast } from 'vue-sonner';
 import InputError from './InputError.vue';
@@ -113,7 +113,10 @@ const toDate = (date: DateValue) => {
                 </Popover>
                 <InputError :message="form.errors.occurs_at" />
             </div>
-            <Button class="mt-4 cursor-pointer" type="submit">Add Event</Button>
+            <Button class="mt-4 cursor-pointer" type="submit" :disabled="form.processing">
+                <LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin" />
+                {{ form.processing ? 'Adding...' : 'Add Event' }}
+            </Button>
         </Form>
     </div>
 </template>

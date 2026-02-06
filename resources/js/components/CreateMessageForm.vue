@@ -3,9 +3,9 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Team } from '@/types/Team';
 import { useForm } from '@inertiajs/vue3';
+import { LoaderCircle } from 'lucide-vue-next';
 import { toast } from 'vue-sonner';
 import InputError from './InputError.vue';
-
 const props = defineProps<{
     team: Team;
 }>();
@@ -40,6 +40,9 @@ const submit = () => {
             <Textarea v-model="form.message" placeholder="Type your message here..." />
             <InputError :message="form.errors.message" />
         </div>
-        <Button type="submit" :disabled="form.processing">Send Message</Button>
+        <Button type="submit" :disabled="form.processing">
+            <LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin" />
+            {{ form.processing ? 'Sending...' : 'Send Message' }}
+        </Button>
     </form>
 </template>

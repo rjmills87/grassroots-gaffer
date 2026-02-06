@@ -13,8 +13,12 @@ use Illuminate\Validation\Rule;
 
 class PlayerController extends Controller
 {
-    public function store(Request $request, Team $team, User $user)
+    public function store(Request $request, Team $team)
     {
+        if ($team->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized action.');
+        }
+  
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'guardian_name' => 'required|string|max:255',
@@ -61,6 +65,14 @@ class PlayerController extends Controller
 
     public function update(Request $request, Player $player)
     {
+        $isTeamCoach = $player->team->user_id === auth()->id();
+        $isPlayerGuardian = $player->guardian_id === auth()->id();
+
+        if (!$isTeamCoach && !$isPlayerGuardian) {
+            abort(403, 'Unauthorized action.');
+        }
+      
+
              $validated = $request->validate([
                 'name' => 'required|string|max:255',
                 'guardian_name' => 'required|string|max:255',
@@ -77,13 +89,21 @@ class PlayerController extends Controller
             'position' => 'string|max:255',
         ]);
 
+   
         $player->update($validated);
 
-        return redirect()->route('team.show', $player->team);
+        return redirect()->route('teams.show', $player->team);
     }
 
     public function destroy(Player $player)
     {
+        $isTeamCoach = $player->team->user_id === auth()->id();
+        $isPlayerGuardian = $player->guardian_id === auth()->id();
+
+        if (!$isTeamCoach && !$isPlayerGuardian) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $player->delete();
 
         return redirect()->route('teams.show', $player->team);

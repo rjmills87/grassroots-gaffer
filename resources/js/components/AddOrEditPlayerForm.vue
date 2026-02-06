@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { Player } from '@/types/Player';
 import { Team } from '@/types/Team';
 import { useForm } from '@inertiajs/vue3';
+import { LoaderCircle } from 'lucide-vue-next';
 import { toast } from 'vue-sonner';
 import InputError from './InputError.vue';
 
@@ -29,7 +30,7 @@ const form = useForm({
 
 const submitForm = () => {
     if (props.player) {
-        form.patch(`/players/${props.team.id}`, {
+        form.patch(`/players/${props.player.id}`, {
             preserveScroll: true,
             onSuccess: () => {
                 form.reset();
@@ -107,7 +108,10 @@ const submitForm = () => {
                 </Select>
                 <InputError :message="form.errors.position" />
             </div>
-            <Button type="submit">{{ props.player ? 'Save Edits' : 'Add Player' }}</Button>
+            <Button type="submit" :disabled="form.processing">
+                <LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin" />
+                {{ form.processing ? 'Saving...' : props.player ? 'Save Edits' : 'Add Player' }}
+            </Button>
         </form>
     </div>
 </template>
