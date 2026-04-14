@@ -126,12 +126,15 @@ const sendEventReminder = () => {
                                 <p class="text-xs capitalize">
                                     {{ player.pivot?.player_response ?? 'no response yet' }}
                                 </p>
+                                <p v-if="props.user.email === player.guardian_email" class="mt-1 text-xs font-medium text-primary">
+                                    Your player
+                                </p>
                             </div>
 
                             <div v-if="props.user.email === player.guardian_email" class="flex gap-2">
                                 <Button
                                     @click="setAvailability(player, 'attending')"
-                                    class="cursor-pointer"
+                                    class="h-11 cursor-pointer px-4"
                                     :disabled="availabilityLoadingPlayerId === player.id"
                                     :class="{ 'bg-emerald-700 text-white': player.pivot?.player_response === 'attending' }"
                                     variant="outline"
@@ -141,7 +144,7 @@ const sendEventReminder = () => {
                                 </Button>
                                 <Button
                                     @click="setAvailability(player, 'unavailable')"
-                                    class="cursor-pointer"
+                                    class="h-11 cursor-pointer px-4"
                                     :disabled="availabilityLoadingPlayerId === player.id"
                                     :class="{ 'bg-red-700 text-white': player.pivot?.player_response === 'unavailable' }"
                                     variant="outline"
@@ -157,7 +160,7 @@ const sendEventReminder = () => {
             </section>
 
             <section v-if="props.user.role === 'coach'" class="flex justify-end">
-                <Button @click="sendEventReminder" :disabled="reminderProcessing || noResponseCount === 0" class="cursor-pointer">
+                <Button @click="sendEventReminder" :disabled="reminderProcessing || noResponseCount === 0" class="h-11 cursor-pointer px-4">
                     <LoaderCircle v-if="reminderProcessing" class="h-4 w-4 animate-spin" />
                     <Mail v-else class="h-4 w-4" />
                     {{ reminderProcessing ? 'Sending reminders...' : `Send reminder (${noResponseCount})` }}

@@ -88,7 +88,7 @@ const saveMessage = (messageId: number) => {
                             <Button
                                 v-if="editingMessageId === message.id"
                                 @click="saveMessage(message.id)"
-                                class="cursor-pointer"
+                                class="h-10 cursor-pointer px-4"
                                 :disabled="processingMessageId === message.id"
                             >
                                 <LoaderCircle v-if="processingMessageId === message.id" class="h-4 w-4 animate-spin" />
@@ -97,12 +97,12 @@ const saveMessage = (messageId: number) => {
                             <Button
                                 v-else
                                 @click="editMessage(message.id)"
-                                class="cursor-pointer"
+                                class="h-10 cursor-pointer px-4"
                                 :disabled="processingMessageId === message.id"
                             >
                                 Edit Message
                             </Button>
-                            <Button @click="deleteMessage(message.id)" class="cursor-pointer" :disabled="processingMessageId === message.id">
+                            <Button @click="deleteMessage(message.id)" class="h-10 cursor-pointer px-4" :disabled="processingMessageId === message.id">
                                 <LoaderCircle v-if="processingMessageId === message.id" class="h-4 w-4 animate-spin" />
                                 {{ processingMessageId === message.id ? 'Deleting...' : 'Delete Message' }}
                             </Button>
