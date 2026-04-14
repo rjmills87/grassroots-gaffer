@@ -3,11 +3,29 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Player extends Model
 {
+    public const POSITIONS = [
+        'gk',
+        'cb',
+        'rb',
+        'lb',
+        'rwb',
+        'lwb',
+        'cm',
+        'cdm',
+        'amf',
+        'rm',
+        'lm',
+        'lwf',
+        'rwf',
+        'cf',
+        'st',
+    ];
+
     protected $fillable = [
         'team_id',
         'name',
@@ -32,6 +50,11 @@ class Player extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'guardian_id');
+    }
+
+    public function guardian(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'guardian_id');
     }
 }

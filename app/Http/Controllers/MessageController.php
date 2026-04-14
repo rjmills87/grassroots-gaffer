@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Team;
 use App\Models\Message;
+use App\Models\Team;
 use Illuminate\Http\Request;
 
 class MessageController extends Controller
 {
     public function store(Request $request, Team $team)
     {
+        if (auth()->user()->role !== 'coach' || $team->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $validated = $request->validate([
             'message' => 'required|string|max:255',
         ]);
@@ -18,7 +22,7 @@ class MessageController extends Controller
 
         $message = $team->messages()->create($validated);
 
-        return redirect()->route('teams.show',$team);
+        return redirect()->route('teams.show', $team);
     }
 
     public function update(Request $request, Message $message)

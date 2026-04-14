@@ -27,6 +27,7 @@ Use this checklist when deploying Grassroots Gaffer to production. Follow the de
 - [ ] PHP dependencies installed (`composer install --optimize-autoloader --no-dev`)
 - [ ] Node dependencies installed (`npm ci`)
 - [ ] Production assets built (`npm run build`)
+- [ ] Public storage link created (`php artisan storage:link`)
 - [ ] `.env` file created and configured
 - [ ] Application key generated (`php artisan key:generate`)
 - [ ] Database migrations run (`php artisan migrate --force`)
@@ -50,6 +51,10 @@ Use this checklist when deploying Grassroots Gaffer to production. Follow the de
 - [ ] Web server virtual host configured
 - [ ] SSL certificate installed and working
 - [ ] Queue worker configured (Supervisor or similar)
+- [ ] Queue workers restarted after deploy (`php artisan queue:restart`)
+- [ ] SSR decision applied:
+  - [ ] `INERTIA_SSR_ENABLED=false`, or
+  - [ ] SSR process managed (`php artisan inertia:start-ssr`)
 
 ## Email Configuration
 
@@ -63,6 +68,7 @@ Use this checklist when deploying Grassroots Gaffer to production. Follow the de
 ## Post-Deployment Verification
 
 - [ ] Application loads at production URL
+- [ ] Health check endpoint responds (`/up`)
 - [ ] SSL certificate working (HTTPS)
 - [ ] User registration works
 - [ ] User login works

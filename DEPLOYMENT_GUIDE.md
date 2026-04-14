@@ -121,6 +121,9 @@ php artisan view:cache
 
 # Generate Ziggy routes for frontend
 php artisan ziggy:generate
+
+# Ensure public uploads are web-accessible (team badges, etc.)
+php artisan storage:link
 ```
 
 ### 7. Set Permissions
@@ -215,6 +218,8 @@ FILESYSTEM_DISK=local
 SESSION_DRIVER=file
 CACHE_STORE=file
 QUEUE_CONNECTION=database
+INERTIA_SSR_ENABLED=false
+# If enabling SSR, set INERTIA_SSR_ENABLED=true and run an SSR process.
 ```
 
 ---
@@ -317,6 +322,20 @@ sudo supervisorctl update
 sudo supervisorctl start grassroots-gaffer-worker:*
 ```
 
+After each deployment, restart workers so new code is loaded:
+```bash
+php artisan queue:restart
+```
+
+### Optional: Inertia SSR Process
+
+If `INERTIA_SSR_ENABLED=true`, run a managed SSR process:
+```bash
+php artisan inertia:start-ssr
+```
+
+If no SSR process is managed, keep `INERTIA_SSR_ENABLED=false`.
+
 ---
 
 ## SSL Certificate (Let's Encrypt)
@@ -383,6 +402,7 @@ php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 php artisan ziggy:generate
+php artisan queue:restart
 ```
 
 ### Backup Database

@@ -2,15 +2,16 @@
 
 namespace App\Notifications;
 
+use App\Models\Event;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use App\Models\Event;
 
-class EventReminderNotification extends Notification
+class EventReminderNotification extends Notification implements ShouldQueue
 {
     use Queueable;
+
     public $event;
 
     /**
@@ -36,11 +37,11 @@ class EventReminderNotification extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        
+
         return (new MailMessage)
             ->subject('Event Reminder')
-            ->line('This is a reminder about ' . $this->event->type)
-            ->action('Submit Your Response', url('/events/' . $this->event->id ));
+            ->line('This is a reminder about '.$this->event->type)
+            ->action('Submit Your Response', url('/events/'.$this->event->id));
     }
 
     /**
@@ -53,5 +54,5 @@ class EventReminderNotification extends Notification
         return [
             //
         ];
-}
+    }
 }
