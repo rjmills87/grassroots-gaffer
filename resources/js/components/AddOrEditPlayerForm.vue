@@ -30,7 +30,7 @@ const form = useForm({
 
 const submitForm = () => {
     if (props.player) {
-        form.patch(`/players/${props.player.id}`, {
+        form.patch(route('players.update', props.player.id), {
             preserveScroll: true,
             onSuccess: () => {
                 form.reset();

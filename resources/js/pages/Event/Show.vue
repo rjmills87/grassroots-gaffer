@@ -1,67 +1,168 @@
 <script setup lang="ts">
 import Button from '@/components/ui/button/Button.vue';
-import { capitalizeFirstLetter, formatDate } from '@/helpers';
+import { capitalizeFirstLetter, formatDateTime } from '@/helpers';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { User } from '@/types';
+import { User, type BreadcrumbItem } from '@/types';
 import { Event } from '@/types/Event';
 import { Player } from '@/types/Player';
-import { useForm, router } from '@inertiajs/vue3';
+import { router } from '@inertiajs/vue3';
+import { LoaderCircle, Mail, MapPin } from 'lucide-vue-next';
+import { computed, ref } from 'vue';
 
 const props = defineProps<{
     event: Event;
     user: User;
 }>();
 
-const setAvailability = (player: Player, response: string) => {
-    const form = useForm({
-        player_response: response,
-    });
+const availabilityLoadingPlayerId = ref<number | null>(null);
+const reminderProcessing = ref(false);
 
-    form.post(`/events/${props.event.id}/players/${player.id}`, {
-        preserveScroll: true,
-    });
+const attendingCount = computed(() => props.event.players.filter((player) => player.pivot?.player_response === 'attending').length);
+const unavailableCount = computed(() => props.event.players.filter((player) => player.pivot?.player_response === 'unavailable').length);
+const noResponseCount = computed(() => props.event.players.filter((player) => !player.pivot?.player_response).length);
+
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: 'Dashboard',
+        href: '/dashboard',
+    },
+    {
+        title: 'Event',
+        href: `/events/${props.event.id}`,
+    },
+];
+
+const statusClasses = (player: Player) => {
+    if (player.pivot?.player_response === 'attending') {
+        return 'border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900/50 dark:bg-emerald-950/30 dark:text-emerald-300';
+    }
+
+    if (player.pivot?.player_response === 'unavailable') {
+        return 'border-red-200 bg-red-50 text-red-700 dark:border-red-900/50 dark:bg-red-950/30 dark:text-red-300';
+    }
+
+    return 'border-muted-foreground/20 bg-muted/40 text-muted-foreground';
+};
+
+const setAvailability = (player: Player, response: string) => {
+    availabilityLoadingPlayerId.value = player.id;
+
+    router.post(
+        `/events/${props.event.id}/players/${player.id}`,
+        {
+            player_response: response,
+        },
+        {
+            preserveScroll: true,
+            onFinish: () => {
+                availabilityLoadingPlayerId.value = null;
+            },
+        },
+    );
 };
 
 const sendEventReminder = () => {
-  router.post(`/events/${props.event.id}/send-reminders`, {}, {
-    preserveScroll: true,
-  });
-}
+    reminderProcessing.value = true;
 
-
+    router.post(
+        `/events/${props.event.id}/send-reminders`,
+        {},
+        {
+            preserveScroll: true,
+            onFinish: () => {
+                reminderProcessing.value = false;
+            },
+        },
+    );
+};
 </script>
 
 <template>
-    <AppLayout>
-        <div class="p-6">
-            <h1>{{ capitalizeFirstLetter(props.event.type) }}</h1>
-            <p>{{ formatDate(props.event.occurs_at) }}</p>
-            <p>{{ props.event.location }}</p>
-            <p>{{ props.event.details }}</p>
-            <div v-if="props.event.players && props.event.players.length > 0" class="mt-4">
-                <ul class="divide-y divide-gray-200">
-                    <li v-for="player in props.event.players" :key="player.id" class="flex items-center justify-between py-2">
-                        {{ player.name }}
-                        <div class="flex gap-4" v-if="props.user.email === player.guardian_email">
-                            <Button
-                                @click="setAvailability(player, 'attending')"
-                                class="cursor-pointer"
-                                :class="{ 'bg-green-700': player.pivot?.player_response === 'attending' }"
-                                variant="default"
-                                >Attending</Button
-                            >
-                            <Button
-                                @click="setAvailability(player, 'unavailable')"
-                                class="cursor-pointer"
-                                :class="{ 'bg-red-700': player.pivot?.player_response === 'unavailable' }"
-                                variant="destructive"
-                                >Unavailable</Button
-                            >
+    <AppLayout :breadcrumbs="breadcrumbs">
+        <div class="space-y-6 p-6">
+            <section class="rounded-xl border bg-card p-6 shadow-sm">
+                <div class="flex flex-wrap items-start justify-between gap-4">
+                    <div class="space-y-2">
+                        <p class="text-xs uppercase tracking-wide text-muted-foreground">Event</p>
+                        <h1 class="text-2xl font-semibold">{{ capitalizeFirstLetter(props.event.type) }}</h1>
+                        <p class="text-sm text-muted-foreground">{{ formatDateTime(props.event.occurs_at) }}</p>
+                    </div>
+                    <div class="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-sm text-muted-foreground">
+                        <MapPin class="h-4 w-4" />
+                        <span>{{ props.event.location }}</span>
+                    </div>
+                </div>
+                <p class="mt-4 text-sm text-muted-foreground">
+                    {{ props.event.details || 'No additional details provided.' }}
+                </p>
+            </section>
+
+            <section class="rounded-xl border bg-card p-6 shadow-sm">
+                <div class="mb-4 flex items-center justify-between gap-4">
+                    <h2 class="text-lg font-semibold">Player Availability</h2>
+                    <div class="flex items-center gap-3 text-xs">
+                        <span class="rounded-full border border-emerald-300 bg-emerald-50 px-2 py-1 text-emerald-700">
+                            {{ attendingCount }} attending
+                        </span>
+                        <span class="rounded-full border border-red-300 bg-red-50 px-2 py-1 text-red-700">
+                            {{ unavailableCount }} unavailable
+                        </span>
+                        <span class="rounded-full border border-muted-foreground/30 bg-muted px-2 py-1 text-muted-foreground">
+                            {{ noResponseCount }} no response
+                        </span>
+                    </div>
+                </div>
+
+                <div v-if="props.event.players && props.event.players.length > 0" class="space-y-3">
+                    <div
+                        v-for="player in props.event.players"
+                        :key="player.id"
+                        class="rounded-lg border p-4"
+                        :class="statusClasses(player)"
+                    >
+                        <div class="flex flex-wrap items-center justify-between gap-3">
+                            <div>
+                                <p class="font-medium">{{ player.name }}</p>
+                                <p class="text-xs capitalize">
+                                    {{ player.pivot?.player_response ?? 'no response yet' }}
+                                </p>
+                            </div>
+
+                            <div v-if="props.user.email === player.guardian_email" class="flex gap-2">
+                                <Button
+                                    @click="setAvailability(player, 'attending')"
+                                    class="cursor-pointer"
+                                    :disabled="availabilityLoadingPlayerId === player.id"
+                                    :class="{ 'bg-emerald-700 text-white': player.pivot?.player_response === 'attending' }"
+                                    variant="outline"
+                                >
+                                    <LoaderCircle v-if="availabilityLoadingPlayerId === player.id" class="h-4 w-4 animate-spin" />
+                                    {{ availabilityLoadingPlayerId === player.id ? 'Saving...' : 'Attending' }}
+                                </Button>
+                                <Button
+                                    @click="setAvailability(player, 'unavailable')"
+                                    class="cursor-pointer"
+                                    :disabled="availabilityLoadingPlayerId === player.id"
+                                    :class="{ 'bg-red-700 text-white': player.pivot?.player_response === 'unavailable' }"
+                                    variant="outline"
+                                >
+                                    <LoaderCircle v-if="availabilityLoadingPlayerId === player.id" class="h-4 w-4 animate-spin" />
+                                    {{ availabilityLoadingPlayerId === player.id ? 'Saving...' : 'Unavailable' }}
+                                </Button>
+                            </div>
                         </div>
-                    </li>
-                </ul>
-            </div>
-            <Button @click="sendEventReminder" v-if="props.user.role === 'coach'">Send Reminder</Button>
+                    </div>
+                </div>
+                <p v-else class="text-sm text-muted-foreground">No players have been added to this event yet.</p>
+            </section>
+
+            <section v-if="props.user.role === 'coach'" class="flex justify-end">
+                <Button @click="sendEventReminder" :disabled="reminderProcessing || noResponseCount === 0" class="cursor-pointer">
+                    <LoaderCircle v-if="reminderProcessing" class="h-4 w-4 animate-spin" />
+                    <Mail v-else class="h-4 w-4" />
+                    {{ reminderProcessing ? 'Sending reminders...' : `Send reminder (${noResponseCount})` }}
+                </Button>
+            </section>
         </div>
     </AppLayout>
 </template>

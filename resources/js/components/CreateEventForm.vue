@@ -32,6 +32,7 @@ const emit = defineEmits<{
 }>();
 
 const value = ref<DateValue | undefined>();
+const occursAtTime = ref('18:00');
 
 // Apply the interface to useForm and set initial values
 const form = useForm<EventForm>({
@@ -55,10 +56,24 @@ const addEvent = () => {
 
 watch(value, (newValue) => {
     if (newValue) {
-        form.occurs_at = newValue.toDate(getLocalTimeZone()).toISOString();
+        const localDate = newValue.toDate(getLocalTimeZone());
+        const [hours, minutes] = occursAtTime.value.split(':').map(Number);
+        localDate.setHours(hours, minutes, 0, 0);
+        form.occurs_at = localDate.toISOString();
     } else {
         form.occurs_at = null;
     }
+});
+
+watch(occursAtTime, (newTime) => {
+    if (!value.value || !newTime) {
+        return;
+    }
+
+    const localDate = value.value.toDate(getLocalTimeZone());
+    const [hours, minutes] = newTime.split(':').map(Number);
+    localDate.setHours(hours, minutes, 0, 0);
+    form.occurs_at = localDate.toISOString();
 });
 
 const dateFormat = new DateFormatter('en-GB', {
@@ -112,6 +127,10 @@ const toDate = (date: DateValue) => {
                     <PopoverContent><Calendar v-model:model-value="value" :weekday-format="'short'" /></PopoverContent>
                 </Popover>
                 <InputError :message="form.errors.occurs_at" />
+            </div>
+            <div class="grid gap-2">
+                <Label for="occurs_at_time">Event Time</Label>
+                <Input id="occurs_at_time" v-model="occursAtTime" type="time" />
             </div>
             <Button class="mt-4 cursor-pointer" type="submit" :disabled="form.processing">
                 <LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin" />

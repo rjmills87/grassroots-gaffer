@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import CreateTeamDialog from '@/components/CreateTeamDialog.vue';
-import { capitalizeFirstLetter, formatDate } from '@/helpers';
+import EmptyState from '@/components/EmptyState.vue';
+import { capitalizeFirstLetter, formatDateTime } from '@/helpers';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { User, type BreadcrumbItem } from '@/types';
 import { type Team } from '@/types/Team';
 import { Head, Link } from '@inertiajs/vue3';
+import { CalendarDays, MessageSquareText, ShieldPlus, Users } from 'lucide-vue-next';
 import { computed } from 'vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -53,7 +55,11 @@ const hasMessages = computed(() => {
                 </div>
 
                 <div v-if="teams.length === 0" class="rounded-lg border border-dashed p-8 text-center">
-                    <p class="mb-4 text-muted-foreground">You don't have any teams yet</p>
+                    <EmptyState title="No teams yet" description="Create your first team and start managing your squad.">
+                        <template #icon>
+                            <ShieldPlus class="h-5 w-5" />
+                        </template>
+                    </EmptyState>
                 </div>
 
                 <div v-else class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -70,6 +76,10 @@ const hasMessages = computed(() => {
                         <p class="mt-2 text-sm text-muted-foreground">
                             {{ capitalizeFirstLetter(team.age_group) }}
                         </p>
+                        <div class="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
+                            <Users class="h-4 w-4" />
+                            <span>{{ team.players?.length ?? 0 }} players</span>
+                        </div>
                     </Link>
                 </div>
             </section>
@@ -88,16 +98,18 @@ const hasMessages = computed(() => {
                                         <div class="flex items-start">
                                             <div class="mb-2 flex items-center gap-2 border-b border-gray-200 pb-2">
                                                 <p class="font-medium">{{ capitalizeFirstLetter(event.type) }}</p>
-                                                <p class="text-sm text-muted-foreground">{{ formatDate(event.occurs_at) }} • {{ event.location }}</p>
+                                                <p class="text-sm text-muted-foreground">{{ formatDateTime(event.occurs_at) }} • {{ event.location }}</p>
                                             </div>
                                         </div>
                                     </Link>
                                 </div>
                             </div>
                         </div>
-                        <div v-else class="py-8 text-center text-muted-foreground">
-                            <p>No upcoming events</p>
-                        </div>
+                        <EmptyState v-else title="No upcoming events" description="Scheduled events will appear here for quick access.">
+                            <template #icon>
+                                <CalendarDays class="h-5 w-5" />
+                            </template>
+                        </EmptyState>
                     </div>
                 </section>
 
@@ -121,16 +133,18 @@ const hasMessages = computed(() => {
                                                 {{ message.message }}
                                             </p>
                                             <p class="mt-1 text-xs text-muted-foreground">
-                                                {{ formatDate(message.created_at) }}
+                                                {{ formatDateTime(message.created_at) }}
                                             </p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div v-else class="py-8 text-center text-muted-foreground">
-                            <p>No recent messages</p>
-                        </div>
+                        <EmptyState v-else title="No recent messages" description="Team announcements and updates will show up here.">
+                            <template #icon>
+                                <MessageSquareText class="h-5 w-5" />
+                            </template>
+                        </EmptyState>
                     </div>
                 </section>
             </div>
