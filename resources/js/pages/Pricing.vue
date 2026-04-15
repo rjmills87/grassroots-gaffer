@@ -5,6 +5,10 @@ import { Head } from '@inertiajs/vue3';
 
 const freeTier = [
     {
+        feature: 'Roster Management',
+        description: 'Unlimited players with guardian contact details',
+    },
+    {
         feature: 'User Experience',
         description: 'Completely Ad-Free UI',
     },
@@ -22,7 +26,7 @@ const freeTier = [
     },
     {
         feature: 'Communication',
-        description: 'Coach to Team Announcements & Notifications only.',
+        description: 'Coach-to-team announcements',
     },
     {
         feature: 'Support',
@@ -36,8 +40,12 @@ const freeTier = [
 
 const proTier = [
     {
+        feature: 'Communication',
+        description: 'Automated reminders for guardians who have not responded',
+    },
+    {
         feature: 'Attendance',
-        description: 'Full Attendance Reporting & Statistics (e.g., Attendance %, Absentees, etc.)',
+        description: 'Full Attendance Reporting & Statistics (e.g., Attendance, Absentees, etc.)',
     },
     {
         feature: 'Development',
@@ -73,13 +81,6 @@ const tiers = [
         idealFor: 'Dedicated coaches, managers, and administrators running multiple teams or needing detailed player data.',
     },
 ];
-
-const props = defineProps({
-    tiers: {
-        type: Array as () => { name: string; price: string; description: string; features: { feature: string; description: string }[] }[],
-        required: true,
-    },
-});
 </script>
 <template>
     <PublicLayout>

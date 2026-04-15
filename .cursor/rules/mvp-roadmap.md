@@ -18,6 +18,33 @@ Create a simple, functional app that solves the core problem of **team communica
 
 ---
 
+## 💳 Product Tiers (Free vs Pro)
+
+To align product delivery with commercial goals, MVP should ship with two clear tiers:
+
+### Free Tier (Core Team Admin)
+
+- Team creation and basic team profile setup
+- Roster management (players + guardian contact details)
+- Event scheduling (matches/training with date, time, location)
+- Availability tracking (guardian responses for events)
+- Basic team announcements/messages
+- Secure, ad-free experience
+
+### Pro Tier (Coach Efficiency)
+
+- Automated reminder sends to non-responding guardians
+- Priority support / faster issue response
+- Advanced communication and automation features (phased post-MVP)
+
+### Tiering Principles
+
+- Free tier must deliver clear value to solo coaches and small teams.
+- Pro tier must save coaches time, not just add cosmetic features.
+- Existing free users should never lose access to core historical data.
+
+---
+
 ## 🗓️ Sprint 1: The Foundation (Week 1)
 
 **Goal:** Get the core user and team infrastructure in place.
@@ -85,3 +112,5 @@ Create a simple, functional app that solves the core problem of **team communica
 ## 🚀 Post-MVP Enhancements
 
 - [ ] **Team Join Code System:** Implement a feature where each team is assigned a unique, random join code. A coach can share this code with parents, who can then use it to have their child join the team roster automatically. This removes the need for the coach to manually invite every parent.
+- [ ] **Tiered Billing & Entitlements:** Add subscription handling and feature gates for Free vs Pro plans.
+- [ ] **Pro Automation Pack:** Expand pro-only features such as message templates, scheduled reminders, and attendance insights.

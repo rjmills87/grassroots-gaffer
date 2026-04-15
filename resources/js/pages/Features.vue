@@ -7,31 +7,43 @@ const features = [
         name: 'Roster Management',
         description: 'Keep all your player and parent contact details in one secure place. Easily add new players and manage guardian information.',
         icon: 'UsersIcon',
+        tier: 'Free',
     },
     {
         name: 'Event Scheduling',
         description: 'Create matches, training sessions, and team events. Set locations, times, and meet times so everyone knows where to be.',
         icon: 'CalendarIcon',
+        tier: 'Free',
     },
     {
         name: 'Availability Tracking',
         description: 'Stop chasing texts and WhatsApps. Parents respond with one tap, and you get a clear list of who is available for match day.',
         icon: 'CheckCircleIcon',
+        tier: 'Free',
     },
     {
         name: 'Team Announcements',
         description: 'Send important updates to the whole squad instantly. Perfect for last-minute pitch changes or cancellations.',
         icon: 'MegaphoneIcon',
+        tier: 'Free',
+    },
+    {
+        name: 'Automated Reminders',
+        description: 'Automatically nudge guardians who have not replied yet, so coaches spend less time chasing responses.',
+        icon: 'MegaphoneIcon',
+        tier: 'Pro',
     },
     {
         name: 'Ad-Free Experience',
         description: 'A clean interface focused purely on football. No distracting betting ads or pop-ups to ruin the experience.',
         icon: 'ShieldCheckIcon',
+        tier: 'Free',
     },
     {
         name: 'Secure & Private',
         description: 'Your team data is yours. We prioritize privacy and security for all youth data handling.',
         icon: 'LockClosedIcon',
+        tier: 'Free',
     },
 ];
 </script>
@@ -50,6 +62,18 @@ const features = [
                         <p class="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300">
                             Grassroots Gaffer is designed to handle the admin, so you can focus on coaching the players.
                         </p>
+                        <div class="mt-6 flex items-center justify-center gap-3 text-sm">
+                            <span
+                                class="inline-flex items-center rounded-full border border-teal-300 bg-teal-50 px-3 py-1 font-medium text-teal-700 dark:border-teal-700 dark:bg-teal-950/40 dark:text-teal-300"
+                            >
+                                Free Tier
+                            </span>
+                            <span
+                                class="inline-flex items-center rounded-full border border-amber-300 bg-amber-50 px-3 py-1 font-medium text-amber-700 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-300"
+                            >
+                                Pro Tier
+                            </span>
+                        </div>
                     </div>
                     <div class="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
                         <dl class="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3">
@@ -145,6 +169,16 @@ const features = [
                                     {{ feature.name }}
                                 </dt>
                                 <dd class="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600 dark:text-gray-300">
+                                    <span
+                                        class="mb-3 inline-flex w-fit items-center rounded-full px-2.5 py-1 text-xs font-semibold"
+                                        :class="
+                                            feature.tier === 'Pro'
+                                                ? 'border border-amber-300 bg-amber-50 text-amber-700 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-300'
+                                                : 'border border-teal-300 bg-teal-50 text-teal-700 dark:border-teal-700 dark:bg-teal-950/40 dark:text-teal-300'
+                                        "
+                                    >
+                                        {{ feature.tier }} Tier
+                                    </span>
                                     <p class="flex-auto">{{ feature.description }}</p>
                                 </dd>
                             </div>
