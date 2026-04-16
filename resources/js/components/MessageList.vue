@@ -60,7 +60,7 @@ const saveMessage = (messageId: number) => {
 
 <template>
     <div>
-        <h2 class="text-xl font-semibold">Messages</h2>
+        <h2 class="text-xl font-semibold">Announcements</h2>
         <div v-if="props.messages && props.messages.length > 0" class="mt-4">
             <ul class="flex flex-col gap-3">
                 <li v-for="message in props.messages" :key="message.id" class="flex flex-col gap-3 rounded-lg border bg-card p-4 shadow-sm">
@@ -92,7 +92,7 @@ const saveMessage = (messageId: number) => {
                                 :disabled="processingMessageId === message.id"
                             >
                                 <LoaderCircle v-if="processingMessageId === message.id" class="h-4 w-4 animate-spin" />
-                                {{ processingMessageId === message.id ? 'Saving...' : 'Save Message' }}
+                                {{ processingMessageId === message.id ? 'Saving...' : 'Save Announcement' }}
                             </Button>
                             <Button
                                 v-else
@@ -100,11 +100,11 @@ const saveMessage = (messageId: number) => {
                                 class="h-10 cursor-pointer px-4"
                                 :disabled="processingMessageId === message.id"
                             >
-                                Edit Message
+                                Edit Announcement
                             </Button>
                             <Button @click="deleteMessage(message.id)" class="h-10 cursor-pointer px-4" :disabled="processingMessageId === message.id">
                                 <LoaderCircle v-if="processingMessageId === message.id" class="h-4 w-4 animate-spin" />
-                                {{ processingMessageId === message.id ? 'Deleting...' : 'Delete Message' }}
+                                {{ processingMessageId === message.id ? 'Deleting...' : 'Delete Announcement' }}
                             </Button>
                         </div>
                     </div>
@@ -112,7 +112,7 @@ const saveMessage = (messageId: number) => {
             </ul>
         </div>
         <div v-else class="mt-4">
-            <EmptyState title="No messages yet" description="Send your first announcement to keep the team informed.">
+            <EmptyState title="No announcements yet" description="Send your first announcement to keep the team informed.">
                 <template #icon>
                     <MessageSquareText class="h-5 w-5" />
                 </template>

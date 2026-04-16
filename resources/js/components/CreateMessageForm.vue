@@ -33,16 +33,16 @@ const submit = () => {
 <template>
     <form @submit.prevent="submit" class="mt-4 space-y-4">
         <div class="grid gap-2">
-            <h3 class="text-lg font-semibold">Send a Message</h3>
-            <p class="text-sm text-gray-500">Your message will be sent to all players and guardians on the team.</p>
+            <h3 class="text-lg font-semibold">Send an Announcement</h3>
+            <p class="text-sm text-gray-500">Your announcement will be sent to all players and guardians on the team.</p>
         </div>
         <div class="grid gap-2">
-            <Textarea v-model="form.message" placeholder="Type your message here..." />
+            <Textarea v-model="form.message" placeholder="Type your announcement here..." />
             <InputError :message="form.errors.message" />
         </div>
         <Button type="submit" :disabled="form.processing">
             <LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin" />
-            {{ form.processing ? 'Sending...' : 'Send Message' }}
+            {{ form.processing ? 'Sending...' : 'Send Announcement' }}
         </Button>
     </form>
 </template>

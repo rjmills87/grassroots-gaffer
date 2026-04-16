@@ -8,6 +8,10 @@ defineProps<{
 }>();
 
 const page = usePage();
+
+const isItemActive = (href: string): boolean => {
+    return page.url === href || page.url.startsWith(`${href}?`) || page.url.startsWith(`${href}/`);
+};
 </script>
 
 <template>
@@ -15,7 +19,7 @@ const page = usePage();
         <SidebarGroupLabel>Platform</SidebarGroupLabel>
         <SidebarMenu>
             <SidebarMenuItem v-for="item in items" :key="item.title">
-                <SidebarMenuButton as-child :is-active="item.href === page.url" :tooltip="item.title">
+                <SidebarMenuButton as-child :is-active="isItemActive(item.href)" :tooltip="item.title">
                     <Link :href="item.href">
                         <component :is="item.icon" />
                         <span>{{ item.title }}</span>

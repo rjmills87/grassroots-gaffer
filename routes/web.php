@@ -4,6 +4,8 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\TeamController;
+use App\Models\User;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -27,41 +29,21 @@ Route::get('/faq', function () {
 // Dashboard Route
 Route::get('dashboard', function () {
     $user = auth()->user();
-    $teams = collect();
-
-    if ($user->role === 'coach') {
-        $teams = $user->teams()->with([
-            'events' => function ($query) {
-                $query->where('occurs_at', '>=', now())
-                    ->orderBy('occurs_at', 'asc')
-                    ->limit(2);
-            },
-            'messages' => function ($query) {
-                $query->with('user')
-                    ->latest()
-                    ->limit(2);
-            },
-            'players', // Preload players count
-        ])->get();
-    } elseif ($user->role === 'guardian') {
-        $players = $user->players()->with([
-            'team.events' => function ($query) {
-                $query->where('occurs_at', '>=', now())
-                    ->orderBy('occurs_at', 'asc')
-                    ->limit(2);
-            },
-            'team.messages' => function ($query) {
-                $query->with('user')
-                    ->latest()
-                    ->limit(2);
-            },
-            'team.players', // Preload players count
-        ])->get();
-
-        $teams = $players->map(function ($player) {
-            return $player->team;
-        })->unique();
-    }
+    $teams = accessibleTeams($user, [
+        'events' => function ($query) {
+            $query->where('occurs_at', '>=', now())
+                ->orderBy('occurs_at', 'asc')
+                ->limit(2);
+        },
+        'messages' => function ($query) {
+            $query->with('user')
+                ->latest()
+                ->limit(2);
+        },
+        'players',
+    ]);
+    $selectedTeam = selectedTeamFromRequest(request('team'), $teams);
+    $selectedTeamId = $selectedTeam['id'] ?? null;
 
     return Inertia::render('Dashboard', [
         'user' => $user,
@@ -71,9 +53,62 @@ Route::get('dashboard', function () {
                 'messages' => $team->messages ?? [],
                 'players' => $team->players ?? [],
             ]);
-        }),
+        })->values(),
+        'selectedTeam' => $selectedTeam,
+        'selectedTeamId' => $selectedTeamId,
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/squad', function () {
+    $user = auth()->user();
+    $teams = accessibleTeams($user, ['players']);
+    $selectedTeam = selectedTeamFromRequest(request('team'), $teams);
+
+    return Inertia::render('Squad', [
+        'user' => $user,
+        'teams' => $teams->values(),
+        'selectedTeam' => $selectedTeam,
+    ]);
+})->middleware(['auth', 'verified'])->name('squad.index');
+
+Route::get('/events', function () {
+    $user = auth()->user();
+    $teams = accessibleTeams($user, [
+        'events' => function ($query) {
+            $query->withCount([
+                'players as attending_count' => function ($query) {
+                    $query->where('player_response', 'attending');
+                },
+                'players as unavailable_count' => function ($query) {
+                    $query->where('player_response', 'unavailable');
+                },
+            ])->orderBy('occurs_at', 'asc');
+        },
+    ]);
+    $selectedTeam = selectedTeamFromRequest(request('team'), $teams);
+
+    return Inertia::render('Events', [
+        'user' => $user,
+        'teams' => $teams->values(),
+        'selectedTeam' => $selectedTeam,
+    ]);
+})->middleware(['auth', 'verified'])->name('events.index');
+
+Route::get('/announcements', function () {
+    $user = auth()->user();
+    $teams = accessibleTeams($user, [
+        'messages' => function ($query) {
+            $query->with('user')->latest();
+        },
+    ]);
+    $selectedTeam = selectedTeamFromRequest(request('team'), $teams);
+
+    return Inertia::render('Announcements', [
+        'user' => $user,
+        'teams' => $teams->values(),
+        'selectedTeam' => $selectedTeam,
+    ]);
+})->middleware(['auth', 'verified'])->name('announcements.index');
 
 // Team Routes
 Route::get('/teams/{team}', [TeamController::class, 'show'])->middleware(['auth', 'verified'])->name('teams.show');
@@ -102,3 +137,54 @@ Route::delete('/messages/{message}', [MessageController::class, 'destroy'])->mid
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
+
+if (! function_exists('accessibleTeams')) {
+    function accessibleTeams(User $user, array $relations = []): Collection
+    {
+        if ($user->role === 'coach') {
+            return $user->teams()->with($relations)->get();
+        }
+
+        if ($user->role === 'guardian') {
+            $guardianRelations = [];
+
+            foreach ($relations as $key => $relation) {
+                if (is_string($key)) {
+                    $guardianRelations["team.{$key}"] = $relation;
+                } else {
+                    $guardianRelations[] = "team.{$relation}";
+                }
+            }
+
+            return $user->players()->with($guardianRelations)
+                ->get()
+                ->map(function ($player) {
+                    return $player->team;
+                })
+                ->filter()
+                ->unique('id')
+                ->values();
+        }
+
+        return collect();
+    }
+}
+
+if (! function_exists('selectedTeamFromRequest')) {
+    function selectedTeamFromRequest(?string $teamId, Collection $teams): ?array
+    {
+        if ($teams->isEmpty()) {
+            return null;
+        }
+
+        $selectedTeam = $teamId
+            ? $teams->firstWhere('id', (int) $teamId)
+            : $teams->first();
+
+        if (! $selectedTeam) {
+            $selectedTeam = $teams->first();
+        }
+
+        return $selectedTeam?->toArray();
+    }
+}
