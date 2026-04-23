@@ -75,15 +75,19 @@ const changeTeam = (event: Event) => {
                 </div>
                 <div v-else-if="selectedTeam" class="group block rounded-lg border p-6">
                     <div class="flex items-center justify-between gap-4">
-                        <img :src="selectedTeam.team_badge_url" alt="Team Badge" class="h-24 w-24 rounded-full" />
-                        <h3 class="text-xl font-medium">{{ selectedTeam.name }}</h3>
-                    </div>
-                    <p class="mt-2 text-sm text-muted-foreground">
-                        {{ capitalizeFirstLetter(selectedTeam.age_group) }}
-                    </p>
-                    <div class="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
-                        <Users class="h-4 w-4" />
-                        <span>{{ selectedTeam.players?.length ?? 0 }} players</span>
+                        <div class="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
+                            <img :src="selectedTeam.team_badge_url" alt="Team Badge" class="h-24 w-24 rounded-full" />
+                            <div>
+                                <h3 class="text-xl font-bold">{{ selectedTeam.name }}</h3>
+                                <p class="mt-2 text-base font-medium">
+                                    {{ capitalizeFirstLetter(selectedTeam.age_group) }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center gap-2 text-base font-medium text-muted-foreground">
+                            <Users class="h-5 w-5" />
+                            <span>{{ selectedTeam.players?.length ?? 0 }} players</span>
+                        </div>
                     </div>
                 </div>
             </section>

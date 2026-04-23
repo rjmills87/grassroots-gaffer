@@ -109,8 +109,50 @@ To align product delivery with commercial goals, MVP should ship with two clear 
 
 ---
 
-## 🚀 Post-MVP Enhancements
+## 🚀 Post-MVP Execution Roadmap
 
-- [ ] **Team Join Code System:** Implement a feature where each team is assigned a unique, random join code. A coach can share this code with parents, who can then use it to have their child join the team roster automatically. This removes the need for the coach to manually invite every parent.
-- [ ] **Tiered Billing & Entitlements:** Add subscription handling and feature gates for Free vs Pro plans.
-- [ ] **Pro Automation Pack:** Expand pro-only features such as message templates, scheduled reminders, and attendance insights.
+### Phase 4: Monetization Foundations
+
+**Goal:** Move from MVP utility to a sustainable product without degrading the free core experience.
+
+#### Deliverables:
+
+- [ ] **Free vs Pro Entitlements:** Define and enforce feature gates so free and pro access is explicit and testable.
+- [ ] **Billing Foundations:** Implement subscription and payment collection rails for coach/club plans.
+- [ ] **Billing Operations:** Add webhook/event handling for billing state changes (active, past due, cancelled).
+- [ ] **Payment Safety:** Add audit-friendly billing logs and failure/retry flows for payment-related actions.
+
+### Phase 5: Competitive Parity Features
+
+**Goal:** Close the most important product gaps with tools coaches use weekly.
+
+#### Deliverables:
+
+- [ ] **Recurring Events:** Support repeat match/training schedules with easy edit controls.
+- [ ] **Communication Upgrade:** Expand from one-way announcements toward structured replies/threads.
+- [ ] **Calendar Integration:** Add calendar export/sync milestones (ICS first, provider sync later).
+- [ ] **Notification Reliability:** Improve reminder delivery, visibility, and recovery for failed sends.
+- [ ] **Team Join Code System:** Add unique join codes so guardians can join teams without manual invites.
+- [ ] **Pro Automation Pack:** Expand pro-only automation such as templates, scheduled nudges, and attendance insights.
+
+### Phase 6: Retention and Optimization
+
+**Goal:** Improve long-term team retention and prove value of paid features.
+
+#### Deliverables:
+
+- [ ] **Coach Workflow Speed:** Reduce steps/time to create event, notify team, and collect responses.
+- [ ] **Activation Improvements:** Improve first-session flow from signup to first team and first event.
+- [ ] **Pro Value Iteration:** Prioritize paid features that save coaches measurable weekly admin time.
+
+## 📈 Metrics and Success Criteria
+
+- **Activation:** % of new coaches who create a team and first event within 24 hours.
+- **Engagement:** Event RSVP response rate and weekly active teams.
+- **Reminder Effectiveness:** % of no-response guardians who respond after a reminder.
+- **Monetization:** Free-to-pro conversion rate once billing is enabled.
+- **Monetization Health:** Pro churn rate and retained paid teams after month one.
+
+## 🧭 Prioritization Rule
+
+If two features compete for the same sprint slot, prioritize the one that reduces weekly coach admin time the most.
