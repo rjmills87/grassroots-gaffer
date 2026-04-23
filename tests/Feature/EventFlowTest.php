@@ -41,7 +41,7 @@ test('coach can create event for own team and all players are attached', functio
         'details' => 'Bring kit',
     ]);
 
-    $response->assertRedirect(route('teams.show', $team, false));
+    $response->assertRedirect(route('events.index', ['team' => $team->id], false));
     $event = Event::query()->where('team_id', $team->id)->firstOrFail();
     expect($event->players()->where('players.id', $firstPlayer->id)->exists())->toBeTrue();
     expect($event->players()->where('players.id', $secondPlayer->id)->exists())->toBeTrue();

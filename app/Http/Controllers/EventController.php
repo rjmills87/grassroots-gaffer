@@ -31,7 +31,7 @@ class EventController extends Controller
 
         $event->players()->attach($playerIds);
 
-        return redirect()->route('teams.show', $team);
+        return redirect()->route('events.index', ['team' => $team->id]);
     }
 
     public function show(Event $event)
