@@ -6,7 +6,7 @@ import EmptyState from '@/components/EmptyState.vue';
 import Button from '@/components/ui/button/Button.vue';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { capitalizeFirstLetter, formatDateTime } from '@/helpers';
+import { capitalizeFirstLetter, formatDate, formatDateTime, formatTimeRange } from '@/helpers';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { User, type BreadcrumbItem } from '@/types';
 import { type Team } from '@/types/Team';
@@ -34,11 +34,6 @@ const isCreateTeamOpen = ref(false);
 const isDeleteTeamOpen = ref(false);
 const formatEventDay = (dateValue: string) => new Date(dateValue).toLocaleDateString('en-GB', { day: '2-digit' });
 const formatEventMonth = (dateValue: string) => new Date(dateValue).toLocaleDateString('en-GB', { month: 'short' });
-const formatEventTime = (dateValue: string) =>
-    new Date(dateValue).toLocaleTimeString('en-GB', {
-        hour: '2-digit',
-        minute: '2-digit',
-    });
 
 const changeTeam = (event: Event) => {
     const value = Number((event.target as HTMLSelectElement).value);
@@ -196,10 +191,11 @@ const changeTeam = (event: Event) => {
                                         <div class="flex flex-wrap items-center gap-2">
                                             <p class="font-semibold">{{ capitalizeFirstLetter(event.type) }}</p>
                                             <span class="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
-                                                {{ formatEventTime(event.starts_at) }} - {{ formatEventTime(event.ends_at) }}
+                                                {{ formatTimeRange(event.starts_at, event.ends_at) }}
                                             </span>
                                         </div>
                                         <p class="mt-1 truncate text-sm text-muted-foreground">{{ event.location }}</p>
+                                        <p class="mt-1 text-xs text-muted-foreground">{{ formatDate(event.starts_at) }}</p>
                                     </div>
                                 </div>
                             </Link>

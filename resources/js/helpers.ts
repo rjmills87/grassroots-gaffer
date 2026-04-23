@@ -11,6 +11,18 @@ export const formatDateTime = (dateString: string) => {
     });
 };
 
+export const formatTime = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleTimeString('en-GB', {
+        hour: '2-digit',
+        minute: '2-digit',
+    });
+};
+
+export const formatTimeRange = (startDateString: string, endDateString: string) => {
+    return `${formatTime(startDateString)} - ${formatTime(endDateString)}`;
+};
+
 export const formatRelativeTime = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();

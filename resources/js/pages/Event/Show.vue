@@ -1,24 +1,18 @@
 <script setup lang="ts">
 import Button from '@/components/ui/button/Button.vue';
-import { capitalizeFirstLetter } from '@/helpers';
+import { capitalizeFirstLetter, formatDate, formatTimeRange } from '@/helpers';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { User, type BreadcrumbItem } from '@/types';
 import { Event } from '@/types/Event';
 import { Player } from '@/types/Player';
 import { router } from '@inertiajs/vue3';
-import { LoaderCircle, Mail, MapPin } from 'lucide-vue-next';
+import { CalendarDays, LoaderCircle, Mail, MapPin } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 
 const props = defineProps<{
     event: Event;
     user: User;
 }>();
-
-const formatEventTime = (dateValue: string) =>
-    new Date(dateValue).toLocaleTimeString('en-GB', {
-        hour: '2-digit',
-        minute: '2-digit',
-    });
 
 const availabilityLoadingPlayerId = ref<number | null>(null);
 const reminderProcessing = ref(false);
@@ -91,9 +85,12 @@ const sendEventReminder = () => {
                     <div class="space-y-2">
                         <p class="text-xs tracking-wide text-muted-foreground uppercase">Event</p>
                         <h1 class="text-2xl font-semibold">{{ capitalizeFirstLetter(props.event.type) }}</h1>
-                        <p class="text-sm font-medium text-muted-foreground">
-                            {{ formatEventTime(props.event.starts_at) }} - {{ formatEventTime(props.event.ends_at) }}
-                        </p>
+                        <div class="flex flex-wrap items-center gap-2 text-sm font-medium text-muted-foreground">
+                            <CalendarDays class="h-4 w-4" />
+                            <span>{{ formatDate(props.event.starts_at) }}</span>
+                            <span>•</span>
+                            <span>{{ formatTimeRange(props.event.starts_at, props.event.ends_at) }}</span>
+                        </div>
                     </div>
                     <div class="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-sm text-muted-foreground">
                         <MapPin class="h-4 w-4" />
