@@ -95,13 +95,13 @@ test('guardian can update own child event attendance while unrelated guardian ca
     ]);
     $event->players()->attach($player->id);
 
-    $this->actingAs($guardian)->post(route('events.update', [$event, $player]), [
+    $this->actingAs($guardian)->post(route('events.players.update', [$event, $player]), [
         'player_response' => 'attending',
     ])->assertRedirect(route('event.show', $event, false));
 
     expect($event->players()->first()->pivot->player_response)->toBe('attending');
 
-    $this->actingAs($otherGuardian)->post(route('events.update', [$event, $player]), [
+    $this->actingAs($otherGuardian)->post(route('events.players.update', [$event, $player]), [
         'player_response' => 'unavailable',
     ])->assertForbidden();
 });
@@ -135,7 +135,7 @@ test('event response update rejects mismatched event and player pairing', functi
         'details' => 'Training',
     ]);
 
-    $this->actingAs($coach)->post(route('events.update', [$event, $player]), [
+    $this->actingAs($coach)->post(route('events.players.update', [$event, $player]), [
         'player_response' => 'attending',
     ])->assertNotFound();
 });
@@ -157,4 +157,103 @@ test('coach cannot create event when finish time is before start time', function
 
     $response->assertRedirect(route('events.index', ['team' => $team->id], false));
     $response->assertSessionHasErrors('ends_at');
+});
+
+test('coach can update and delete future own event', function () {
+    $coach = User::factory()->create(['role' => 'coach']);
+    $team = $coach->teams()->create([
+        'name' => 'U11 Panthers',
+        'age_group' => 'under-11s',
+    ]);
+
+    $event = Event::create([
+        'team_id' => $team->id,
+        'type' => 'training',
+        'starts_at' => now()->addDay()->setTime(18, 0),
+        'ends_at' => now()->addDay()->setTime(19, 30),
+        'location' => 'Pitch 1',
+        'details' => 'Bring kit',
+    ]);
+
+    $this->actingAs($coach)->patch(route('events.manage.update', $event), [
+        'type' => 'match',
+        'starts_at' => now()->addDay()->setTime(19, 0)->toISOString(),
+        'ends_at' => now()->addDay()->setTime(20, 30)->toISOString(),
+        'location' => 'Pitch 2',
+        'details' => 'Arrive early',
+    ])->assertRedirect(route('event.show', $event, false));
+
+    $this->assertDatabaseHas('events', [
+        'id' => $event->id,
+        'type' => 'match',
+        'location' => 'Pitch 2',
+        'details' => 'Arrive early',
+    ]);
+
+    $this->actingAs($coach)->delete(route('events.destroy', $event))
+        ->assertRedirect(route('events.index', ['team' => $team->id], false));
+
+    $this->assertDatabaseMissing('events', [
+        'id' => $event->id,
+    ]);
+});
+
+test('coach cannot update or delete past event', function () {
+    $coach = User::factory()->create(['role' => 'coach']);
+    $team = $coach->teams()->create([
+        'name' => 'U11 Panthers',
+        'age_group' => 'under-11s',
+    ]);
+
+    $event = Event::create([
+        'team_id' => $team->id,
+        'type' => 'training',
+        'starts_at' => now()->subHour(),
+        'ends_at' => now()->addHour(),
+        'location' => 'Pitch 1',
+        'details' => 'Bring kit',
+    ]);
+
+    $this->actingAs($coach)->patch(route('events.manage.update', $event), [
+        'type' => 'match',
+        'starts_at' => now()->addDay()->setTime(19, 0)->toISOString(),
+        'ends_at' => now()->addDay()->setTime(20, 30)->toISOString(),
+        'location' => 'Pitch 2',
+        'details' => 'Arrive early',
+    ])->assertForbidden();
+
+    $this->actingAs($coach)->delete(route('events.destroy', $event))->assertForbidden();
+});
+
+test('non-owner coach and guardian cannot update or delete event', function () {
+    $ownerCoach = User::factory()->create(['role' => 'coach']);
+    $otherCoach = User::factory()->create(['role' => 'coach']);
+    $guardian = User::factory()->create(['role' => 'guardian']);
+    $team = $ownerCoach->teams()->create([
+        'name' => 'U11 Panthers',
+        'age_group' => 'under-11s',
+    ]);
+
+    $event = Event::create([
+        'team_id' => $team->id,
+        'type' => 'training',
+        'starts_at' => now()->addDay()->setTime(18, 0),
+        'ends_at' => now()->addDay()->setTime(19, 30),
+        'location' => 'Pitch 1',
+        'details' => 'Bring kit',
+    ]);
+
+    $payload = [
+        'type' => 'match',
+        'starts_at' => now()->addDay()->setTime(19, 0)->toISOString(),
+        'ends_at' => now()->addDay()->setTime(20, 30)->toISOString(),
+        'location' => 'Pitch 2',
+        'details' => 'Arrive early',
+    ];
+
+    $this->actingAs($otherCoach)->patch(route('events.manage.update', $event), $payload)->assertForbidden();
+    $this->actingAs($guardian)->patch(route('events.manage.update', $event), $payload)->assertForbidden();
+
+    $this->actingAs($otherCoach)->delete(route('events.destroy', $event))->assertForbidden();
+    $this->actingAs($guardian)->delete(route('events.destroy', $event))->assertForbidden();
 });

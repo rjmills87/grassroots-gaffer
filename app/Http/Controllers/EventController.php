@@ -49,7 +49,34 @@ class EventController extends Controller
         ]);
     }
 
-    public function update(Request $request, Event $event, Player $player)
+    public function update(Request $request, Event $event)
+    {
+        $this->ensureCoachCanManageFutureEvent($event);
+
+        $validated = $request->validate([
+            'type' => 'required|string',
+            'starts_at' => 'required|date',
+            'ends_at' => 'required|date|after:starts_at',
+            'location' => 'required|string|max:255',
+            'details' => 'required|string|max:255',
+        ]);
+
+        $event->update($validated);
+
+        return redirect()->route('event.show', $event);
+    }
+
+    public function destroy(Event $event)
+    {
+        $this->ensureCoachCanManageFutureEvent($event);
+
+        $teamId = $event->team_id;
+        $event->delete();
+
+        return redirect()->route('events.index', ['team' => $teamId]);
+    }
+
+    public function updatePlayerResponse(Request $request, Event $event, Player $player)
     {
         if ($player->team_id !== $event->team_id || ! $event->players()->where('players.id', $player->id)->exists()) {
             abort(404);
@@ -109,5 +136,16 @@ class EventController extends Controller
         }
 
         return false;
+    }
+
+    protected function ensureCoachCanManageFutureEvent(Event $event): void
+    {
+        if (! $this->userIsTeamCoach(auth()->user(), $event->team)) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        if ($event->starts_at->lte(now())) {
+            abort(403, 'Past events cannot be changed.');
+        }
     }
 }
