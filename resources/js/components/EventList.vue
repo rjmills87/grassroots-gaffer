@@ -22,7 +22,9 @@ const props = defineProps<{
                                 <span class="rounded-full border px-2 py-1 text-xs font-semibold">
                                     {{ capitalizeFirstLetter(event.type) }}
                                 </span>
-                                <span class="text-xs text-muted-foreground">{{ formatDateTime(event.occurs_at) }}</span>
+                                <span class="text-xs text-muted-foreground">
+                                    {{ formatDateTime(event.starts_at) }} - {{ formatDateTime(event.ends_at) }}
+                                </span>
                             </div>
                             <p class="mt-3 text-sm font-medium">{{ event.location }}</p>
                             <p class="mt-1 line-clamp-2 text-sm text-muted-foreground">

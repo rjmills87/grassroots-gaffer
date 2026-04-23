@@ -31,8 +31,8 @@ Route::get('dashboard', function () {
     $user = auth()->user();
     $teams = accessibleTeams($user, [
         'events' => function ($query) {
-            $query->where('occurs_at', '>=', now())
-                ->orderBy('occurs_at', 'asc')
+            $query->where('starts_at', '>=', now())
+                ->orderBy('starts_at', 'asc')
                 ->limit(4);
         },
         'messages' => function ($query) {
@@ -82,7 +82,7 @@ Route::get('/events', function () {
                 'players as unavailable_count' => function ($query) {
                     $query->where('player_response', 'unavailable');
                 },
-            ])->orderBy('occurs_at', 'asc');
+            ])->orderBy('starts_at', 'asc');
         },
     ]);
     $selectedTeam = selectedTeamFromRequest(request('team'), $teams);

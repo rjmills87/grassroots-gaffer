@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Event;
-use App\Models\Team;
 use App\Models\User;
 use App\Notifications\WelcomeToTeamNotification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -76,7 +75,8 @@ test('newly added player is attached only to future events', function () {
     $pastEvent = Event::create([
         'team_id' => $team->id,
         'type' => 'match',
-        'occurs_at' => now()->subDay(),
+        'starts_at' => now()->subDay()->setTime(18, 0),
+        'ends_at' => now()->subDay()->setTime(19, 30),
         'location' => 'Past Ground',
         'details' => 'Past event',
     ]);
@@ -84,7 +84,8 @@ test('newly added player is attached only to future events', function () {
     $futureEvent = Event::create([
         'team_id' => $team->id,
         'type' => 'training',
-        'occurs_at' => now()->addDay(),
+        'starts_at' => now()->addDay()->setTime(18, 0),
+        'ends_at' => now()->addDay()->setTime(19, 30),
         'location' => 'Future Ground',
         'details' => 'Future event',
     ]);

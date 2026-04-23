@@ -4,7 +4,8 @@ export interface Event {
     id: number;
     team_id: number;
     type: string;
-    occurs_at: string;
+    starts_at: string;
+    ends_at: string;
     location: string;
     details: string | null;
     players: Player[];

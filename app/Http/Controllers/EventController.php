@@ -20,7 +20,8 @@ class EventController extends Controller
 
         $validated = $request->validate([
             'type' => 'required|string',
-            'occurs_at' => 'required|date',
+            'starts_at' => 'required|date',
+            'ends_at' => 'required|date|after:starts_at',
             'location' => 'required|string|max:255',
             'details' => 'required|string|max:255',
         ]);

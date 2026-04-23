@@ -2,7 +2,6 @@
 
 use App\Models\Event;
 use App\Models\Player;
-use App\Models\Team;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -36,7 +35,8 @@ test('coach can create event for own team and all players are attached', functio
 
     $response = $this->actingAs($coach)->post(route('events.store', $team), [
         'type' => 'training',
-        'occurs_at' => now()->addDay()->toISOString(),
+        'starts_at' => now()->addDay()->setTime(18, 0)->toISOString(),
+        'ends_at' => now()->addDay()->setTime(19, 30)->toISOString(),
         'location' => 'Training Ground',
         'details' => 'Bring kit',
     ]);
@@ -57,7 +57,8 @@ test('coach cannot create event for foreign team', function () {
 
     $response = $this->actingAs($otherCoach)->post(route('events.store', $team), [
         'type' => 'match',
-        'occurs_at' => now()->addDay()->toISOString(),
+        'starts_at' => now()->addDay()->setTime(18, 0)->toISOString(),
+        'ends_at' => now()->addDay()->setTime(19, 30)->toISOString(),
         'location' => 'Away',
         'details' => 'Details',
     ]);
@@ -87,7 +88,8 @@ test('guardian can update own child event attendance while unrelated guardian ca
     $event = Event::create([
         'team_id' => $team->id,
         'type' => 'match',
-        'occurs_at' => now()->addDay(),
+        'starts_at' => now()->addDay()->setTime(18, 0),
+        'ends_at' => now()->addDay()->setTime(19, 30),
         'location' => 'Home',
         'details' => 'League match',
     ]);
@@ -127,7 +129,8 @@ test('event response update rejects mismatched event and player pairing', functi
     $event = Event::create([
         'team_id' => $teamA->id,
         'type' => 'training',
-        'occurs_at' => now()->addDay(),
+        'starts_at' => now()->addDay()->setTime(18, 0),
+        'ends_at' => now()->addDay()->setTime(19, 30),
         'location' => 'Pitch',
         'details' => 'Training',
     ]);
@@ -135,4 +138,23 @@ test('event response update rejects mismatched event and player pairing', functi
     $this->actingAs($coach)->post(route('events.update', [$event, $player]), [
         'player_response' => 'attending',
     ])->assertNotFound();
+});
+
+test('coach cannot create event when finish time is before start time', function () {
+    $coach = User::factory()->create(['role' => 'coach']);
+    $team = $coach->teams()->create([
+        'name' => 'U11 Panthers',
+        'age_group' => 'under-11s',
+    ]);
+
+    $response = $this->from(route('events.index', ['team' => $team->id]))->actingAs($coach)->post(route('events.store', $team), [
+        'type' => 'training',
+        'starts_at' => now()->addDay()->setTime(19, 30)->toISOString(),
+        'ends_at' => now()->addDay()->setTime(18, 0)->toISOString(),
+        'location' => 'Training Ground',
+        'details' => 'Bring kit',
+    ]);
+
+    $response->assertRedirect(route('events.index', ['team' => $team->id], false));
+    $response->assertSessionHasErrors('ends_at');
 });

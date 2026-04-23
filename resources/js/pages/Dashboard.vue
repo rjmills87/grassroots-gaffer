@@ -187,20 +187,19 @@ const changeTeam = (event: Event) => {
                             >
                                 <div class="flex items-start gap-3">
                                     <div class="flex min-w-14 shrink-0 flex-col items-center rounded-md border bg-muted/40 px-2 py-2">
-                                        <span class="text-lg font-bold leading-none">{{ formatEventDay(event.occurs_at) }}</span>
-                                        <span class="mt-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-                                            {{ formatEventMonth(event.occurs_at) }}
+                                        <span class="text-lg leading-none font-bold">{{ formatEventDay(event.starts_at) }}</span>
+                                        <span class="mt-1 text-[11px] font-semibold tracking-wide text-muted-foreground uppercase">
+                                            {{ formatEventMonth(event.starts_at) }}
                                         </span>
                                     </div>
                                     <div class="min-w-0 flex-1">
                                         <div class="flex flex-wrap items-center gap-2">
                                             <p class="font-semibold">{{ capitalizeFirstLetter(event.type) }}</p>
                                             <span class="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
-                                                {{ formatEventTime(event.occurs_at) }}
+                                                {{ formatEventTime(event.starts_at) }} - {{ formatEventTime(event.ends_at) }}
                                             </span>
                                         </div>
                                         <p class="mt-1 truncate text-sm text-muted-foreground">{{ event.location }}</p>
-                                        <p class="mt-1 text-xs text-muted-foreground">{{ formatDateTime(event.occurs_at) }}</p>
                                     </div>
                                 </div>
                             </Link>

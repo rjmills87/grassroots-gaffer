@@ -2,7 +2,7 @@
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Team } from '@/types/Team';
-import { useForm } from '@inertiajs/vue3';
+import { Form, useForm } from '@inertiajs/vue3';
 import type { DateValue } from '@internationalized/date';
 import { DateFormatter, getLocalTimeZone } from '@internationalized/date';
 import { Calendar as CalendarIcon, LoaderCircle } from 'lucide-vue-next';
@@ -18,7 +18,8 @@ import Textarea from './ui/textarea/Textarea.vue';
 // Define the shape of the form data
 interface EventForm {
     type: string | null;
-    occurs_at: string | null;
+    starts_at: string | null;
+    ends_at: string | null;
     location: string;
     details: string;
 }
@@ -32,12 +33,14 @@ const emit = defineEmits<{
 }>();
 
 const value = ref<DateValue | undefined>();
-const occursAtTime = ref('18:00');
+const startsAtTime = ref('18:00');
+const endsAtTime = ref('19:30');
 
 // Apply the interface to useForm and set initial values
 const form = useForm<EventForm>({
     type: null,
-    occurs_at: null,
+    starts_at: null,
+    ends_at: null,
     location: '',
     details: '',
 });
@@ -48,33 +51,35 @@ const addEvent = () => {
         onSuccess: () => {
             form.reset();
             value.value = undefined;
+            startsAtTime.value = '18:00';
+            endsAtTime.value = '19:30';
             toast('The event has been created successfully');
             emit('close');
         },
     });
 };
 
-watch(value, (newValue) => {
-    if (newValue) {
-        const localDate = newValue.toDate(getLocalTimeZone());
-        const [hours, minutes] = occursAtTime.value.split(':').map(Number);
-        localDate.setHours(hours, minutes, 0, 0);
-        form.occurs_at = localDate.toISOString();
-    } else {
-        form.occurs_at = null;
-    }
-});
-
-watch(occursAtTime, (newTime) => {
-    if (!value.value || !newTime) {
+const updateDateTimes = () => {
+    if (!value.value || !startsAtTime.value || !endsAtTime.value) {
+        form.starts_at = null;
+        form.ends_at = null;
         return;
     }
 
-    const localDate = value.value.toDate(getLocalTimeZone());
-    const [hours, minutes] = newTime.split(':').map(Number);
-    localDate.setHours(hours, minutes, 0, 0);
-    form.occurs_at = localDate.toISOString();
-});
+    const startsAtLocalDate = value.value.toDate(getLocalTimeZone());
+    const [startHours, startMinutes] = startsAtTime.value.split(':').map(Number);
+    startsAtLocalDate.setHours(startHours, startMinutes, 0, 0);
+    form.starts_at = startsAtLocalDate.toISOString();
+
+    const endsAtLocalDate = value.value.toDate(getLocalTimeZone());
+    const [endHours, endMinutes] = endsAtTime.value.split(':').map(Number);
+    endsAtLocalDate.setHours(endHours, endMinutes, 0, 0);
+    form.ends_at = endsAtLocalDate.toISOString();
+};
+
+watch(value, updateDateTimes);
+watch(startsAtTime, updateDateTimes);
+watch(endsAtTime, updateDateTimes);
 
 const dateFormat = new DateFormatter('en-GB', {
     dateStyle: 'long',
@@ -116,21 +121,26 @@ const toDate = (date: DateValue) => {
                 <InputError :message="form.errors.details" />
             </div>
             <div class="grid gap-2">
-                <Label for="occurs_at">Event Date</Label>
+                <Label for="starts_at">Event Date</Label>
                 <Popover>
-                    <PopoverTrigger
-                        ><Button variant="outline"
-                            ><span>{{ value ? dateFormat.format(toDate(value)) : 'Select a Date' }}</span
-                            ><CalendarIcon class="mr-2 h-4 w-4"
-                        /></Button>
+                    <PopoverTrigger as-child>
+                        <Button variant="outline" class="w-full justify-between text-left font-normal">
+                            <span>{{ value ? dateFormat.format(toDate(value)) : 'Select a Date' }}</span>
+                            <CalendarIcon class="h-4 w-4" />
+                        </Button>
                     </PopoverTrigger>
                     <PopoverContent><Calendar v-model:model-value="value" :weekday-format="'short'" /></PopoverContent>
                 </Popover>
-                <InputError :message="form.errors.occurs_at" />
+                <InputError :message="form.errors.starts_at" />
             </div>
             <div class="grid gap-2">
-                <Label for="occurs_at_time">Event Time</Label>
-                <Input id="occurs_at_time" v-model="occursAtTime" type="time" />
+                <Label for="starts_at_time">Event Start Time</Label>
+                <Input id="starts_at_time" v-model="startsAtTime" type="time" />
+            </div>
+            <div class="grid gap-2">
+                <Label for="ends_at_time">Event Finish Time</Label>
+                <Input id="ends_at_time" v-model="endsAtTime" type="time" />
+                <InputError :message="form.errors.ends_at" />
             </div>
             <Button class="mt-4 cursor-pointer" type="submit" :disabled="form.processing">
                 <LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin" />

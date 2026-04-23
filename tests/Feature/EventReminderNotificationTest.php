@@ -2,7 +2,6 @@
 
 use App\Models\Event;
 use App\Models\Player;
-use App\Models\Team;
 use App\Models\User;
 use App\Notifications\EventReminderNotification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -43,7 +42,8 @@ test('reminders are only sent to guardians without a response', function () {
     $event = Event::create([
         'team_id' => $team->id,
         'type' => 'match',
-        'occurs_at' => now()->addDay(),
+        'starts_at' => now()->addDay()->setTime(18, 0),
+        'ends_at' => now()->addDay()->setTime(19, 30),
         'location' => 'Main pitch',
         'details' => 'League game',
     ]);
@@ -69,7 +69,8 @@ test('unauthorized coach cannot send reminders for foreign team event', function
     $event = Event::create([
         'team_id' => $team->id,
         'type' => 'training',
-        'occurs_at' => now()->addDay(),
+        'starts_at' => now()->addDay()->setTime(18, 0),
+        'ends_at' => now()->addDay()->setTime(19, 30),
         'location' => 'Ground',
         'details' => 'Session',
     ]);

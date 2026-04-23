@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Button from '@/components/ui/button/Button.vue';
-import { capitalizeFirstLetter, formatDateTime } from '@/helpers';
+import { capitalizeFirstLetter } from '@/helpers';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { User, type BreadcrumbItem } from '@/types';
 import { Event } from '@/types/Event';
@@ -13,6 +13,12 @@ const props = defineProps<{
     event: Event;
     user: User;
 }>();
+
+const formatEventTime = (dateValue: string) =>
+    new Date(dateValue).toLocaleTimeString('en-GB', {
+        hour: '2-digit',
+        minute: '2-digit',
+    });
 
 const availabilityLoadingPlayerId = ref<number | null>(null);
 const reminderProcessing = ref(false);
@@ -83,13 +89,15 @@ const sendEventReminder = () => {
             <section class="rounded-xl border bg-card p-6 shadow-sm">
                 <div class="flex flex-wrap items-start justify-between gap-4">
                     <div class="space-y-2">
-                        <p class="text-xs uppercase tracking-wide text-muted-foreground">Event</p>
+                        <p class="text-xs tracking-wide text-muted-foreground uppercase">Event</p>
                         <h1 class="text-2xl font-semibold">{{ capitalizeFirstLetter(props.event.type) }}</h1>
-                        <p class="text-sm text-muted-foreground">{{ formatDateTime(props.event.occurs_at) }}</p>
+                        <p class="text-sm font-medium text-muted-foreground">
+                            {{ formatEventTime(props.event.starts_at) }} - {{ formatEventTime(props.event.ends_at) }}
+                        </p>
                     </div>
                     <div class="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-sm text-muted-foreground">
                         <MapPin class="h-4 w-4" />
-                        <span>{{ props.event.location }}</span>
+                        <span class="font-medium">{{ props.event.location }}</span>
                     </div>
                 </div>
                 <p class="mt-4 text-sm text-muted-foreground">
@@ -104,9 +112,7 @@ const sendEventReminder = () => {
                         <span class="rounded-full border border-emerald-300 bg-emerald-50 px-2 py-1 text-emerald-700">
                             {{ attendingCount }} attending
                         </span>
-                        <span class="rounded-full border border-red-300 bg-red-50 px-2 py-1 text-red-700">
-                            {{ unavailableCount }} unavailable
-                        </span>
+                        <span class="rounded-full border border-red-300 bg-red-50 px-2 py-1 text-red-700"> {{ unavailableCount }} unavailable </span>
                         <span class="rounded-full border border-muted-foreground/30 bg-muted px-2 py-1 text-muted-foreground">
                             {{ noResponseCount }} no response
                         </span>
@@ -114,21 +120,14 @@ const sendEventReminder = () => {
                 </div>
 
                 <div v-if="props.event.players && props.event.players.length > 0" class="space-y-3">
-                    <div
-                        v-for="player in props.event.players"
-                        :key="player.id"
-                        class="rounded-lg border p-4"
-                        :class="statusClasses(player)"
-                    >
+                    <div v-for="player in props.event.players" :key="player.id" class="rounded-lg border p-4" :class="statusClasses(player)">
                         <div class="flex flex-wrap items-center justify-between gap-3">
                             <div>
                                 <p class="font-medium">{{ player.name }}</p>
                                 <p class="text-xs capitalize">
                                     {{ player.pivot?.player_response ?? 'no response yet' }}
                                 </p>
-                                <p v-if="props.user.email === player.guardian_email" class="mt-1 text-xs font-medium text-primary">
-                                    Your player
-                                </p>
+                                <p v-if="props.user.email === player.guardian_email" class="mt-1 text-xs font-medium text-primary">Your player</p>
                             </div>
 
                             <div v-if="props.user.email === player.guardian_email" class="flex gap-2">

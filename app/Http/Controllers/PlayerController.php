@@ -55,7 +55,7 @@ class PlayerController extends Controller
             $player = $team->players()->create($validated);
 
             // Add new player to already scheduled future events
-            $futureEventIds = $team->events()->where('occurs_at', '>', now())->pluck('id');
+            $futureEventIds = $team->events()->where('starts_at', '>', now())->pluck('id');
             if ($futureEventIds->isNotEmpty()) {
                 $player->events()->attach($futureEventIds);
             }
