@@ -33,7 +33,7 @@ Route::get('dashboard', function () {
         'events' => function ($query) {
             $query->where('occurs_at', '>=', now())
                 ->orderBy('occurs_at', 'asc')
-                ->limit(2);
+                ->limit(4);
         },
         'messages' => function ($query) {
             $query->with('user')

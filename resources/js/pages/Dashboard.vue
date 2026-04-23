@@ -32,6 +32,13 @@ const hasEvents = computed(() => (props.selectedTeam?.events?.length ?? 0) > 0);
 const hasMessages = computed(() => (props.selectedTeam?.messages?.length ?? 0) > 0);
 const isCreateTeamOpen = ref(false);
 const isDeleteTeamOpen = ref(false);
+const formatEventDay = (dateValue: string) => new Date(dateValue).toLocaleDateString('en-GB', { day: '2-digit' });
+const formatEventMonth = (dateValue: string) => new Date(dateValue).toLocaleDateString('en-GB', { month: 'short' });
+const formatEventTime = (dateValue: string) =>
+    new Date(dateValue).toLocaleTimeString('en-GB', {
+        hour: '2-digit',
+        minute: '2-digit',
+    });
 
 const changeTeam = (event: Event) => {
     const value = Number((event.target as HTMLSelectElement).value);
@@ -172,21 +179,31 @@ const changeTeam = (event: Event) => {
                     </div>
                     <div class="rounded-lg border p-4">
                         <div v-if="hasEvents" class="space-y-4">
-                            <div>
-                                <h3 class="mb-2 font-medium">{{ selectedTeam?.name }}</h3>
-                                <div v-for="event in selectedTeam?.events?.slice(0, 2)" :key="event.id" class="mb-3">
-                                    <Link :href="`/events/${event.id}`">
-                                        <div class="flex items-start">
-                                            <div class="mb-2 flex items-center gap-2 border-b border-gray-200 pb-2">
-                                                <p class="font-medium">{{ capitalizeFirstLetter(event.type) }}</p>
-                                                <p class="text-sm text-muted-foreground">
-                                                    {{ formatDateTime(event.occurs_at) }} • {{ event.location }}
-                                                </p>
-                                            </div>
+                            <Link
+                                v-for="event in selectedTeam?.events?.slice(0, 4)"
+                                :key="event.id"
+                                :href="`/events/${event.id}`"
+                                class="block rounded-lg border p-3 transition-colors hover:bg-accent/40"
+                            >
+                                <div class="flex items-start gap-3">
+                                    <div class="flex min-w-14 shrink-0 flex-col items-center rounded-md border bg-muted/40 px-2 py-2">
+                                        <span class="text-lg font-bold leading-none">{{ formatEventDay(event.occurs_at) }}</span>
+                                        <span class="mt-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                                            {{ formatEventMonth(event.occurs_at) }}
+                                        </span>
+                                    </div>
+                                    <div class="min-w-0 flex-1">
+                                        <div class="flex flex-wrap items-center gap-2">
+                                            <p class="font-semibold">{{ capitalizeFirstLetter(event.type) }}</p>
+                                            <span class="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+                                                {{ formatEventTime(event.occurs_at) }}
+                                            </span>
                                         </div>
-                                    </Link>
+                                        <p class="mt-1 truncate text-sm text-muted-foreground">{{ event.location }}</p>
+                                        <p class="mt-1 text-xs text-muted-foreground">{{ formatDateTime(event.occurs_at) }}</p>
+                                    </div>
                                 </div>
-                            </div>
+                            </Link>
                         </div>
                         <EmptyState v-else title="No upcoming events" description="Scheduled events will appear here for quick access.">
                             <template #icon>
