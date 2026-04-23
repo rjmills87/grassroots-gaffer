@@ -19,10 +19,11 @@ const emit = defineEmits<{
 const confirmationInput = ref('');
 
 const comfirmDeletion = () => {
+    const toastMessage = props.toastMessage;
     router.delete(route(props.deleteRoute, props.itemId), {
         onSuccess: () => {
             emit('close');
-            toast(props.toastMessage);
+            toast(toastMessage);
         },
     });
 };
@@ -33,8 +34,10 @@ const comfirmDeletion = () => {
         <p class="pb-2 text-black dark:text-white">Are you sure you want to delete this {{ props.itemType }}?</p>
         <p class="pb-2 font-bold">{{ props.itemName }}</p>
         <p class="pb-2 text-black dark:text-white">This cannot be undone.</p>
-        <p class="pb-2">Type the {{ props.itemType }} name to confirm deletion</p>
-        <Input v-model="confirmationInput" type="text" />
+        <p class="pb-2">
+            Type <span class="font-semibold">"{{ props.itemName }}"</span> to confirm deletion
+        </p>
+        <Input v-model="confirmationInput" type="text" :placeholder="props.itemName" />
         <p v-if="confirmationInput !== props.itemName" class="mt-2 text-red-600">{{ props.itemType }} names must match.</p>
 
         <p v-else class="py-2 font-bold text-green-600">{{ props.itemType }} names match.</p>

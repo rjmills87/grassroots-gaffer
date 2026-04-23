@@ -103,15 +103,6 @@ const props = defineProps<{
             <CreateEventDialog v-if="$page.props.auth.user.role === 'coach'" :team="team" />
             <MessageList :messages="team.messages" />
             <CreateMessageDialog v-if="$page.props.auth.user.role === 'coach'" :team="team" />
-            <div class="mt-8 mr-4 mb-4 flex justify-end">
-                <DeleteConfirmationDialog
-                    itemType="Team"
-                    :itemName="team.name"
-                    deleteRoute="teams.destroy"
-                    :itemId="team.id"
-                    :toastMessage="`Team: ${team.name} has been deleted successfully`"
-                />
-            </div>
         </div>
     </AppLayout>
 </template>

@@ -1,13 +1,18 @@
 <script setup lang="ts">
 import CreateTeamDialog from '@/components/CreateTeamDialog.vue';
+import CreateTeamForm from '@/components/CreateTeamForm.vue';
+import DeleteConfirmation from '@/components/DeleteConfirmation.vue';
 import EmptyState from '@/components/EmptyState.vue';
+import Button from '@/components/ui/button/Button.vue';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { capitalizeFirstLetter, formatDateTime } from '@/helpers';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { User, type BreadcrumbItem } from '@/types';
 import { type Team } from '@/types/Team';
 import { Head, Link, router } from '@inertiajs/vue3';
-import { CalendarDays, ChevronRight, MessageSquareText, ShieldPlus, Users } from 'lucide-vue-next';
-import { computed } from 'vue';
+import { CalendarDays, ChevronRight, EllipsisVertical, MessageSquareText, Plus, ShieldPlus, Trash2, Users } from 'lucide-vue-next';
+import { computed, ref } from 'vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -25,6 +30,8 @@ const props = defineProps<{
 
 const hasEvents = computed(() => (props.selectedTeam?.events?.length ?? 0) > 0);
 const hasMessages = computed(() => (props.selectedTeam?.messages?.length ?? 0) > 0);
+const isCreateTeamOpen = ref(false);
+const isDeleteTeamOpen = ref(false);
 
 const changeTeam = (event: Event) => {
     const value = Number((event.target as HTMLSelectElement).value);
@@ -48,7 +55,8 @@ const changeTeam = (event: Event) => {
                 <div class="mb-4 flex flex-wrap items-end justify-between gap-4">
                     <div>
                         <h2 class="text-2xl font-semibold">Team Summary</h2>
-                        <p class="text-sm text-muted-foreground">Switch teams to view a focused summary.</p>
+
+                        <p v-if="teams.length > 1" class="text-sm text-muted-foreground">Switch teams to view a focused summary.</p>
                     </div>
                     <div v-if="teams.length > 1" class="w-full max-w-sm space-y-2">
                         <label class="text-sm font-medium" for="dashboard-team-select">Team</label>
@@ -63,7 +71,30 @@ const changeTeam = (event: Event) => {
                             </option>
                         </select>
                     </div>
-                    <CreateTeamDialog v-if="user.role === 'coach'" />
+                    <CreateTeamDialog v-if="user.role === 'coach' && teams.length === 0" />
+                    <DropdownMenu v-else-if="user.role === 'coach'">
+                        <DropdownMenuTrigger as-child>
+                            <Button variant="ghost" size="icon" class="h-9 w-9 cursor-pointer">
+                                <span class="sr-only">Team actions</span>
+                                <EllipsisVertical class="h-5 w-5" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" class="w-44">
+                            <DropdownMenuItem class="cursor-pointer" @select.prevent="isCreateTeamOpen = true">
+                                <Plus class="mr-2 h-4 w-4" />
+                                Create Team
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator v-if="selectedTeam" />
+                            <DropdownMenuItem
+                                v-if="selectedTeam"
+                                class="cursor-pointer text-destructive focus:text-destructive"
+                                @select.prevent="isDeleteTeamOpen = true"
+                            >
+                                <Trash2 class="mr-2 h-4 w-4" />
+                                Delete Team
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </div>
 
                 <div v-if="teams.length === 0" class="rounded-lg border border-dashed p-8 text-center">
@@ -210,4 +241,24 @@ const changeTeam = (event: Event) => {
             </div>
         </div>
     </AppLayout>
+
+    <Dialog v-model:open="isCreateTeamOpen">
+        <DialogContent>
+            <CreateTeamForm @close="isCreateTeamOpen = false" />
+        </DialogContent>
+    </Dialog>
+
+    <Dialog v-model:open="isDeleteTeamOpen">
+        <DialogContent>
+            <DeleteConfirmation
+                v-if="selectedTeam"
+                itemType="Team"
+                :itemName="selectedTeam.name"
+                deleteRoute="teams.destroy"
+                :itemId="selectedTeam.id"
+                :toastMessage="`Team: ${selectedTeam.name} has been deleted successfully`"
+                @close="isDeleteTeamOpen = false"
+            />
+        </DialogContent>
+    </Dialog>
 </template>
