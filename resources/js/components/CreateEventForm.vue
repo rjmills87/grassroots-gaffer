@@ -22,6 +22,7 @@ interface EventForm {
     ends_at: string | null;
     location: string;
     details: string;
+    attachments: File[];
 }
 
 const props = defineProps<{
@@ -43,6 +44,7 @@ const form = useForm<EventForm>({
     ends_at: null,
     location: '',
     details: '',
+    attachments: [],
 });
 
 const addEvent = () => {
@@ -53,6 +55,7 @@ const addEvent = () => {
             value.value = undefined;
             startsAtTime.value = '18:00';
             endsAtTime.value = '19:30';
+            form.attachments = [];
             toast('The event has been created successfully');
             emit('close');
         },
@@ -87,6 +90,11 @@ const dateFormat = new DateFormatter('en-GB', {
 
 const toDate = (date: DateValue) => {
     return date.toDate(getLocalTimeZone());
+};
+
+const onAttachmentChange = (event: Event) => {
+    const files = (event.target as HTMLInputElement).files;
+    form.attachments = files ? Array.from(files).slice(0, 3) : [];
 };
 </script>
 
@@ -141,6 +149,16 @@ const toDate = (date: DateValue) => {
                 <Label for="ends_at_time">Event Finish Time</Label>
                 <Input id="ends_at_time" v-model="endsAtTime" type="time" />
                 <InputError :message="form.errors.ends_at" />
+            </div>
+            <div class="grid gap-2">
+                <Label for="event-attachments">Attachments (optional)</Label>
+                <Input id="event-attachments" type="file" multiple accept=".pdf,.jpg,.jpeg,.png" @change="onAttachmentChange" />
+                <p class="text-xs text-muted-foreground">Up to 3 files. PDF, JPG, JPEG, PNG only. 10MB max per file.</p>
+                <p v-if="form.attachments.length > 0" class="text-xs text-muted-foreground">
+                    {{ form.attachments.length }} file(s) selected
+                </p>
+                <InputError :message="form.errors.attachments" />
+                <InputError :message="form.errors['attachments.0']" />
             </div>
             <Button class="mt-4 cursor-pointer" type="submit" :disabled="form.processing">
                 <LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin" />

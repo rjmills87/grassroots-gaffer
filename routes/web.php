@@ -131,6 +131,12 @@ Route::patch('/events/{event}', [EventController::class, 'update'])->middleware(
 Route::delete('/events/{event}', [EventController::class, 'destroy'])->middleware(['auth', 'verified'])->name('events.destroy');
 Route::post('/events/{event}/players/{player}', [EventController::class, 'updatePlayerResponse'])->middleware(['auth', 'verified'])->name('events.players.update');
 Route::post('/events/{event}/send-reminders', [EventController::class, 'sendReminders'])->middleware(['auth', 'verified', 'throttle:5,1'])->name('events.sendReminders');
+Route::get('/event-attachments/{eventAttachment}/preview', [EventController::class, 'previewAttachment'])
+    ->middleware(['auth', 'verified'])
+    ->name('events.attachments.preview');
+Route::get('/event-attachments/{eventAttachment}/download', [EventController::class, 'downloadAttachment'])
+    ->middleware(['auth', 'verified'])
+    ->name('events.attachments.download');
 
 // Message Routes
 Route::post('/teams/{team}/messages', [MessageController::class, 'store'])->middleware(['auth', 'verified'])->name('teams.messages.store');
