@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Message;
-use App\Models\Team;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -18,7 +17,7 @@ test('coach can post message to own team', function () {
         'message' => 'Training moved to 6pm.',
     ]);
 
-    $response->assertRedirect(route('teams.show', $team, false));
+    $response->assertRedirect(route('announcements.index', ['team' => $team->id], false));
     $this->assertDatabaseHas('messages', [
         'team_id' => $team->id,
         'user_id' => $coach->id,
@@ -60,7 +59,7 @@ test('message author can edit and delete while non-author cannot', function () {
 
     $this->actingAs($author)->put(route('messages.update', $message), [
         'message' => 'Updated message',
-    ])->assertRedirect(route('teams.show', $team, false));
+    ])->assertRedirect(route('announcements.index', ['team' => $team->id], false));
 
     $this->assertDatabaseHas('messages', [
         'id' => $message->id,
@@ -73,4 +72,11 @@ test('message author can edit and delete while non-author cannot', function () {
 
     $this->actingAs($otherCoach)->delete(route('messages.destroy', $message))
         ->assertForbidden();
+
+    $this->actingAs($author)->delete(route('messages.destroy', $message))
+        ->assertRedirect(route('announcements.index', ['team' => $team->id], false));
+
+    $this->assertDatabaseMissing('messages', [
+        'id' => $message->id,
+    ]);
 });

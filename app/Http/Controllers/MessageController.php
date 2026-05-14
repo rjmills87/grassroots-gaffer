@@ -22,7 +22,7 @@ class MessageController extends Controller
 
         $message = $team->messages()->create($validated);
 
-        return redirect()->route('teams.show', $team);
+        return redirect()->route('announcements.index', ['team' => $team->id]);
     }
 
     public function update(Request $request, Message $message)
@@ -38,7 +38,7 @@ class MessageController extends Controller
         $message->update($validated);
         $team = $message->team;
 
-        return redirect()->route('teams.show', $team);
+        return redirect()->route('announcements.index', ['team' => $team->id]);
     }
 
     public function destroy(Message $message)
@@ -49,6 +49,6 @@ class MessageController extends Controller
         $team = $message->team;
         $message->delete();
 
-        return redirect()->route('teams.show', $team);
+        return redirect()->route('announcements.index', ['team' => $team->id]);
     }
 }
