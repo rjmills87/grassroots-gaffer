@@ -6,8 +6,10 @@ use App\Models\Message;
 use App\Models\MessageAttachment;
 use App\Models\Team;
 use App\Models\User;
+use App\Notifications\NewTeamAnnouncementNotification;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
@@ -33,6 +35,18 @@ class MessageController extends Controller
         ]);
 
         $this->storeAttachments($message, $request->file('attachments', []));
+
+        $guardianIds = $team->players()
+            ->whereNotNull('guardian_id')
+            ->pluck('guardian_id')
+            ->unique()
+            ->values();
+
+        if ($guardianIds->isNotEmpty()) {
+            $recipients = User::query()->whereIn('id', $guardianIds)->get();
+            $message->loadMissing('team');
+            Notification::send($recipients, new NewTeamAnnouncementNotification($message));
+        }
 
         return redirect()->route('announcements.index', ['team' => $team->id]);
     }

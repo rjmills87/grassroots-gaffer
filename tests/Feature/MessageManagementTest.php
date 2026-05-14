@@ -4,8 +4,10 @@ use App\Models\Message;
 use App\Models\MessageAttachment;
 use App\Models\Player;
 use App\Models\User;
+use App\Notifications\NewTeamAnnouncementNotification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 
 uses(RefreshDatabase::class);
@@ -276,4 +278,126 @@ test('deleting message removes attachment files from storage', function () {
 
     Storage::disk('public')->assertMissing($path);
     expect(MessageAttachment::query()->where('message_id', $message->id)->exists())->toBeFalse();
+});
+
+test('new announcement notifies each distinct guardian once', function () {
+    Notification::fake();
+
+    $coach = User::factory()->create(['role' => 'coach']);
+    $team = $coach->teams()->create([
+        'name' => 'U12 Reds',
+        'age_group' => 'under-12s',
+    ]);
+
+    $guardianA = User::factory()->create(['role' => 'guardian']);
+    $guardianB = User::factory()->create(['role' => 'guardian']);
+
+    Player::create([
+        'team_id' => $team->id,
+        'name' => 'Player One',
+        'guardian_name' => $guardianA->name,
+        'guardian_email' => $guardianA->email,
+        'guardian_phone' => '0111111111',
+        'guardian_id' => $guardianA->id,
+        'position' => 'cm',
+    ]);
+    Player::create([
+        'team_id' => $team->id,
+        'name' => 'Player Two',
+        'guardian_name' => $guardianB->name,
+        'guardian_email' => $guardianB->email,
+        'guardian_phone' => '0222222222',
+        'guardian_id' => $guardianB->id,
+        'position' => 'st',
+    ]);
+
+    $this->actingAs($coach)->post(route('teams.messages.store', $team), [
+        'message' => 'Team BBQ this Saturday.',
+    ])->assertRedirect(route('announcements.index', ['team' => $team->id], false));
+
+    Notification::assertSentTo($guardianA, NewTeamAnnouncementNotification::class);
+    Notification::assertSentTo($guardianB, NewTeamAnnouncementNotification::class);
+    Notification::assertSentToTimes($guardianA, NewTeamAnnouncementNotification::class, 1);
+    Notification::assertSentToTimes($guardianB, NewTeamAnnouncementNotification::class, 1);
+});
+
+test('new announcement dedupes when multiple players share the same guardian', function () {
+    Notification::fake();
+
+    $coach = User::factory()->create(['role' => 'coach']);
+    $team = $coach->teams()->create([
+        'name' => 'U9 Greens',
+        'age_group' => 'under-9s',
+    ]);
+
+    $guardian = User::factory()->create(['role' => 'guardian']);
+
+    Player::create([
+        'team_id' => $team->id,
+        'name' => 'Sibling One',
+        'guardian_name' => $guardian->name,
+        'guardian_email' => $guardian->email,
+        'guardian_phone' => '0333333333',
+        'guardian_id' => $guardian->id,
+        'position' => 'gk',
+    ]);
+    Player::create([
+        'team_id' => $team->id,
+        'name' => 'Sibling Two',
+        'guardian_name' => $guardian->name,
+        'guardian_email' => $guardian->email,
+        'guardian_phone' => '0333333333',
+        'guardian_id' => $guardian->id,
+        'position' => 'cb',
+    ]);
+
+    $this->actingAs($coach)->post(route('teams.messages.store', $team), [
+        'message' => 'One email per household.',
+    ])->assertRedirect(route('announcements.index', ['team' => $team->id], false));
+
+    Notification::assertSentToTimes($guardian, NewTeamAnnouncementNotification::class, 1);
+});
+
+test('new announcement does not notify when team has no players', function () {
+    Notification::fake();
+
+    $coach = User::factory()->create(['role' => 'coach']);
+    $team = $coach->teams()->create([
+        'name' => 'Empty Roster FC',
+        'age_group' => 'under-8s',
+    ]);
+
+    $this->actingAs($coach)->post(route('teams.messages.store', $team), [
+        'message' => 'Pitch closed.',
+    ])->assertRedirect(route('announcements.index', ['team' => $team->id], false));
+
+    Notification::assertNothingSent();
+});
+
+test('foreign coach posting message does not send announcement notifications', function () {
+    Notification::fake();
+
+    $owner = User::factory()->create(['role' => 'coach']);
+    $otherCoach = User::factory()->create(['role' => 'coach']);
+    $team = $owner->teams()->create([
+        'name' => 'U11 Blues',
+        'age_group' => 'under-11s',
+    ]);
+
+    $guardian = User::factory()->create(['role' => 'guardian']);
+    Player::create([
+        'team_id' => $team->id,
+        'name' => 'Kid',
+        'guardian_name' => $guardian->name,
+        'guardian_email' => $guardian->email,
+        'guardian_phone' => '0444444444',
+        'guardian_id' => $guardian->id,
+        'position' => 'lm',
+    ]);
+
+    $this->actingAs($otherCoach)->post(route('teams.messages.store', $team), [
+        'message' => 'Should not exist',
+    ])->assertForbidden();
+
+    Notification::assertNothingSent();
 });
