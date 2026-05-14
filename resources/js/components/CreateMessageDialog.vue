@@ -14,7 +14,7 @@ const isCreateMessageOpen = ref(false);
 <template>
     <div class="mt-8 mr-4 mb-4 flex justify-end">
         <Dialog v-model:open="isCreateMessageOpen">
-            <DialogTrigger as-child><Button variant="default" class="cursor-pointer">Create Announcement</Button></DialogTrigger>
+            <DialogTrigger as-child><Button variant="default" class="cursor-pointer">Create New Announcement</Button></DialogTrigger>
             <DialogContent>
                 <CreateMessageForm :team="team" @close="isCreateMessageOpen = false" />
             </DialogContent>

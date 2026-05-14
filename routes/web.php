@@ -36,7 +36,7 @@ Route::get('dashboard', function () {
                 ->limit(4);
         },
         'messages' => function ($query) {
-            $query->with('user')
+            $query->with(['user', 'attachments'])
                 ->latest()
                 ->limit(2);
         },
@@ -98,7 +98,7 @@ Route::get('/announcements', function () {
     $user = auth()->user();
     $teams = accessibleTeams($user, [
         'messages' => function ($query) {
-            $query->with('user')->latest();
+            $query->with(['user', 'attachments'])->latest();
         },
     ]);
     $selectedTeam = selectedTeamFromRequest(request('team'), $teams);
@@ -140,8 +140,14 @@ Route::get('/event-attachments/{eventAttachment}/download', [EventController::cl
 
 // Message Routes
 Route::post('/teams/{team}/messages', [MessageController::class, 'store'])->middleware(['auth', 'verified'])->name('teams.messages.store');
-Route::put('/messages/{message}', [MessageController::class, 'update'])->middleware(['auth', 'verified'])->name('messages.update');
+Route::match(['put', 'post'], '/messages/{message}', [MessageController::class, 'update'])->middleware(['auth', 'verified'])->name('messages.update');
 Route::delete('/messages/{message}', [MessageController::class, 'destroy'])->middleware(['auth', 'verified'])->name('messages.destroy');
+Route::get('/message-attachments/{messageAttachment}/preview', [MessageController::class, 'previewAttachment'])
+    ->middleware(['auth', 'verified'])
+    ->name('messages.attachments.preview');
+Route::get('/message-attachments/{messageAttachment}/download', [MessageController::class, 'downloadAttachment'])
+    ->middleware(['auth', 'verified'])
+    ->name('messages.attachments.download');
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

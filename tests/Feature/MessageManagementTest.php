@@ -1,8 +1,12 @@
 <?php
 
 use App\Models\Message;
+use App\Models\MessageAttachment;
+use App\Models\Player;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 uses(RefreshDatabase::class);
 
@@ -79,4 +83,197 @@ test('message author can edit and delete while non-author cannot', function () {
     $this->assertDatabaseMissing('messages', [
         'id' => $message->id,
     ]);
+});
+
+test('coach can post message with valid attachments', function () {
+    Storage::fake('public');
+
+    $coach = User::factory()->create(['role' => 'coach']);
+    $team = $coach->teams()->create([
+        'name' => 'U12 Reds',
+        'age_group' => 'under-12s',
+    ]);
+
+    $attachments = [
+        UploadedFile::fake()->create('notice.pdf', 500, 'application/pdf'),
+        UploadedFile::fake()->create('photo.jpg', 500, 'image/jpeg'),
+    ];
+
+    $response = $this->actingAs($coach)->post(route('teams.messages.store', $team), [
+        'message' => 'Please read the attachments.',
+        'attachments' => $attachments,
+    ]);
+
+    $response->assertRedirect(route('announcements.index', ['team' => $team->id], false));
+
+    $message = Message::query()->where('team_id', $team->id)->firstOrFail();
+    expect($message->attachments()->count())->toBe(2);
+    Storage::disk('public')->assertExists($message->attachments()->first()->file_path);
+});
+
+test('invalid message attachment type is rejected', function () {
+    Storage::fake('public');
+
+    $coach = User::factory()->create(['role' => 'coach']);
+    $team = $coach->teams()->create([
+        'name' => 'U12 Reds',
+        'age_group' => 'under-12s',
+    ]);
+
+    $response = $this->from(route('announcements.index', ['team' => $team->id]))->actingAs($coach)->post(route('teams.messages.store', $team), [
+        'message' => 'Hello',
+        'attachments' => [
+            UploadedFile::fake()->create('notes.txt', 10, 'text/plain'),
+        ],
+    ]);
+
+    $response->assertRedirect(route('announcements.index', ['team' => $team->id], false));
+    $response->assertSessionHasErrors('attachments.0');
+});
+
+test('oversized message attachment is rejected', function () {
+    Storage::fake('public');
+
+    $coach = User::factory()->create(['role' => 'coach']);
+    $team = $coach->teams()->create([
+        'name' => 'U12 Reds',
+        'age_group' => 'under-12s',
+    ]);
+
+    $response = $this->from(route('announcements.index', ['team' => $team->id]))->actingAs($coach)->post(route('teams.messages.store', $team), [
+        'message' => 'Hello',
+        'attachments' => [
+            UploadedFile::fake()->create('large.pdf', 11000, 'application/pdf'),
+        ],
+    ]);
+
+    $response->assertRedirect(route('announcements.index', ['team' => $team->id], false));
+    $response->assertSessionHasErrors('attachments.0');
+});
+
+test('more than three message attachments is rejected', function () {
+    Storage::fake('public');
+
+    $coach = User::factory()->create(['role' => 'coach']);
+    $team = $coach->teams()->create([
+        'name' => 'U12 Reds',
+        'age_group' => 'under-12s',
+    ]);
+
+    $response = $this->from(route('announcements.index', ['team' => $team->id]))->actingAs($coach)->post(route('teams.messages.store', $team), [
+        'message' => 'Hello',
+        'attachments' => [
+            UploadedFile::fake()->create('one.pdf', 100, 'application/pdf'),
+            UploadedFile::fake()->create('two.jpg', 100, 'image/jpeg'),
+            UploadedFile::fake()->create('three.png', 100, 'image/png'),
+            UploadedFile::fake()->create('four.pdf', 100, 'application/pdf'),
+        ],
+    ]);
+
+    $response->assertRedirect(route('announcements.index', ['team' => $team->id], false));
+    $response->assertSessionHasErrors('attachments');
+});
+
+test('coach can update message attachments removing one and adding another', function () {
+    Storage::fake('public');
+
+    $coach = User::factory()->create(['role' => 'coach']);
+    $team = $coach->teams()->create([
+        'name' => 'U12 Reds',
+        'age_group' => 'under-12s',
+    ]);
+
+    $this->actingAs($coach)->post(route('teams.messages.store', $team), [
+        'message' => 'Original',
+        'attachments' => [
+            UploadedFile::fake()->create('keep.pdf', 100, 'application/pdf'),
+            UploadedFile::fake()->create('remove.jpg', 100, 'image/jpeg'),
+        ],
+    ]);
+
+    $message = Message::query()->where('team_id', $team->id)->firstOrFail();
+    $toRemove = $message->attachments()->where('original_name', 'remove.jpg')->firstOrFail();
+
+    $this->actingAs($coach)->post(route('messages.update', $message), [
+        'message' => 'Updated body',
+        'removed_attachment_ids' => [$toRemove->id],
+        'attachments' => [
+            UploadedFile::fake()->create('new.png', 100, 'image/png'),
+        ],
+        '_method' => 'PUT',
+    ])->assertRedirect(route('announcements.index', ['team' => $team->id], false));
+
+    $message->refresh();
+    expect($message->attachments()->count())->toBe(2);
+    expect($message->attachments()->pluck('original_name')->all())->toContain('keep.pdf')->toContain('new.png');
+    expect($message->attachments()->where('original_name', 'remove.jpg')->exists())->toBeFalse();
+});
+
+test('message attachment preview and download require team access', function () {
+    Storage::fake('public');
+
+    $coach = User::factory()->create(['role' => 'coach']);
+    $team = $coach->teams()->create([
+        'name' => 'U12 Reds',
+        'age_group' => 'under-12s',
+    ]);
+
+    $message = Message::create([
+        'user_id' => $coach->id,
+        'team_id' => $team->id,
+        'message' => 'Notice',
+    ]);
+
+    Storage::disk('public')->put('message_attachments/doc.pdf', 'fake-pdf');
+    $attachment = $message->attachments()->create([
+        'file_path' => 'message_attachments/doc.pdf',
+        'original_name' => 'doc.pdf',
+        'mime_type' => 'application/pdf',
+        'size' => 8,
+    ]);
+
+    $this->actingAs($coach)->get(route('messages.attachments.preview', $attachment))->assertOk();
+    $this->actingAs($coach)->get(route('messages.attachments.download', $attachment))->assertOk();
+
+    $stranger = User::factory()->create(['role' => 'guardian']);
+    $this->actingAs($stranger)->get(route('messages.attachments.preview', $attachment))->assertForbidden();
+
+    $guardian = User::factory()->create(['role' => 'guardian']);
+    Player::create([
+        'team_id' => $team->id,
+        'name' => 'Child',
+        'guardian_name' => $guardian->name,
+        'guardian_email' => $guardian->email,
+        'guardian_phone' => '0123456789',
+        'guardian_id' => $guardian->id,
+        'position' => 'cm',
+    ]);
+
+    $this->actingAs($guardian)->get(route('messages.attachments.preview', $attachment))->assertOk();
+});
+
+test('deleting message removes attachment files from storage', function () {
+    Storage::fake('public');
+
+    $coach = User::factory()->create(['role' => 'coach']);
+    $team = $coach->teams()->create([
+        'name' => 'U12 Reds',
+        'age_group' => 'under-12s',
+    ]);
+
+    $this->actingAs($coach)->post(route('teams.messages.store', $team), [
+        'message' => 'With file',
+        'attachments' => [
+            UploadedFile::fake()->create('doc.pdf', 100, 'application/pdf'),
+        ],
+    ]);
+
+    $message = Message::query()->where('team_id', $team->id)->firstOrFail();
+    $path = $message->attachments()->first()->file_path;
+
+    $this->actingAs($coach)->delete(route('messages.destroy', $message))
+        ->assertRedirect(route('announcements.index', ['team' => $team->id], false));
+
+    Storage::disk('public')->assertMissing($path);
+    expect(MessageAttachment::query()->where('message_id', $message->id)->exists())->toBeFalse();
 });
