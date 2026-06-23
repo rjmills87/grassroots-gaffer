@@ -6,17 +6,17 @@ import { Head } from '@inertiajs/vue3';
 const generalFAQs = [
     {
         value: 'item-1',
-        question: 'What is Grassroots Gaffer?',
-        answer: 'Grassroots Gaffer is an ad-free, intuitive mobile-first web application designed specifically for grassroots football coaches to manage their teams, schedules, and communication simply and efficiently.',
+        question: 'What is Squadra365?',
+        answer: 'Squadra365 is an ad-free, intuitive mobile-first web application designed specifically for grassroots football coaches to manage their teams, schedules, and communication simply and efficiently.',
     },
     {
         value: 'item-2',
         question: 'Is the app truly 100% ad-free?',
-        answer: 'Yes. Unlike many competitors, we believe ads ruin the user experience, especially for parents and children. Our Free Tier has no ads, and our Gaffer Pro Tier has no ads.',
+        answer: 'Yes. Unlike many competitors, we believe ads ruin the user experience, especially for parents and children. Our Free Tier has no ads, and Squadra365 Pro has no ads.',
     },
     {
         value: 'item-3',
-        question: 'What is the main difference between Grassroots Gaffer and other team management apps?',
+        question: 'What is the main difference between Squadra365 and other team management apps?',
         answer: 'We focus on providing a superior, clean, and fast user experience (UI/UX) without ad distractions. Our features are highly focused on the real-world administrative and logistical problems that grassroots football coaches face, with a simple, transparent pricing model.',
     },
     {
@@ -30,11 +30,11 @@ const pricingFAQs = [
     {
         value: 'item-5',
         question: 'Why is there a paid tier if the app is free to use?',
-        answer: 'The Free Tier covers all essential communication and scheduling needs. The Gaffer Pro Tier unlocks powerful tools for the dedicated coach who runs multiple teams or needs advanced features to save administrative time, such as detailed attendance reports and the Session Planner.',
+        answer: 'The Free Tier covers all essential communication and scheduling needs. Squadra365 Pro unlocks powerful tools for the dedicated coach who runs multiple teams or needs advanced features to save administrative time, such as detailed attendance reports and the Session Planner.',
     },
     {
         value: 'item-6',
-        question: 'How much does the Gaffer Pro Tier cost?',
+        question: 'How much does Squadra365 Pro cost?',
         answer: 'It costs £6.99 per month, or you can get the best value with an annual subscription of £49.99 per year, which saves you over 40% compared to monthly billing.',
     },
     {
@@ -62,9 +62,9 @@ const pricingFAQs = [
                 <div class="w-full max-w-4xl text-center">
                     <h1 class="text-4xl font-bold tracking-tight text-gray-900 dark:text-white">Frequently Asked Questions</h1>
                     <p class="mt-6 text-lg text-gray-600 dark:text-gray-400">
-                        Find answers to common questions about Grassroots Gaffer below. If you have a question that is not answered here, please
+                        Find answers to common questions about Squadra365 below. If you have a question that is not answered here, please
                         contact us at
-                        <a href="mailto:hello@grassrootsgaffer.com">hello@grassrootsgaffer.com</a>.
+                        <a href="mailto:hello@squadra365.com">hello@squadra365.com</a>.
                     </p>
                 </div>
                 <div class="mt-12 w-full max-w-4xl text-center">

@@ -60,7 +60,7 @@ const features = [
                             Everything you need to run your team
                         </p>
                         <p class="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300">
-                            Grassroots Gaffer is designed to handle the admin, so you can focus on coaching the players.
+                            Squadra365 is designed to handle the admin, so you can focus on coaching the players.
                         </p>
                         <div class="mt-6 flex items-center justify-center gap-3 text-sm">
                             <span

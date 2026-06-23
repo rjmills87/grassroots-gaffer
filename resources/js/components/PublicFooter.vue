@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 import AppLogo from './AppLogo.vue';
+
+const page = usePage();
 </script>
 
 <template>
@@ -68,7 +70,7 @@ import AppLogo from './AppLogo.vue';
             </div>
         </div>
         <div class="p-6 text-center text-gray-600 dark:text-gray-400">
-            <p>&copy; {{ new Date().getFullYear() }} Grassroots Gaffer. All rights reserved.</p>
+            <p>&copy; {{ new Date().getFullYear() }} {{ page.props.name }}. All rights reserved.</p>
         </div>
     </footer>
 </template>

@@ -2,7 +2,7 @@
 trigger: always_on
 ---
 
-# ⚽ The Grassroots Coach App (Grassroots Gaffer): MVP Roadmap ⚽
+# Squadra365 MVP Roadmap
 
 ## Our Mission
 

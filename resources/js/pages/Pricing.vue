@@ -74,7 +74,7 @@ const tiers = [
         idealFor: 'New coaches, individual parents, or teams just needing basic scheduling',
     },
     {
-        name: 'The Gaffer Pro Tier',
+        name: 'Squadra365 Pro',
         price: '£6.99 per month or £49.99 per year',
         description: 'Everything in Free, PLUS...',
         features: proTier,

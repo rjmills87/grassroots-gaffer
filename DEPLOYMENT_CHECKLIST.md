@@ -1,6 +1,6 @@
 # Production Deployment Checklist
 
-Use this checklist when deploying Grassroots Gaffer to production. Follow the detailed instructions in `DEPLOYMENT_GUIDE.md`.
+Use this checklist when deploying Squadra365 to production. Follow the detailed instructions in `DEPLOYMENT_GUIDE.md`.
 
 ## Pre-Deployment
 

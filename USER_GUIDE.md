@@ -1,10 +1,10 @@
-# Welcome to Grassroots Gaffer! ⚽
+# Welcome to Squadra365! ⚽
 
 Thank you for being one of our first test users! This guide will help you get started with the app.
 
-## What is Grassroots Gaffer?
+## What is Squadra365?
 
-Grassroots Gaffer is an ad-free, intuitive web app designed specifically for grassroots football coaches and parents. It helps you:
+Squadra365 is an ad-free, intuitive web app designed specifically for grassroots football coaches and parents. It helps you:
 
 - **Manage your team roster** - Add players and their guardian contact details
 - **Schedule events** - Create matches and training sessions with dates, times, and locations
@@ -202,7 +202,7 @@ Yes! We take data security seriously:
 
 ## Mobile Usage
 
-Grassroots Gaffer is designed to work great on mobile devices! You can:
+Squadra365 is designed to work great on mobile devices! You can:
 
 - Access the app from any smartphone browser
 - Respond to events on the go
@@ -230,7 +230,7 @@ As a test user, your feedback is incredibly valuable! If you encounter:
 
 ## What's Next?
 
-We're constantly improving Grassroots Gaffer based on user feedback. Some features we're considering:
+We're constantly improving Squadra365 based on user feedback. Some features we're considering:
 
 - Two-way messaging (guardians can reply to coaches)
 - Team join codes (easier player onboarding)
@@ -242,7 +242,7 @@ We're constantly improving Grassroots Gaffer based on user feedback. Some featur
 
 ## Thank You!
 
-Thank you for being part of the Grassroots Gaffer community. We hope the app makes managing your team easier and more enjoyable.
+Thank you for being part of the Squadra365 community. We hope the app makes managing your team easier and more enjoyable.
 
 **Happy coaching! ⚽**
 

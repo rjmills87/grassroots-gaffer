@@ -1,4 +1,4 @@
-# Grassroots Gaffer - UI/UX Testing Guide
+# Squadra365 - UI/UX Testing Guide
 
 This guide provides step-by-step instructions for testing both coach and guardian workflows to ensure the MVP is ready for deployment.
 

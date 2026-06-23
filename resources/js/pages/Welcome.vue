@@ -19,7 +19,7 @@ import { Head, Link } from '@inertiajs/vue3';
                         Grassroots football management, <span class="text-teal-600 dark:text-teal-400">finally ad-free.</span>
                     </h1>
                     <p class="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300">
-                        Stop battling with betting ads and clunky interfaces. Grassroots Gaffer is the simple, intuitive way to manage your team's
+                        Stop battling with betting ads and clunky interfaces. Squadra365 is the simple, intuitive way to manage your team's
                         schedule and availability.
                     </p>
                     <div class="mt-10 flex items-center gap-x-6">
