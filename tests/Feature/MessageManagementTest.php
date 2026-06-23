@@ -401,3 +401,67 @@ test('foreign coach posting message does not send announcement notifications', f
 
     Notification::assertNothingSent();
 });
+
+test('announcement notification email includes full message body', function () {
+    $coach = User::factory()->create(['role' => 'coach']);
+    $guardian = User::factory()->create(['role' => 'guardian']);
+    $team = $coach->teams()->create([
+        'name' => 'U12 Reds',
+        'age_group' => 'under-12s',
+    ]);
+
+    $announcementBody = 'Team BBQ this Saturday at 3pm. Bring snacks and drinks for everyone.';
+
+    $message = Message::create([
+        'user_id' => $coach->id,
+        'team_id' => $team->id,
+        'message' => $announcementBody,
+    ]);
+    $message->load('team');
+
+    $mail = (new NewTeamAnnouncementNotification($message))->toMail($guardian);
+
+    expect($mail->introLines)->toContain($announcementBody);
+    expect(collect($mail->introLines)->contains(fn (string $line) => str_starts_with($line, 'Preview:')))->toBeFalse();
+});
+
+test('announcement notification email attaches message files', function () {
+    Storage::fake('public');
+
+    $coach = User::factory()->create(['role' => 'coach']);
+    $guardian = User::factory()->create(['role' => 'guardian']);
+    $team = $coach->teams()->create([
+        'name' => 'U12 Reds',
+        'age_group' => 'under-12s',
+    ]);
+
+    $message = Message::create([
+        'user_id' => $coach->id,
+        'team_id' => $team->id,
+        'message' => 'Please see attached files.',
+    ]);
+
+    Storage::disk('public')->put('message_attachments/notice.pdf', 'pdf-content');
+    Storage::disk('public')->put('message_attachments/photo.jpg', 'jpg-content');
+
+    $message->attachments()->create([
+        'file_path' => 'message_attachments/notice.pdf',
+        'original_name' => 'notice.pdf',
+        'mime_type' => 'application/pdf',
+        'size' => 100,
+    ]);
+    $message->attachments()->create([
+        'file_path' => 'message_attachments/photo.jpg',
+        'original_name' => 'photo.jpg',
+        'mime_type' => 'image/jpeg',
+        'size' => 200,
+    ]);
+    $message->load(['team', 'attachments']);
+
+    $mail = (new NewTeamAnnouncementNotification($message))->toMail($guardian);
+
+    expect($mail->attachments)->toHaveCount(2);
+    expect(collect($mail->attachments)->pluck('options.as')->all())
+        ->toContain('notice.pdf')
+        ->toContain('photo.jpg');
+});
