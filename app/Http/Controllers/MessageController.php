@@ -44,7 +44,7 @@ class MessageController extends Controller
 
         if ($guardianIds->isNotEmpty()) {
             $recipients = User::query()->whereIn('id', $guardianIds)->get();
-            $message->loadMissing('team');
+            $message->loadMissing(['team', 'attachments']);
             Notification::send($recipients, new NewTeamAnnouncementNotification($message));
         }
 

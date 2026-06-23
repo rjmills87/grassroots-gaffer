@@ -7,7 +7,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class NewTeamAnnouncementNotification extends Notification implements ShouldQueue
 {
@@ -25,17 +25,32 @@ class NewTeamAnnouncementNotification extends Notification implements ShouldQueu
 
     public function toMail(object $notifiable): MailMessage
     {
+        $this->message->loadMissing(['team', 'attachments']);
+
         $team = $this->message->team;
         $announcementsUrl = route('announcements.index', ['team' => $team->id], true);
-        $excerpt = Str::limit($this->message->message, 200);
 
-        return (new MailMessage)
+        $mail = (new MailMessage)
             ->subject('New announcement: '.$team->name)
             ->line('The coach has posted a new announcement for '.$team->name.'.')
-            ->line('Preview: '.$excerpt)
-            ->line('If files are attached, open the link below to view or download them in the app.')
+            ->line($this->message->message)
             ->action('View announcements', $announcementsUrl)
             ->line('Thank you for using '.config('app.name').'.');
+
+        foreach ($this->message->attachments as $attachment) {
+            $path = Storage::disk('public')->path($attachment->file_path);
+
+            if (! is_file($path)) {
+                continue;
+            }
+
+            $mail->attach($path, [
+                'as' => $attachment->original_name,
+                'mime' => $attachment->mime_type,
+            ]);
+        }
+
+        return $mail;
     }
 
     /**
