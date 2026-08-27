@@ -2,9 +2,12 @@
 import AddOrEditPlayerDialog from '@/components/AddOrEditPlayerDialog.vue';
 import EmptyState from '@/components/EmptyState.vue';
 import GuardianDetailsSheet from '@/components/GuardianDetailsSheet.vue';
+import PendingJoinsInbox from '@/components/PendingJoinsInbox.vue';
+import TeamInviteCard from '@/components/TeamInviteCard.vue';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { capitalizeFirstLetter } from '@/helpers';
 import AppLayout from '@/layouts/AppLayout.vue';
+import { type PendingJoin, type TeamInvite } from '@/types/Join';
 import { type BreadcrumbItem, User } from '@/types';
 import { type Team } from '@/types/Team';
 import { Head, router } from '@inertiajs/vue3';
@@ -15,9 +18,12 @@ const props = defineProps<{
     user: User;
     teams: Team[];
     selectedTeam: Team | null;
+    invite: TeamInvite | null;
+    pendingJoins: PendingJoin[];
 }>();
 
 const selectedTeamId = computed(() => props.selectedTeam?.id ?? null);
+const isCoach = computed(() => props.user.role === 'coach');
 const breadcrumbs = computed<BreadcrumbItem[]>(() => [
     {
         title: 'Squad',
@@ -66,13 +72,18 @@ const changeTeam = (event: Event) => {
                 </EmptyState>
             </div>
 
-            <section v-else class="space-y-4">
+            <section v-else class="space-y-6">
                 <div class="flex flex-wrap items-center justify-between gap-3">
                     <div>
                         <h2 class="text-2xl font-semibold">{{ selectedTeam.name }}</h2>
                         <p class="text-sm text-muted-foreground">View and update squad details for this team.</p>
                     </div>
-                    <AddOrEditPlayerDialog v-if="$page.props.auth.user.role === 'coach'" :team="selectedTeam" />
+                    <AddOrEditPlayerDialog v-if="isCoach" :team="selectedTeam" />
+                </div>
+
+                <div v-if="isCoach && invite" class="grid gap-4 lg:grid-cols-2">
+                    <TeamInviteCard :team="selectedTeam" :invite="invite" />
+                    <PendingJoinsInbox :pending-joins="pendingJoins" />
                 </div>
 
                 <div v-if="selectedTeam.players && selectedTeam.players.length > 0" class="space-y-3">
@@ -83,7 +94,7 @@ const changeTeam = (event: Event) => {
                                 <span class="text-xs text-muted-foreground">#{{ player.squad_number ?? '-' }}</span>
                             </div>
                             <p class="mt-1 text-sm text-muted-foreground uppercase">{{ player.position || 'Not set' }}</p>
-                            <div v-if="$page.props.auth.user.role === 'coach'" class="mt-3 flex flex-wrap items-center gap-2">
+                            <div v-if="isCoach" class="mt-3 flex flex-wrap items-center gap-2">
                                 <GuardianDetailsSheet :player="player" />
                                 <AddOrEditPlayerDialog :team="selectedTeam" :player="player" />
                             </div>
@@ -97,8 +108,8 @@ const changeTeam = (event: Event) => {
                                     <TableHead class="w-auto font-bold">Name</TableHead>
                                     <TableHead class="w-auto font-bold">Squad Number</TableHead>
                                     <TableHead class="w-auto font-bold">Position</TableHead>
-                                    <TableHead v-if="$page.props.auth.user.role === 'coach'" class="w-auto font-bold">Guardian Details</TableHead>
-                                    <TableHead v-if="$page.props.auth.user.role === 'coach'" class="w-auto font-bold">Actions</TableHead>
+                                    <TableHead v-if="isCoach" class="w-auto font-bold">Guardian Details</TableHead>
+                                    <TableHead v-if="isCoach" class="w-auto font-bold">Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -107,9 +118,9 @@ const changeTeam = (event: Event) => {
                                     <TableCell class="font-bold">{{ player.squad_number }}</TableCell>
                                     <TableCell class="font-bold uppercase">{{ player.position }}</TableCell>
                                     <TableCell>
-                                        <GuardianDetailsSheet v-if="$page.props.auth.user.role === 'coach'" :player="player" />
+                                        <GuardianDetailsSheet v-if="isCoach" :player="player" />
                                     </TableCell>
-                                    <TableCell v-if="$page.props.auth.user.role === 'coach'" class="flex items-center gap-4">
+                                    <TableCell v-if="isCoach" class="flex items-center gap-4">
                                         <AddOrEditPlayerDialog :team="selectedTeam" :player="player" />
                                     </TableCell>
                                 </TableRow>
@@ -119,7 +130,7 @@ const changeTeam = (event: Event) => {
                 </div>
 
                 <div v-else>
-                    <EmptyState title="No players yet" description="Add players to build your squad and start tracking responses.">
+                    <EmptyState title="No players yet" description="Share the join link or add players to build your squad and start tracking responses.">
                         <template #icon>
                             <Users class="h-5 w-5" />
                         </template>

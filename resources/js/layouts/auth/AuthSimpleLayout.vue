@@ -25,6 +25,13 @@ defineProps<{
                     </div>
                 </div>
                 <slot />
+
+                <p class="text-center text-sm text-muted-foreground">
+                    Joining as a parent?
+                    <Link :href="route('join.create')" class="font-medium text-foreground underline underline-offset-4">
+                        Enter your team code
+                    </Link>
+                </p>
             </div>
         </div>
     </div>

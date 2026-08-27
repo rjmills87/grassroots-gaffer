@@ -24,6 +24,11 @@ const generalFAQs = [
         question: 'Can parents use the app, or is it only for the coach?',
         answer: 'Both. The coach manages the team and events, but parents and guardians are the primary users for responding to availability and receiving announcements. The app is designed to be extremely easy for parents to use.',
     },
+    {
+        value: 'item-4b',
+        question: "How do I join my child's team?",
+        answer: "Tap the join link in your coach's WhatsApp message. If the link doesn't open, go to Join a team in the menu (or /join), type the 8-character code from the message, and continue. Use your own email, not your child's. A second parent can join the same child too.",
+    },
 ];
 
 const pricingFAQs = [

@@ -11,6 +11,7 @@ const navigation = [
     { name: 'Features', href: '/features', routeName: 'features' },
     { name: 'Pricing', href: '/pricing', routeName: 'pricing' },
     { name: 'FAQ', href: '/faq', routeName: 'faq' },
+    { name: 'Join a team', href: '/join', routeName: 'join.create' },
 ];
 </script>
 

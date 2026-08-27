@@ -22,12 +22,20 @@ import { Head, Link } from '@inertiajs/vue3';
                         Stop battling with betting ads and clunky interfaces. Squadra365 is the simple, intuitive way to manage your team's
                         schedule and availability.
                     </p>
-                    <div class="mt-10 flex items-center gap-x-6">
-                        <Link :href="route('register')">
-                            <Button class="cursor-pointer bg-teal-600 hover:bg-teal-500" size="lg">Get Started for Free</Button>
-                        </Link>
-                        <Link :href="route('features')" class="text-sm leading-6 font-semibold text-gray-900 dark:text-white">
-                            Learn more <span aria-hidden="true">→</span>
+                    <div class="mt-10 flex flex-col items-start gap-4">
+                        <div class="flex items-center gap-x-6">
+                            <Link :href="route('register')">
+                                <Button class="cursor-pointer bg-teal-600 hover:bg-teal-500" size="lg">Get Started for Free</Button>
+                            </Link>
+                            <Link :href="route('features')" class="text-sm leading-6 font-semibold text-gray-900 dark:text-white">
+                                Learn more <span aria-hidden="true">→</span>
+                            </Link>
+                        </div>
+                        <Link
+                            :href="route('join.create')"
+                            class="text-sm leading-6 font-semibold text-teal-700 hover:text-teal-600 dark:text-teal-400 dark:hover:text-teal-300"
+                        >
+                            Joining as a parent? Enter your team code <span aria-hidden="true">→</span>
                         </Link>
                     </div>
                 </div>

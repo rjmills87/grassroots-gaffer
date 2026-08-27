@@ -41,6 +41,13 @@ const page = usePage();
                             >FAQ</Link
                         >
                     </li>
+                    <li>
+                        <Link
+                            class="text-gray-600 transition-colors hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-gray-300"
+                            href="/join"
+                            >Join a team</Link
+                        >
+                    </li>
                 </ul>
             </div>
             <div>

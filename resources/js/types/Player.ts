@@ -1,3 +1,9 @@
+export interface Guardian {
+    id: number;
+    name: string;
+    email: string;
+}
+
 export interface Player {
     id: number;
     name: string;
@@ -10,4 +16,5 @@ export interface Player {
     };
     squad_number: number;
     position: string;
+    guardians?: Guardian[];
 }

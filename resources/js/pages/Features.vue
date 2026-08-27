@@ -5,7 +5,7 @@ import { Head } from '@inertiajs/vue3';
 const features = [
     {
         name: 'Roster Management',
-        description: 'Keep all your player and parent contact details in one secure place. Easily add new players and manage guardian information.',
+        description: 'Keep player and parent details in one place. Share a WhatsApp join code so parents add themselves, or add players yourself.',
         icon: 'UsersIcon',
         tier: 'Free',
     },

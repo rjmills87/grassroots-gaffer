@@ -37,6 +37,12 @@ test('coach can add player to own team and reuse existing guardian', function ()
     ]);
 
     Notification::assertSentTo($guardian, WelcomeToTeamNotification::class);
+
+    $playerId = (int) DB::table('players')->where('name', 'Player One')->value('id');
+    $this->assertDatabaseHas('player_guardians', [
+        'player_id' => $playerId,
+        'user_id' => $guardian->id,
+    ]);
 });
 
 test('coach cannot add player to another coach team', function () {
@@ -99,7 +105,7 @@ test('newly added player is attached only to future events', function () {
         'squad_number' => 1,
     ])->assertRedirect(route('teams.show', $team, false));
 
-    $playerId = (int) \DB::table('players')->where('name', 'Player Two')->value('id');
+    $playerId = (int) DB::table('players')->where('name', 'Player Two')->value('id');
 
     expect($futureEvent->players()->where('players.id', $playerId)->exists())->toBeTrue();
     expect($pastEvent->players()->where('players.id', $playerId)->exists())->toBeFalse();
