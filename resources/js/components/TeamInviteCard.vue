@@ -62,7 +62,8 @@ const rotateCode = () => {
             <CardTitle>Parent join link</CardTitle>
             <CardDescription>
                 Copy this into the parent WhatsApp group. Parents use their own email and pick their child — including a
-                second parent in a split household.
+                second parent in a split household. If the link doesn't open, they can open Join a team and type this
+                code.
             </CardDescription>
         </CardHeader>
         <CardContent class="space-y-4">

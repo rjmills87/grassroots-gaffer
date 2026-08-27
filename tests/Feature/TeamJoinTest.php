@@ -20,6 +20,41 @@ test('new teams receive a unique invite code', function () {
         ->and($team->invite_code_expires_at)->not->toBeNull();
 });
 
+test('parents can open a join page and type a code as a fallback', function () {
+    $coach = User::factory()->create(['role' => 'coach']);
+    $team = $coach->teams()->create([
+        'name' => 'U12 Eagles',
+        'age_group' => 'under-12s',
+    ]);
+
+    $this->get(route('join.create'))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('Join')
+            ->where('valid', null)
+            ->where('code', null)
+        );
+
+    $this->post(route('join.lookup'), [
+        'code' => strtolower($team->invite_code),
+    ])->assertRedirect(route('join.show', $team->invite_code));
+});
+
+test('whatsapp message includes the magic link and where to type the code', function () {
+    $coach = User::factory()->create(['role' => 'coach']);
+    $team = $coach->teams()->create([
+        'name' => 'U12 Eagles',
+        'age_group' => 'under-12s',
+    ]);
+
+    $message = $team->whatsappMessage();
+
+    expect($message)->toContain($team->joinUrl())
+        ->and($message)->toContain($team->joinPageUrl())
+        ->and($message)->toContain($team->invite_code)
+        ->and($message)->toContain('enter this code');
+});
+
 test('coach can view invite code on squad and other coaches cannot rotate it', function () {
     $coach = User::factory()->create(['role' => 'coach']);
     $otherCoach = User::factory()->create(['role' => 'coach']);

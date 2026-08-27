@@ -97,11 +97,16 @@ class Team extends Model
         return route('join.show', ['code' => $this->invite_code], true);
     }
 
+    public function joinPageUrl(): string
+    {
+        return route('join.create', absolute: true);
+    }
+
     public function whatsappMessage(): string
     {
         $appName = config('app.name');
 
-        return "Hi parents — please join {$this->name} on {$appName} so you can see events and RSVP for your child.\n\nUse your own email (not your child's). If another parent is already linked, you can still join as a second guardian.\n\nJoin here:\n{$this->joinUrl()}\n\nOr enter code: {$this->invite_code}";
+        return "Hi parents — please join {$this->name} on {$appName} so you can see events and RSVP for your child.\n\nUse your own email (not your child's). If another parent is already linked, you can still join as a second guardian.\n\nJoin here:\n{$this->joinUrl()}\n\nIf the link doesn't open, go to {$this->joinPageUrl()} and enter this code: {$this->invite_code}";
     }
 
     /**
