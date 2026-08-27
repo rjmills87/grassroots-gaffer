@@ -7,22 +7,22 @@ const generalFAQs = [
     {
         value: 'item-1',
         question: 'What is Squadra365?',
-        answer: 'Squadra365 is an ad-free, intuitive mobile-first web application designed specifically for grassroots football coaches to manage their teams, schedules, and communication simply and efficiently.',
+        answer: 'Squadra365 is an ad-free web app for grassroots football coaches. You can run the squad, put matches and training on the calendar, collect parent RSVPs, send reminders, and post one-way announcements. Parents join with a WhatsApp code. It does not register players with the FA, and it does not replace Matchday or Club Portal — it sits beside them.',
     },
     {
         value: 'item-2',
-        question: 'Is the app truly 100% ad-free?',
-        answer: 'Yes. Unlike many competitors, we believe ads ruin the user experience, especially for parents and children. Our Free Tier has no ads, and Squadra365 Pro has no ads.',
+        question: 'Is it ad-free?',
+        answer: 'Yes. No betting ads, and no ads in front of the kids.',
     },
     {
         value: 'item-3',
-        question: 'What is the main difference between Squadra365 and other team management apps?',
-        answer: 'We focus on providing a superior, clean, and fast user experience (UI/UX) without ad distractions. Our features are highly focused on the real-world administrative and logistical problems that grassroots football coaches face, with a simple, transparent pricing model.',
+        question: 'How is this different from other team apps?',
+        answer: 'It is for the WhatsApp-admin problem: who is in on Saturday, where is training, and can you tell the parents without a group-chat pile-on. It is not a club system, not an FA registration tool, and not a session planner or match-stats pack.',
     },
     {
         value: 'item-4',
-        question: 'Can parents use the app, or is it only for the coach?',
-        answer: 'Both. The coach manages the team and events, but parents and guardians are the primary users for responding to availability and receiving announcements. The app is designed to be extremely easy for parents to use.',
+        question: 'Can parents use it, or is it only for the coach?',
+        answer: 'Both. The coach runs the team and events. Parents and guardians RSVP and receive announcements. A second parent can join the same child.',
     },
     {
         value: 'item-4b',
@@ -34,28 +34,28 @@ const generalFAQs = [
 const pricingFAQs = [
     {
         value: 'item-5',
-        question: 'Why is there a paid tier if the app is free to use?',
-        answer: 'The Free Tier covers all essential communication and scheduling needs. Squadra365 Pro unlocks powerful tools for the dedicated coach who runs multiple teams or needs advanced features to save administrative time, such as detailed attendance reports and the Session Planner.',
+        question: 'Is there a paid plan?',
+        answer: 'Not today. The coach core is free: teams, players and guardians, events, RSVPs, reminders, one-way announcements, and join codes. There is no subscription to buy.',
     },
     {
         value: 'item-6',
-        question: 'How much does Squadra365 Pro cost?',
-        answer: 'It costs £6.99 per month, or you can get the best value with an annual subscription of £49.99 per year, which saves you over 40% compared to monthly billing.',
+        question: 'Will you charge later?',
+        answer: 'Possibly, for things that cost money to send — SMS frost or venue-change alert packs — and later still for subs collection. None of that is live. Reminders stay in the free core.',
     },
     {
         value: 'item-7',
-        question: 'Who pays for the Pro Tier?',
-        answer: "Only the Coach or Manager needs to subscribe to Pro. Once the coach subscribes, all players and parents on that team automatically gain access to the coach's Pro features.",
+        question: 'Who pays?',
+        answer: 'Nobody, today. Coaches use the core tools for free. Parents join and RSVP for free.',
     },
     {
         value: 'item-8',
-        question: 'What is "Multi-Team Management" in the Pro Tier?',
-        answer: 'This allows a coach to manage and switch between multiple independent teams (e.g., U10 Boys and U12 Girls) using a single account, keeping all data, rosters, and schedules separate and organised.',
+        question: 'Does Squadra365 register players with the FA?',
+        answer: 'No. It does not register anyone with the FA, and it does not replace Matchday or Club Portal. Use those for affiliation and fixtures. Use Squadra365 for the squad, RSVPs, reminders, and parent comms.',
     },
     {
         value: 'item-9',
-        question: 'How does the "Parent-to-Parent Contact Sharing" work?',
-        answer: 'This Pro feature allows parents who have opted in to share their contact details (e.g., phone number) with other parents on the same team. This is great for organising carpools or shared snack duties without the coach having to manually coordinate.',
+        question: 'Can I run more than one team?',
+        answer: 'Yes. A coach can already have more than one team on a free account, with separate squads and events.',
     },
 ];
 </script>
@@ -67,13 +67,13 @@ const pricingFAQs = [
                 <div class="w-full max-w-4xl text-center">
                     <h1 class="text-4xl font-bold tracking-tight text-gray-900 dark:text-white">Frequently Asked Questions</h1>
                     <p class="mt-6 text-lg text-gray-600 dark:text-gray-400">
-                        Find answers to common questions about Squadra365 below. If you have a question that is not answered here, please
-                        contact us at
+                        Find answers to common questions about Squadra365 below. If you have a question that is not answered here, please contact us
+                        at
                         <a href="mailto:hello@squadra365.com">hello@squadra365.com</a>.
                     </p>
                 </div>
                 <div class="mt-12 w-full max-w-4xl text-center">
-                    <h2 class="mt-12 mb-8 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">General FAQs</h2>
+                    <h2 class="mt-12 mb-8 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">General</h2>
                 </div>
 
                 <Accordion type="single" collapsible class="w-full max-w-4xl">
@@ -84,7 +84,7 @@ const pricingFAQs = [
                 </Accordion>
 
                 <div class="mt-12 w-full max-w-4xl text-center">
-                    <h2 class="mt-12 mb-8 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Pricing FAQs</h2>
+                    <h2 class="mt-12 mb-8 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Cost</h2>
                 </div>
 
                 <Accordion type="single" collapsible class="w-full max-w-4xl">

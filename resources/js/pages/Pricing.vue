@@ -5,80 +5,42 @@ import { Head } from '@inertiajs/vue3';
 
 const freeTier = [
     {
-        feature: 'Roster Management',
-        description: 'Unlimited players with guardian contact details',
+        feature: 'Teams and squad',
+        description: 'Players and guardian contact details',
     },
     {
-        feature: 'User Experience',
-        description: 'Completely Ad-Free UI',
+        feature: 'Join codes',
+        description: 'WhatsApp join codes so parents add themselves',
     },
     {
-        feature: 'Team Size',
-        description: 'Unlimited Players & Parents/Guardians',
+        feature: 'Matches and training',
+        description: 'Unlimited events with location and times',
     },
     {
-        feature: 'Scheduling',
-        description: 'Unlimited Events (Matches, Training, etc.)',
+        feature: 'RSVPs',
+        description: 'Parents tap in or out for each event',
     },
     {
-        feature: 'Attendance',
-        description: 'Simple Yes/No Availability Tracking',
+        feature: 'Reminders',
+        description: 'Nudge guardians who have not replied — included, not paid',
     },
     {
-        feature: 'Communication',
-        description: 'Coach-to-team announcements',
+        feature: 'Announcements',
+        description: 'One-way updates from the coach to the team',
     },
     {
-        feature: 'Support',
-        description: 'Standard Support via Email',
-    },
-    {
-        feature: 'Pro Features',
-        description: 'None',
-    },
-];
-
-const proTier = [
-    {
-        feature: 'Communication',
-        description: 'Automated reminders for guardians who have not responded',
-    },
-    {
-        feature: 'Attendance',
-        description: 'Full Attendance Reporting & Statistics (e.g., Attendance, Absentees, etc.)',
-    },
-    {
-        feature: 'Development',
-        description: 'Session Planner & Training Drills Storage (Create, save and categorise training plans)',
-    },
-    {
-        feature: 'Logistics',
-        description: 'Parent-to-Parent Contact Sharing (Allows carpool organising without the coach as the middleman)',
-    },
-    {
-        feature: 'Player Data',
-        description: 'Basic Player Stats Tracker (Minutes played, post-game notes)',
-    },
-    {
-        feature: 'Support',
-        description: 'Priority Support via Email',
+        feature: 'No ads',
+        description: 'No betting ads, no trial that runs out',
     },
 ];
 
 const tiers = [
     {
-        name: 'The Free Tier',
+        name: 'For coaches, free',
         price: 'Free',
-        description: 'Free Forever (No ads, no hidden fees)',
+        description: 'The core tools are free. There is no paid plan to buy today.',
         features: freeTier,
-        idealFor: 'New coaches, individual parents, or teams just needing basic scheduling',
-    },
-    {
-        name: 'Squadra365 Pro',
-        price: '£6.99 per month or £49.99 per year',
-        description: 'Everything in Free, PLUS...',
-        features: proTier,
-        idealFor: 'Dedicated coaches, managers, and administrators running multiple teams or needing detailed player data.',
+        idealFor: 'Grassroots coaches running a team from the touchline',
     },
 ];
 </script>
@@ -89,11 +51,17 @@ const tiers = [
             <div class="flex w-full flex-col items-center px-6 py-24 sm:py-32">
                 <div class="mb-8 w-full max-w-4xl text-center">
                     <h1 class="text-4xl font-bold tracking-tight text-gray-900 dark:text-white">Pricing</h1>
-                    <p class="mt-6 text-lg text-gray-600 dark:text-gray-400">
-                        We offer a simple, transparent pricing model with no hidden fees. You can cancel at any time.
-                    </p>
+                    <p class="mt-6 text-lg text-gray-600 dark:text-gray-400">Nothing to buy. Coaches and parents use the core tools for free.</p>
                 </div>
                 <PricingTable :tiers="tiers" />
+                <div class="mt-12 w-full max-w-4xl text-center">
+                    <h2 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">Later, not live</h2>
+                    <p class="mt-4 text-base leading-7 text-gray-600 dark:text-gray-400">
+                        We may later charge for things that cost money to send, such as SMS frost or venue-change alert packs, and later still for
+                        subs collection. None of that is for sale now, and there is no price on it. Recurring training and a one-tap call-off or venue
+                        change that notifies parents are also on the list — still not a session planner or stats pack.
+                    </p>
+                </div>
             </div>
         </main>
     </PublicLayout>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Link } from '@inertiajs/vue3';
 import { defineProps } from 'vue';
 import { Button } from './ui/button';
 
@@ -30,13 +31,15 @@ const props = defineProps({
                         <p class="mt-4 text-lg leading-6 text-gray-600 dark:text-gray-300">
                             {{ tier.description }}
                         </p>
-                        <h4 class="mt-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Ideal for:</h4>
+                        <h4 class="mt-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Who it's for:</h4>
                         <p class="mt-2 text-lg leading-6 text-gray-600 dark:text-gray-300">
                             {{ tier.idealFor }}
                         </p>
                     </div>
                     <div class="mt-8">
-                        <Button class="cursor-pointer bg-teal-600" variant="default">Get Started</Button>
+                        <Link :href="route('register')">
+                            <Button class="cursor-pointer bg-teal-600" variant="default">Get started for free</Button>
+                        </Link>
                     </div>
                 </div>
 
@@ -45,7 +48,7 @@ const props = defineProps({
                     class="flex flex-col justify-between border-t border-gray-200 pt-8 lg:col-span-2 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-12 dark:border-gray-700"
                 >
                     <div>
-                        <h4 class="text-sm font-semibold tracking-wide text-teal-600 uppercase dark:text-indigo-400">Key Features</h4>
+                        <h4 class="text-sm font-semibold tracking-wide text-teal-600 uppercase dark:text-indigo-400">What you get</h4>
                         <ul role="list" class="mt-6 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
                             <li v-for="feature in tier.features" :key="feature.feature" class="flex gap-x-3">
                                 <div class="mt-1 flex-none">
