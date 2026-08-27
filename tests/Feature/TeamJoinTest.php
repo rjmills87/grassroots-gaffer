@@ -20,6 +20,16 @@ test('new teams receive a unique invite code', function () {
         ->and($team->invite_code_expires_at)->not->toBeNull();
 });
 
+test('join page stays reachable from public and auth screens', function () {
+    $this->get(route('home'))->assertOk();
+    $this->get(route('faq'))->assertOk();
+    $this->get(route('login'))->assertOk();
+    $this->get(route('register'))->assertOk();
+    $this->get(route('join.create'))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page->component('Join'));
+});
+
 test('parents can open a join page and type a code as a fallback', function () {
     $coach = User::factory()->create(['role' => 'coach']);
     $team = $coach->teams()->create([
