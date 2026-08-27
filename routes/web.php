@@ -1,9 +1,12 @@
 <?php
 
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\JoinController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\TeamController;
+use App\Http\Controllers\TeamInviteController;
+use App\Http\Controllers\TeamJoinRequestController;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +28,12 @@ Route::get('/pricing', function () {
 Route::get('/faq', function () {
     return Inertia::render('FAQ');
 })->name('faq');
+
+Route::get('/join', [JoinController::class, 'create'])->name('join.create');
+Route::post('/join/lookup', [JoinController::class, 'lookup'])->name('join.lookup');
+Route::get('/join/submitted', [JoinController::class, 'submitted'])->name('join.submitted');
+Route::get('/join/{code}', [JoinController::class, 'show'])->name('join.show');
+Route::post('/join/{code}', [JoinController::class, 'store'])->middleware('throttle:10,1')->name('join.store');
 
 // Dashboard Route
 Route::get('dashboard', function () {
@@ -61,13 +70,22 @@ Route::get('dashboard', function () {
 
 Route::get('/squad', function () {
     $user = auth()->user();
-    $teams = accessibleTeams($user, ['players']);
+    $teams = accessibleTeams($user, ['players.guardians']);
     $selectedTeam = selectedTeamFromRequest(request('team'), $teams);
+    $selectedTeamModel = $selectedTeam
+        ? $teams->firstWhere('id', $selectedTeam['id'])
+        : null;
 
     return Inertia::render('Squad', [
         'user' => $user,
         'teams' => $teams->values(),
         'selectedTeam' => $selectedTeam,
+        'invite' => $user->role === 'coach' && $selectedTeamModel
+            ? $selectedTeamModel->invitePayload()
+            : null,
+        'pendingJoins' => $user->role === 'coach' && $selectedTeamModel
+            ? $selectedTeamModel->pendingJoinPayload()
+            : [],
     ]);
 })->middleware(['auth', 'verified'])->name('squad.index');
 
@@ -118,6 +136,15 @@ Route::post('/teams', [TeamController::class, 'store'])
 Route::delete('/teams/{team}', [TeamController::class, 'destroy'])
     ->middleware(['auth', 'verified'])
     ->name('teams.destroy');
+Route::post('/teams/{team}/invite/rotate', [TeamInviteController::class, 'rotate'])
+    ->middleware(['auth', 'verified'])
+    ->name('teams.invite.rotate');
+Route::post('/team-join-requests/{teamJoinRequest}/approve', [TeamJoinRequestController::class, 'approve'])
+    ->middleware(['auth', 'verified'])
+    ->name('team-join-requests.approve');
+Route::post('/team-join-requests/{teamJoinRequest}/reject', [TeamJoinRequestController::class, 'reject'])
+    ->middleware(['auth', 'verified'])
+    ->name('team-join-requests.reject');
 
 // Player Routes
 Route::post('/teams/{team}/players', [PlayerController::class, 'store'])->middleware(['auth', 'verified'])->name('players.store');
@@ -170,7 +197,7 @@ if (! function_exists('accessibleTeams')) {
                 }
             }
 
-            return $user->players()->with($guardianRelations)
+            return $user->accessiblePlayers()->with($guardianRelations)
                 ->get()
                 ->map(function ($player) {
                     return $player->team;

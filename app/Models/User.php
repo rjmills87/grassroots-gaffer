@@ -2,15 +2,17 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
     /**
@@ -22,7 +24,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role'
+        'role',
     ];
 
     /**
@@ -38,7 +40,7 @@ class User extends Authenticatable
     /**
      * Get the attributes that should be cast.
      *
-     * @return array<string, string>
+     * @return array<string, mixed>
      */
     protected function casts(): array
     {
@@ -50,7 +52,7 @@ class User extends Authenticatable
 
     public function teams(): HasMany
     {
-       return $this->hasMany(Team::class);
+        return $this->hasMany(Team::class);
     }
 
     public function messages(): HasMany
@@ -61,5 +63,50 @@ class User extends Authenticatable
     public function players(): HasMany
     {
         return $this->hasMany(Player::class, 'guardian_id');
+    }
+
+    public function guardedPlayers(): BelongsToMany
+    {
+        return $this->belongsToMany(Player::class, 'player_guardians')
+            ->withPivot('is_primary')
+            ->withTimestamps();
+    }
+
+    public function isCoachOf(Team $team): bool
+    {
+        return $this->role === 'coach' && (int) $team->user_id === (int) $this->id;
+    }
+
+    public function accessiblePlayers(): Builder
+    {
+        return Player::query()->where(function (Builder $query) {
+            $query->where('guardian_id', $this->id)
+                ->orWhereHas('guardians', function (Builder $guardians) {
+                    $guardians->where('users.id', $this->id);
+                });
+        });
+    }
+
+    public function isGuardianOf(Player $player): bool
+    {
+        return $this->accessiblePlayers()->where('players.id', $player->id)->exists();
+    }
+
+    public function isGuardianOnTeam(Team $team): bool
+    {
+        return $this->accessiblePlayers()->where('team_id', $team->id)->exists();
+    }
+
+    public function canAccessTeam(Team $team): bool
+    {
+        if ($this->isCoachOf($team)) {
+            return true;
+        }
+
+        if ($this->role === 'guardian') {
+            return $this->isGuardianOnTeam($team);
+        }
+
+        return false;
     }
 }

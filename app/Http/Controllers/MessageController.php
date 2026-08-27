@@ -36,14 +36,9 @@ class MessageController extends Controller
 
         $this->storeAttachments($message, $request->file('attachments', []));
 
-        $guardianIds = $team->players()
-            ->whereNotNull('guardian_id')
-            ->pluck('guardian_id')
-            ->unique()
-            ->values();
+        $recipients = $team->guardianUsers();
 
-        if ($guardianIds->isNotEmpty()) {
-            $recipients = User::query()->whereIn('id', $guardianIds)->get();
+        if ($recipients->isNotEmpty()) {
             $message->loadMissing(['team', 'attachments']);
             Notification::send($recipients, new NewTeamAnnouncementNotification($message));
         }
@@ -126,7 +121,7 @@ class MessageController extends Controller
         }
 
         if ($user->role === 'guardian') {
-            return $user->players()->where('team_id', $team->id)->exists();
+            return $user->isGuardianOnTeam($team);
         }
 
         return false;

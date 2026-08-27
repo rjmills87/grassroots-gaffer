@@ -71,7 +71,7 @@ class PlayerController extends Controller
     public function update(Request $request, Player $player)
     {
         $isTeamCoach = $player->team->user_id === auth()->id();
-        $isPlayerGuardian = $player->guardian_id === auth()->id();
+        $isPlayerGuardian = auth()->user()->isGuardianOf($player);
 
         if (! $isTeamCoach && ! $isPlayerGuardian) {
             abort(403, 'Unauthorized action.');
@@ -101,7 +101,7 @@ class PlayerController extends Controller
     public function destroy(Player $player)
     {
         $isTeamCoach = $player->team->user_id === auth()->id();
-        $isPlayerGuardian = $player->guardian_id === auth()->id();
+        $isPlayerGuardian = auth()->user()->isGuardianOf($player);
 
         if (! $isTeamCoach && ! $isPlayerGuardian) {
             abort(403, 'Unauthorized action.');

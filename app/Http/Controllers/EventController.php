@@ -100,7 +100,7 @@ class EventController extends Controller
 
         $user = auth()->user();
         $isTeamCoach = $this->userIsTeamCoach($user, $event->team);
-        $isPlayerGuardian = $player->guardian_id === $user->id;
+        $isPlayerGuardian = $user->isGuardianOf($player);
 
         if (! $isTeamCoach && ! $isPlayerGuardian) {
             abort(403, 'Unauthorized action.');
@@ -121,16 +121,12 @@ class EventController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        $playersWithoutResponse = $event->players()->wherePivotNull('player_response')->get();
+        $playersWithoutResponse = $event->players()->with(['guardians', 'guardian'])->wherePivotNull('player_response')->get();
 
         foreach ($playersWithoutResponse as $player) {
-            $guardian = $player->guardian;
-
-            if (! $guardian) {
-                continue;
+            foreach ($player->allGuardians() as $guardian) {
+                $guardian->notify(new EventReminderNotification($event));
             }
-
-            $guardian->notify(new EventReminderNotification($event));
         }
 
         return redirect()->route('event.show', $event);
@@ -173,7 +169,7 @@ class EventController extends Controller
         }
 
         if ($user->role === 'guardian') {
-            return $user->players()->where('team_id', $event->team_id)->exists();
+            return $user->isGuardianOnTeam($event->team);
         }
 
         return false;

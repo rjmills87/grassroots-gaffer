@@ -23,6 +23,13 @@ export type AppPageProps<T extends Record<string, unknown> = Record<string, unkn
     auth: Auth;
     ziggy: Config & { location: string };
     sidebarOpen: boolean;
+    flash?: {
+        join?: {
+            team_name: string;
+            child_name: string;
+            coach_first_name: string;
+        } | null;
+    };
 };
 
 export interface User {
