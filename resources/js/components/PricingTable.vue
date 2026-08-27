@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Link } from '@inertiajs/vue3';
 import { defineProps } from 'vue';
 import { Button } from './ui/button';
 
@@ -36,7 +37,9 @@ const props = defineProps({
                         </p>
                     </div>
                     <div class="mt-8">
-                        <Button class="cursor-pointer bg-teal-600" variant="default">Get Started</Button>
+                        <Link :href="route('register')">
+                            <Button class="cursor-pointer bg-teal-600" variant="default">Get started for free</Button>
+                        </Link>
                     </div>
                 </div>
 

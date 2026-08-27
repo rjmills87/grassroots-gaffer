@@ -4,46 +4,35 @@ import { Head } from '@inertiajs/vue3';
 
 const features = [
     {
-        name: 'Roster Management',
-        description: 'Keep player and parent details in one place. Share a WhatsApp join code so parents add themselves, or add players yourself.',
+        name: 'Squad and guardians',
+        description:
+            'Keep players and parent details in one place. Share a WhatsApp join code so parents add themselves, or add players yourself. A second parent can join the same child.',
         icon: 'UsersIcon',
-        tier: 'Free',
     },
     {
-        name: 'Event Scheduling',
-        description: 'Create matches, training sessions, and team events. Set locations, times, and meet times so everyone knows where to be.',
+        name: 'Matches and training',
+        description: 'Create matches, training, and other team events. Set the location and times so everyone knows where to be.',
         icon: 'CalendarIcon',
-        tier: 'Free',
     },
     {
-        name: 'Availability Tracking',
-        description: 'Stop chasing texts and WhatsApps. Parents respond with one tap, and you get a clear list of who is available for match day.',
+        name: 'Parent RSVPs',
+        description: 'Stop chasing the group chat. Parents respond with one tap, and you get a clear list of who is available.',
         icon: 'CheckCircleIcon',
-        tier: 'Free',
     },
     {
-        name: 'Team Announcements',
-        description: 'Send important updates to the whole squad instantly. Perfect for last-minute pitch changes or cancellations.',
+        name: 'Reminders',
+        description: 'Send a nudge to guardians who have not replied yet. Reminders are part of the free core, not a paid extra.',
+        icon: 'BellIcon',
+    },
+    {
+        name: 'One-way announcements',
+        description: 'Post updates to the whole squad. Pitch notes, kit colour, meet time — the coach writes, the parents read.',
         icon: 'MegaphoneIcon',
-        tier: 'Free',
     },
     {
-        name: 'Automated Reminders',
-        description: 'Automatically nudge guardians who have not replied yet, so coaches spend less time chasing responses.',
-        icon: 'MegaphoneIcon',
-        tier: 'Pro',
-    },
-    {
-        name: 'Ad-Free Experience',
-        description: 'A clean interface focused purely on football. No distracting betting ads or pop-ups to ruin the experience.',
+        name: 'Ad-free and private',
+        description: 'No betting ads. Team data stays with you. Built for youth football, not for selling eyeballs.',
         icon: 'ShieldCheckIcon',
-        tier: 'Free',
-    },
-    {
-        name: 'Secure & Private',
-        description: 'Your team data is yours. We prioritize privacy and security for all youth data handling.',
-        icon: 'LockClosedIcon',
-        tier: 'Free',
     },
 ];
 </script>
@@ -55,31 +44,17 @@ const features = [
             <div class="flex w-full flex-col items-center px-6 py-24 sm:py-32">
                 <div class="mx-auto max-w-7xl">
                     <div class="mx-auto max-w-2xl lg:text-center">
-                        <h2 class="text-base leading-7 font-semibold text-teal-600 dark:text-teal-400">Built for Coaches</h2>
-                        <p class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl dark:text-white">
-                            Everything you need to run your team
-                        </p>
+                        <h2 class="text-base leading-7 font-semibold text-teal-600 dark:text-teal-400">Built for coaches</h2>
+                        <p class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl dark:text-white">What you can do today</p>
                         <p class="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300">
-                            Squadra365 is designed to handle the admin, so you can focus on coaching the players.
+                            The coach tools are free: teams, players and guardians, events, RSVPs, reminders, one-way announcements, and join codes.
+                            Squadra365 sits beside Matchday and Club Portal. It does not register anyone with the FA.
                         </p>
-                        <div class="mt-6 flex items-center justify-center gap-3 text-sm">
-                            <span
-                                class="inline-flex items-center rounded-full border border-teal-300 bg-teal-50 px-3 py-1 font-medium text-teal-700 dark:border-teal-700 dark:bg-teal-950/40 dark:text-teal-300"
-                            >
-                                Free Tier
-                            </span>
-                            <span
-                                class="inline-flex items-center rounded-full border border-amber-300 bg-amber-50 px-3 py-1 font-medium text-amber-700 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-300"
-                            >
-                                Pro Tier
-                            </span>
-                        </div>
                     </div>
                     <div class="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
                         <dl class="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3">
                             <div v-for="feature in features" :key="feature.name" class="flex flex-col">
                                 <dt class="flex items-center gap-x-3 text-base leading-7 font-semibold text-gray-900 dark:text-white">
-                                    <!-- Heroicons are usually imported or SVG inlined. For simplicity, I'll use consistent SVG paths or a generic icon component if available, but here I will inline simple SVGs based on the icon name for now to keep it self-contained without extra dependencies -->
                                     <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-teal-600">
                                         <svg
                                             v-if="feature.icon === 'UsersIcon'"
@@ -124,6 +99,20 @@ const features = [
                                             />
                                         </svg>
                                         <svg
+                                            v-else-if="feature.icon === 'BellIcon'"
+                                            class="h-6 w-6 text-white"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke-width="1.5"
+                                            stroke="currentColor"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"
+                                            />
+                                        </svg>
+                                        <svg
                                             v-else-if="feature.icon === 'MegaphoneIcon'"
                                             class="h-6 w-6 text-white"
                                             fill="none"
@@ -138,7 +127,7 @@ const features = [
                                             />
                                         </svg>
                                         <svg
-                                            v-else-if="feature.icon === 'ShieldCheckIcon'"
+                                            v-else
                                             class="h-6 w-6 text-white"
                                             fill="none"
                                             viewBox="0 0 24 24"
@@ -151,39 +140,19 @@ const features = [
                                                 d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z"
                                             />
                                         </svg>
-                                        <svg
-                                            v-else
-                                            class="h-6 w-6 text-white"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke-width="1.5"
-                                            stroke="currentColor"
-                                        >
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"
-                                            />
-                                        </svg>
                                     </div>
                                     {{ feature.name }}
                                 </dt>
                                 <dd class="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600 dark:text-gray-300">
-                                    <span
-                                        class="mb-3 inline-flex w-fit items-center rounded-full px-2.5 py-1 text-xs font-semibold"
-                                        :class="
-                                            feature.tier === 'Pro'
-                                                ? 'border border-amber-300 bg-amber-50 text-amber-700 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-300'
-                                                : 'border border-teal-300 bg-teal-50 text-teal-700 dark:border-teal-700 dark:bg-teal-950/40 dark:text-teal-300'
-                                        "
-                                    >
-                                        {{ feature.tier }} Tier
-                                    </span>
                                     <p class="flex-auto">{{ feature.description }}</p>
                                 </dd>
                             </div>
                         </dl>
                     </div>
+                    <p class="mx-auto mt-16 max-w-2xl text-center text-base leading-7 text-gray-600 dark:text-gray-300">
+                        Coming later, if we need it: recurring training, and a one-tap call-off or venue change that tells the parents. Not a session
+                        planner, lineup tool, or match stats pack.
+                    </p>
                 </div>
             </div>
         </main>
